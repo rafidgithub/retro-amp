@@ -2,7 +2,7 @@
 <html lang="en" data-family="classic" data-look="amp" data-skin="amp" data-state="empty">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.google.com; img-src 'self' data: blob: https://i.ytimg.com; style-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="description" content="New music, old pixels: a Windows 95–XP era audio player for YouTube. No accounts, no API keys.">
 <title>RetroAmp</title>
@@ -197,7 +197,7 @@
       <div class="progress" hidden><div class="progress-fill"></div></div>
       <div class="listview" id="results" tabindex="0" role="listbox" aria-label="Search results" aria-multiselectable="true"></div>
       <div class="dlg-foot">
-        <span class="search-status">Double-click a result to play it now.</span>
+        <span class="search-status"><span class="mouse-only">Double-click</span><span class="touch-only">Double-tap</span> a result to play it now.</span>
         <button class="btn" data-act="res-play">Play</button>
         <button class="btn" data-act="res-add">Add</button>
         <button class="btn" data-act="res-all">Add all</button>
@@ -221,7 +221,7 @@
       </label>
       <div class="skin-groups"></div>
       <div class="dlg-foot">
-        <span class="search-status">Click a skin to try it. Press K anytime to flip through them.</span>
+        <span class="search-status"><span class="mouse-only">Click a skin to try it. Press K anytime to flip through them.</span><span class="touch-only">Tap a skin to try it.</span></span>
         <button class="btn" data-act="skins-ok">OK</button>
       </div>
     </div>
@@ -240,7 +240,12 @@
         <div><b>RetroAmp</b> version 1.0<br>New music. Old pixels.<br>Made by <a class="credit" href="https://rafidkhan.github.io/" target="_blank" rel="noopener noreferrer">Rafid Khan</a></div>
       </div>
       <p>Streams YouTube through the official embedded player. No accounts, no API keys, no tracking. Your playlist and recent searches stay in this browser. Searches pass through this site’s server to YouTube; once a video plays, YouTube may store its own cookies. Your own audio files play right here in the browser and are never uploaded.</p>
-      <div class="keys">
+      <ul class="touch-only touch-tips">
+        <li>Double-tap a track or a search result to play it.</li>
+        <li>Long-press a track to move or remove it.</li>
+        <li>All menus are on the player’s title-bar icon or menu bar.</li>
+      </ul>
+      <div class="keys mouse-only">
         <kbd>X</kbd><span>Play</span><kbd>C</kbd><span>Pause</span>
         <kbd>V</kbd><span>Stop</span><kbd>Z / B</kbd><span>Previous / Next</span>
         <kbd>L</kbd><span>Add from YouTube</span><kbd>S / R</kbd><span>Shuffle / Repeat</span>
@@ -289,9 +294,9 @@
 <div id="balloon" class="balloon" hidden role="status">
   <button class="balloon-x" aria-label="Dismiss">×</button>
   <b><svg class="ico"><use href="#i-palette"/></svg>10 skins to try</b>
-  <p>One player for every year from 1990 to 2026, plus Mac and Linux. Click here, or the palette button on the player, to time-travel.</p>
+  <p>One player for every year from 1990 to 2026, plus Mac and Linux. <span class="mouse-only">Click</span><span class="touch-only">Tap</span> here, or the palette button on the player, to time-travel.</p>
 </div>
-<div id="night" hidden><div class="moon"></div><p>Sleep timer finished.<br>Sweet dreams.</p><small>Click anywhere to wake up</small></div>
-<div id="shutdown" hidden><p>It’s now safe to turn off<br>your computer.</p><small>Click anywhere to start again</small></div>
+<div id="night" hidden><div class="moon"></div><p>Sleep timer finished.<br>Sweet dreams.</p><small><span class="mouse-only">Click</span><span class="touch-only">Tap</span> anywhere to wake up</small></div>
+<div id="shutdown" hidden><p>It’s now safe to turn off<br>your computer.</p><small><span class="mouse-only">Click</span><span class="touch-only">Tap</span> anywhere to start again</small></div>
 </body>
 </html>

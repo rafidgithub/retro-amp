@@ -1,22 +1,79 @@
 // Win9x-style list view: column header, click / Ctrl / Shift selection,
 // arrow-key navigation, Enter or double-click to activate, Delete to remove,
-// and (with onMove) drag-to-reorder.
+// and (with onMove) drag-to-reorder. On touch screens: tap selects, double-tap
+// activates, and a long press opens the row's menu (onMenu) — phones have no
+// right-click, and dragging would fight with scrolling.
 import { fmtTime, cleanArtist } from './util.js';
 
+const LONG_PRESS = 500;
+const DOUBLE_TAP = 450;
+
 export class ListView {
-  constructor(el, { columns, empty = '', onActivate, onDelete, onMove }) {
-    Object.assign(this, { el, columns, empty, onActivate, onDelete, onMove });
+  constructor(el, { columns, empty = '', onActivate, onDelete, onMove, onMenu }) {
+    Object.assign(this, { el, columns, empty, onActivate, onDelete, onMove, onMenu });
     this.items = [];
     this.sel = new Set();
     this.anchor = -1;
     this.focus = -1;
     this.current = -1;
-    el.addEventListener('pointerdown', e => this.press(e));
+    this.lastTap = { i: -1, t: 0 };
+    this.pointer = 'mouse';
+    el.addEventListener('pointerdown', e => {
+      this.pointer = e.pointerType;
+      if (e.pointerType === 'mouse') this.press(e);
+      else this.touch(e);
+    });
     el.addEventListener('dblclick', e => {
       const i = this.indexAt(e);
-      if (i >= 0) onActivate?.(i);
+      if (i >= 0 && this.pointer === 'mouse') onActivate?.(i); // touch double-taps are counted in touch()
+    });
+    el.addEventListener('contextmenu', e => {
+      if (this.pointer !== 'mouse') e.preventDefault(); // the long press below opens our menu instead
     });
     el.addEventListener('keydown', e => this.key(e));
+  }
+
+  // A finger only selects on release, so scrolling the list doesn't pick rows.
+  touch(e) {
+    const i = this.indexAt(e);
+    if (i < 0) return;
+    const { clientX: x, clientY: y, pointerId } = e;
+    let long = 0;
+    const done = () => {
+      clearTimeout(long);
+      this.el.removeEventListener('pointerup', up);
+      this.el.removeEventListener('pointercancel', done);
+      this.el.removeEventListener('pointermove', move);
+    };
+    const pick = () => {
+      this.sel = new Set([i]);
+      this.anchor = this.focus = i;
+      this.paint();
+    };
+    const up = ev => {
+      if (ev.pointerId !== pointerId) return;
+      done();
+      pick();
+      const now = performance.now();
+      if (this.lastTap.i === i && now - this.lastTap.t < DOUBLE_TAP) {
+        this.lastTap = { i: -1, t: 0 };
+        this.onActivate?.(i);
+      } else this.lastTap = { i, t: now };
+    };
+    const move = ev => {
+      if (ev.pointerId === pointerId && Math.hypot(ev.clientX - x, ev.clientY - y) > 10) done();
+    };
+    if (this.onMenu) {
+      long = setTimeout(() => {
+        done();
+        pick();
+        this.lastTap = { i: -1, t: 0 };
+        this.onMenu(i, x, y);
+      }, LONG_PRESS);
+    }
+    this.el.addEventListener('pointerup', up);
+    this.el.addEventListener('pointercancel', done);
+    this.el.addEventListener('pointermove', move);
   }
 
   get selected() {

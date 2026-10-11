@@ -15,6 +15,7 @@ RetroAmp is a Windows 95–XP era music player for YouTube. Vanilla JS, no build
 - Wrap every `localStorage` access in try/catch; the app keeps working without storage.
 - `server.js` mirrors Vercel: every `api/*.js` function is mounted in `server.js` too, and security headers in `vercel.json` and `server.js` stay identical.
 - Every new window goes through `js/core/wm.js` (`register`, `show`, `hide`) and is styled for every look in `js/core/skins.js`, plus the mobile layout (`wm.isMobile()`).
+- Touch screens (`html.touch`, `wm.isTouch()`): nothing may need hover, right-click, double-click or a keyboard. Give each a tap / long-press path or hide it on touch, keep targets about 34px+, and phone CSS uses the same media query as `wm.isMobile()`.
 - File layout: shared code in `js/core/`, player code in `js/player/`, `js/main.js` is the app entry. Each feature module is `js/<module>/index.js` + `css/<module>/index.css` (games, camera, browser…): it registers its own windows, desktop icon and Start-menu entry, and lazy-loads heavy code. Looks live in `css/looks/`, skin colors in `css/skins/`.
 - YouTube embed rules in README still apply.
 - Update README (features, file map, Privacy) in the same change as the feature.

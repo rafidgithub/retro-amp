@@ -15,11 +15,11 @@
   flex: none;
   aspect-ratio: var(--ar, 4 / 3);
   min-height: 150px;
-  max-height: calc(100vh - var(--tb-h) - 230px);
+  max-height: calc(var(--vh) - var(--tb-h) - 230px);
   overflow: hidden;
   background: #000;
 }
-[data-look=mac] .cam-screen { max-height: calc(100vh - var(--tb-h) - 310px); } /* leave room for the Dock */
+[data-look=mac] .cam-screen { max-height: calc(var(--vh) - var(--tb-h) - 310px); } /* leave room for the Dock */
 [data-family=classic] .cam-screen { margin: 2px; box-shadow: -1px -1px var(--sh), 1px 1px var(--hi), -2px -2px var(--dk), 2px 2px var(--lt); }
 [data-family=media] .cam-screen { border: 1px solid var(--field-border); border-radius: 3px; }
 /* the raw camera feed sits under the preview: it has to stay "visible" for
@@ -133,7 +133,7 @@
 [data-family=media] .cam-status { color: var(--muted, inherit); }
 
 /* ---------- Gallery window ---------- */
-#w-gallery { width: 580px; height: 440px; max-width: calc(100vw - 16px); max-height: calc(100vh - var(--tb-h) - 16px); }
+#w-gallery { width: 580px; height: 440px; max-width: calc(100vw - 16px); max-height: calc(var(--vh) - var(--tb-h) - 16px); }
 .gal-body { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
 [data-family=classic] .gal-body { padding: 6px 4px 2px; }
 [data-family=media] .gal-body { padding: 10px 10px 8px; gap: 8px; }
@@ -175,16 +175,29 @@
 .gal-info { min-width: 120px; }
 
 /* ---------- phones ---------- */
-@media (max-width: 720px) {
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
   .cam-filters { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding-bottom: 2px; }
   .cam-filters::-webkit-scrollbar { display: none; }
   .cam-filter { flex: none; height: 30px; }
-  .cam-screen { max-height: calc(100vh - var(--tb-h) - 250px); }
+  .cam-screen { max-height: calc(var(--vh) - var(--tb-h) - 250px); }
   .cam-shutter { width: 58px; height: 58px; }
   .cam-roll { width: 52px; height: 52px; }
-  #w-gallery { height: calc(100vh - var(--tb-h) - 16px); }
-  [data-look=mac] #w-gallery { height: calc(100vh - var(--tb-h) - 92px); }
+  #w-gallery { height: calc(var(--vh) - var(--tb-h) - 16px); }
+  [data-look=mac] #w-gallery { height: calc(var(--vh) - var(--tb-h) - 92px); }
   .gal-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
   .gal-item img { width: 100%; height: auto; aspect-ratio: 4 / 3; }
   .gal-foot .btn, .gal-ask .btn { min-width: 0; }
+}
+
+/* phones held sideways: viewfinder on the left, shutter column on the right */
+@media (pointer: coarse) and (max-height: 520px) and (orientation: landscape) {
+  .cam-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "screen controls" "filters controls"; align-items: start; }
+  .cam-screen { grid-area: screen; max-height: calc(var(--vh) - var(--tb-h) - 110px); }
+  [data-look=mac] .cam-screen { max-height: calc(var(--vh) - var(--tb-h) - 200px); }
+  .cam-filters { grid-area: filters; }
+  .cam-controls { grid-area: controls; grid-template-columns: auto; grid-template-rows: 1fr auto 1fr; align-self: stretch; gap: 8px; padding: 2px 4px; }
+  .cam-flip { grid-column: 1; grid-row: 1; justify-self: center; align-self: start; }
+  .cam-shutter { grid-column: 1; grid-row: 2; }
+  .cam-roll { grid-column: 1; grid-row: 3; justify-self: center; align-self: end; }
+  .cam-status { display: none; }
 }

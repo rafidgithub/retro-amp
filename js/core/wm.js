@@ -6,13 +6,17 @@ const SNAP = 10;
 const TOUCH = 3;
 const desktop = $('#desktop');
 const tasks = $('#tasks');
-const mobile = matchMedia('(max-width: 720px)');
+// Phones, portrait or landscape: windows stack in a scrolling column. Every
+// stylesheet's phone block uses this same media query.
+const mobile = matchMedia('(max-width: 720px), (pointer: coarse) and (max-height: 520px)');
 const calm = matchMedia('(prefers-reduced-motion: reduce)');
 const wins = new Map(); // el -> { task, dialog, main }
 let z = 10;
 let changed = () => {};
 
 export const isMobile = () => mobile.matches;
+// Finger-first screen (set by boot.js): tap and long-press instead of hover and right-click.
+export const isTouch = () => document.documentElement.classList.contains('touch');
 export const onChange = fn => {
   changed = fn;
 };
@@ -32,7 +36,7 @@ export function register(el, { title, icon, dialog = false, main = false }) {
   el.addEventListener('pointerdown', () => focus(el));
   bar.addEventListener('pointerdown', e => drag(e, el));
   bar.addEventListener('dblclick', e => {
-    if (!e.target.closest('button') && el.querySelector('[data-wm=shade]')) toggleShade(el);
+    if (!e.target.closest('button') && !mobile.matches && el.querySelector('[data-wm=shade]')) toggleShade(el);
   });
   for (const b of el.querySelectorAll('[data-wm]')) {
     b.addEventListener('click', () => (b.dataset.wm === 'shade' ? toggleShade(el) : hide(el)));

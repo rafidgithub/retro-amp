@@ -132,6 +132,7 @@ const plView = new ListView($('#playlist'), {
   onActivate: i => playIndex(i),
   onDelete: removeTracks,
   onMove: moveTracks,
+  onMenu: (i, x, y) => openMenu(playlistMenu(), x, y), // long press on touch screens
 });
 let results = [];
 const resView = new ListView($('#results'), {
@@ -249,6 +250,7 @@ function playIndex(i, { record = true } = {}) {
   viz.setTrack(cur().id);
   if (before && engineFor(before) !== engine()) engineFor(before).unload();
   engine().load(cur(), true);
+  watchStart();
   trackChanged();
   plView.reveal(i);
 }
@@ -262,6 +264,7 @@ function play() {
     return;
   }
   engine().play();
+  watchStart();
 }
 
 function pause() {
@@ -309,6 +312,10 @@ function seekBy(sec) {
   flash(`Seek to: ${fmtTime(t)} / ${fmtTime(dur)}`);
 }
 
+// iPhone and iPad let only the hardware buttons change a YouTube video's
+// volume, so the slider hides there (mute still works; your files keep it).
+const hardwareVolume = () => root.classList.contains('ios') && !!cur() && !isLocal(cur());
+
 function setVolume(v, announce = true) {
   S.volume = clamp(Math.round(v), 0, 100);
   setRange(ui.vol, S.volume, 100);
@@ -317,9 +324,26 @@ function setVolume(v, announce = true) {
   local.setVolume(S.volume);
   if (announce) {
     if (S.muted) toggleMute(false);
-    flash(`Volume: ${S.volume}%`);
+    flash(hardwareVolume() ? 'Use your device’s volume buttons' : `Volume: ${S.volume}%`);
   }
   persist();
+}
+
+// Phones can refuse to start a YouTube video the visitor didn't tap directly.
+// If nothing starts, stop pretending to buffer and point at the video.
+let startWatch = 0;
+function watchStart() {
+  clearTimeout(startWatch);
+  if (!wm.isTouch() || isLocal(cur())) return;
+  const at = S.index;
+  startWatch = setTimeout(() => {
+    const code = yt?.getPlayerState?.();
+    if (S.index !== at || S.state === 'playing' || S.state === 'paused' || code === 1 || code === 3) return;
+    setState('paused');
+    wm.show(VID);
+    VID.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+    flash('Tap the video to start playback', 5000);
+  }, 6000);
 }
 
 function toggleMute(force) {
@@ -468,7 +492,7 @@ function trackChanged() {
   const t = cur();
   const lk = look();
   const label = t && (lk.numbered ? `${S.index + 1}. ${t.title}${t.seconds ? ` (${fmtTime(t.seconds)})` : ''}` : t.title);
-  setMarquee(t ? label : lk.idle);
+  setMarquee(t ? label : (wm.isTouch() && lk.idleTouch) || lk.idle);
   ui.artist.textContent = t ? cleanArtist(t.channel) || 'YouTube' : 'No track loaded';
   ui.art.hidden = !t || isLocal(t);
   if (t && !isLocal(t)) ui.art.src = `https://i.ytimg.com/vi/${t.id}/mqdefault.jpg`;
@@ -476,8 +500,10 @@ function trackChanged() {
   VID.classList.toggle('idle', !t || isLocal(t));
   $('.no-signal', VID).textContent = isLocal(t) ? 'Audio only' : 'No signal';
   syncEqNote();
+  root.toggleAttribute('data-hw-volume', hardwareVolume());
   plView.setCurrent(S.index);
   setState(S.state);
+  syncMediaMeta();
   persist();
 }
 
@@ -489,6 +515,36 @@ function setState(s) {
   const label = t ? `${S.index + 1}. ${t.title}` : 'RetroAmp';
   document.title = t && s !== 'stopped' ? `${label} - RetroAmp` : 'RetroAmp';
   wm.setTitle(P, label);
+  if (mediaSession) mediaSession.playbackState = s === 'playing' ? 'playing' : s === 'paused' ? 'paused' : 'none';
+}
+
+// Lock-screen and notification controls (phones, and media keys on desktops).
+// They steer your own files; a YouTube video brings its own from the iframe.
+const mediaSession = navigator.mediaSession;
+for (const [action, fn] of [
+  ['play', () => S.state !== 'playing' && play()],
+  ['pause', () => S.state === 'playing' && pause()],
+  ['stop', () => stop()],
+  ['previoustrack', () => prev()],
+  ['nexttrack', () => next()],
+]) {
+  try {
+    mediaSession?.setActionHandler(action, fn);
+  } catch {
+    // action not supported by this browser
+  }
+}
+function syncMediaMeta() {
+  const t = cur();
+  if (!mediaSession || typeof MediaMetadata !== 'function') return;
+  mediaSession.metadata = t
+    ? new MediaMetadata({
+        title: t.title,
+        artist: cleanArtist(t.channel) || (isLocal(t) ? 'Local file' : 'YouTube'),
+        album: 'RetroAmp',
+        artwork: isLocal(t) ? [{ src: 'assets/icon.svg', type: 'image/svg+xml' }] : [{ src: `https://i.ytimg.com/vi/${t.id}/mqdefault.jpg`, sizes: '320x180', type: 'image/jpeg' }],
+      })
+    : null;
 }
 
 function syncToggles() {
@@ -745,7 +801,7 @@ $('.search-form').addEventListener('submit', async e => {
     resView.select(results.length ? [0] : []);
     resView.render(results, -1);
     ui.status.textContent = results.length
-      ? `${results.length} result${results.length === 1 ? '' : 's'}${data.title ? ` from “${data.title}”` : ''}. Double-click to play.`
+      ? `${results.length} result${results.length === 1 ? '' : 's'}${data.title ? ` from “${data.title}”` : ''}. ${wm.isTouch() ? 'Double-tap' : 'Double-click'} to play.`
       : 'Nothing found. Try other words.';
     if (results.length) $('#results').focus();
   } catch (err) {
@@ -859,7 +915,7 @@ const windowItems = () => [
   { label: 'Playlist editor', checked: wm.isOpen(PL), act: () => wm.toggle(PL) },
   { label: 'Video window', checked: wm.isOpen(VID), act: () => wm.toggle(VID) },
   { label: 'Equalizer', key: 'G', checked: wm.isOpen(EQW), act: toggleEq },
-  { label: 'Window shade', checked: P.classList.contains('shaded'), act: () => wm.toggleShade(P) },
+  ...(wm.isMobile() ? [] : [{ label: 'Window shade', checked: P.classList.contains('shaded'), act: () => wm.toggleShade(P) }]),
 ];
 const MENUS = {
   file: () => [
@@ -880,8 +936,7 @@ const MENUS = {
   ],
   play: playItems,
   help: () => [
-    { label: 'Keyboard shortcuts', act: openAbout },
-    { sep: true },
+    ...(wm.isTouch() ? [] : [{ label: 'Keyboard shortcuts', act: openAbout }, { sep: true }]),
     { label: 'About RetroAmp…', act: openAbout },
   ],
 };
@@ -898,13 +953,19 @@ const mainMenu = () => [
   { sep: true },
   { label: 'About RetroAmp…', act: openAbout },
 ];
-const playlistMenu = () => [
-  { label: 'Play', disabled: plView.selected.length !== 1, act: () => playIndex(plView.selected[0]) },
-  { label: 'Remove', key: 'Del', disabled: !plView.selected.length, act: () => removeTracks(plView.selected) },
-  { sep: true },
-  { label: 'Add from YouTube…', key: 'L', act: openSearch },
-  { label: 'Clear playlist', disabled: !S.list.length, act: clearPlaylist },
-];
+// Move up / down stand in for drag-to-reorder on touch screens.
+const playlistMenu = () => {
+  const one = plView.selected.length === 1 ? plView.selected[0] : -1;
+  return [
+    { label: 'Play', disabled: one < 0, act: () => playIndex(one) },
+    { label: 'Move up', disabled: one < 1, act: () => moveTracks([one], one - 1) },
+    { label: 'Move down', disabled: one < 0 || one >= S.list.length - 1, act: () => moveTracks([one], one + 2) },
+    { label: 'Remove', key: 'Del', disabled: !plView.selected.length, act: () => removeTracks(plView.selected) },
+    { sep: true },
+    { label: 'Add from YouTube…', key: 'L', act: openSearch },
+    { label: 'Clear playlist', disabled: !S.list.length, act: clearPlaylist },
+  ];
+};
 
 let barBtn = null;
 function openBarMenu(btn) {
@@ -926,6 +987,7 @@ P.addEventListener('contextmenu', e => {
   openMenu(mainMenu(), e.clientX, e.clientY);
 });
 $('#playlist').addEventListener('contextmenu', e => {
+  if (e.defaultPrevented) return; // a touch long press, already handled by the list view
   e.preventDefault();
   openMenu(playlistMenu(), e.clientX, e.clientY);
 });
@@ -1280,15 +1342,15 @@ function syncEqNote() {
     ? S.eq.on
       ? 'Shaping your file in real time.'
       : 'Equalizer is off.'
-    : 'YouTube audio can’t be equalized in a browser. The EQ works on your own files — drop audio files on the desktop or click Files….';
+    : `YouTube audio can’t be equalized in a browser. The EQ works on your own files — ${wm.isTouch() ? 'tap Files… to open some' : 'drop audio files on the desktop or click Files…'}.`;
 }
 
 // First time it opens, the EQ slots in under the player (Winamp order:
-// player, equalizer, playlist) and pushes a docked playlist down.
+// player, equalizer, playlist) and pushes the windows docked below it down.
 let eqPlaced = !!saved.layout?.['w-eq'];
 function showEq() {
   if (!eqPlaced && !wm.isMobile()) {
-    const below = wm.docked(P).filter(r => r.anchor === P && r.side === 'bottom').map(r => r.el);
+    const below = wm.docked(P).filter(r => r.el.offsetTop >= P.offsetTop + P.offsetHeight - 1).map(r => r.el);
     wm.place(EQW, P.offsetLeft, P.offsetTop + P.offsetHeight);
     for (const el of below) wm.place(el, el.offsetLeft, el.offsetTop + EQW.offsetHeight);
     eqPlaced = true;
@@ -1481,11 +1543,13 @@ if (saved.layout && !wm.isMobile()) {
   wm.restore(saved.layout);
 } else if (!wm.isMobile()) {
   // Winamp-style default: playlist docked under the player, video to the right,
-  // leaving the desktop icons uncovered.
+  // leaving the desktop icons uncovered. Narrower screens (tablets) get the
+  // video under the playlist instead of half off the edge.
   const x = 100;
   wm.place(P, x, 20);
   wm.place(PL, x, 20 + P.offsetHeight);
-  wm.place(VID, x + P.offsetWidth, 20);
+  if (x + P.offsetWidth + VID.offsetWidth <= $('#desktop').clientWidth) wm.place(VID, x + P.offsetWidth, 20);
+  else wm.place(VID, x, 20 + P.offsetHeight + PL.offsetHeight);
 }
 wm.fit();
 wm.focus(P);

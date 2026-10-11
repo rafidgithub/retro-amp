@@ -14,6 +14,7 @@ export const LOOKS = {
     clock: 'amp',
     numbered: true,
     idle: 'RetroAmp  ***  Press eject (or L) to add music from YouTube',
+    idleTouch: 'RetroAmp  ***  Tap eject to add music from YouTube',
   },
   chicago: {
     family: 'classic',
@@ -21,6 +22,7 @@ export const LOOKS = {
     lcd: { seg: true, w: 9, h: 16, t: 2, gap: 3, scale: 2 },
     clock: 'cd',
     idle: 'No track. Click eject to add music from YouTube.',
+    idleTouch: 'No track. Tap eject to add music from YouTube.',
   },
   luna: {
     family: 'media',

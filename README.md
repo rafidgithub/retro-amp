@@ -10,6 +10,7 @@ Made by [Rafid Khan](https://rafidkhan.github.io/).
 - [Quick start](#quick-start)
 - [Deploy to Vercel](#deploy-to-vercel)
 - [Keyboard shortcuts](#keyboard-shortcuts)
+- [Phones and tablets](#phones-and-tablets)
 - [Modules](#modules): [Games](#games) · [Camera](#camera) · [Internet](#internet)
 - [Project structure](#project-structure)
 - [How it works](#how-it-works)
@@ -25,7 +26,7 @@ Made by [Rafid Khan](https://rafidkhan.github.io/).
 - Play your own audio files (MP3, M4A, OGG, FLAC, WAV…): open them or drop them on the desktop. They play in the browser with a real spectrum analyzer.
 - 10-band equalizer with preamp, presets, Auto headroom and a live response curve (press **G**). It shapes your own files; no web page can process YouTube's audio.
 - Spectrum analyzer and oscilloscope, 7-segment clock (blinks when paused), scrolling title marquee.
-- Drag to reorder the playlist; the mouse wheel over the player changes volume.
+- Drag to reorder the playlist (long-press a track on touch screens); the mouse wheel over the player changes volume.
 - Sleep timer (Play › Sleep timer): fades the music out over 30 seconds, then dims the desktop.
 
 **Time machine**
@@ -114,6 +115,20 @@ Or push the repository to GitHub and import it at [vercel.com/new](https://verce
 | Esc | Stop |
 | G H R B F Q | Go, Home, Reload, Back, Forward, Quit (text-mode skins only) |
 
+## Phones and tablets
+
+RetroAmp runs in the browser on Android and iOS (iPhone and iPad).
+
+- **Layout.** On phones (screens up to 720 px wide, or a phone held sideways) the windows stack in a scrolling column: the player, playlist, equalizer and video fill the width, and dialogs fill the screen. Every look gives the player finger-sized button rows. Tablets keep the desktop with draggable windows.
+- **Touch.** Tap selects; double-tap a track or search result to play it; long-press a track for Play, Move up, Move down and Remove. Menus, list rows and buttons are taller, small title-bar buttons get a bigger invisible hit area, and text fields use 16 px text so iOS doesn't zoom in.
+- **Hidden on touch screens:** keyboard shortcuts (the About window shows touch tips instead), shortcut keys in menus, tooltips, drag-to-reorder and drag-and-drop of files (use **Files…**). Phones also drop the desktop icons (everything is in the Start menu) and window shade.
+- **Lock screen.** Your own files show their title and play/pause/next/previous on the lock screen and in the notification shade (Media Session API). YouTube videos bring their own.
+- **iPhone and iPad.** iOS lets only the hardware buttons set a video's volume, so the volume slider hides while a YouTube track is loaded. Mute still works, and your own files keep the slider.
+- **Camera.** Starts with the front camera, shows Back / Front when there's more than one, and puts the shutter beside the viewfinder in landscape. **Save** opens the share sheet. Needs HTTPS (see below).
+- **Games** show on-screen buttons; Minesweeper flags with a long press.
+
+`js/boot.js` sets `html.touch` (no hover, coarse pointer) and `html.ios` before first paint. Each stylesheet's phone block uses the same media query as `wm.isMobile()`: `(max-width: 720px), (pointer: coarse) and (max-height: 520px)`.
+
 ## Modules
 
 ### Games
@@ -181,7 +196,7 @@ Each game is `js/games/<id>.js` plus `css/games/<id>.css`, loaded the first time
 │   ├── camera/             Camera and Gallery windows
 │   └── browser/            Internet window, one block per browser era
 ├── js/
-│   ├── boot.js             Applies the saved skin before first paint (classic script)
+│   ├── boot.js             Before first paint: the saved skin, html.touch and html.ios (classic script)
 │   ├── main.js             App entry: player, playlist, desktop, menus, Skins window, keyboard
 │   ├── core/               Shared building blocks
 │   │   ├── util.js         DOM helpers, storage, YouTube URL parsing
@@ -237,6 +252,8 @@ Each game is `js/games/<id>.js` plus `css/games/<id>.css`, loaded the first time
 - **Local files are session-only.** They play from memory and drop out of the playlist on reload; YouTube tracks are kept.
 - **Some videos won't play.** Owners can block embedding (often official label videos). RetroAmp marks those tracks and skips to the next one. "Official Audio" or "Topic" uploads usually work.
 - **Search scrapes YouTube's results page.** No key is needed, but if YouTube changes its page format or rate-limits the server, search can break until `api/yt.js` is updated. Pasting links keeps working.
+- **Phones may not autoplay YouTube.** Mobile browsers, iOS especially, can refuse to start a video that wasn't tapped directly. If a track hasn't started after a few seconds, RetroAmp stops showing *Buffering*, opens the Video window and asks you to tap the video.
+- **No background playback on phones.** Mobile browsers pause web video when the screen locks or the browser goes to the background, so YouTube tracks stop there. Your own files may stop too (iOS suspends Web Audio in the background).
 - **The camera needs HTTPS.** Browsers only allow it on `https://` pages and `localhost`; a phone opening the dev server as `http://192.168.x.x:3000` sees *Camera needs HTTPS*.
 - **The Internet window is Google-only by design.** Pages you reach by clicking inside Google keep the last address you entered in the address bar, Stop only stops the animation, there is one tab, and Google's page follows your system's dark mode, not the skin. If Google ever stops honoring `igu=1`, the window shows the browser's own refusal page.
 - **YouTube's rules:** keep the video window at least 200×200 px when you can. Hiding the player entirely is against YouTube's embed policy.

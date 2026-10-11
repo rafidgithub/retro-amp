@@ -225,3 +225,17 @@
   --th-bg: var(--orb);
   --th-sh: 0 0 0 1px var(--orb-ring), 0 1px 3px rgba(0, 0, 0, .5);
 }
+
+/* ---------- phones: same query as wm.isMobile() ---------- */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  /* transport gets its own row; every orb grows to finger size */
+  [data-family=media] .player-body { grid-template-areas: "art lcd lcd" "title title title" "artist artist artist" "seek seek seek" "transport transport transport" "toggles toggles vol"; }
+  [data-family=media] .transport { --play-size: 54px; gap: 10px; }
+  [data-family=media] .transport button { width: 38px; height: 38px; }
+  [data-family=media] .transport .ico { width: 14px; height: 14px; }
+  [data-family=media] .toggles { gap: 6px; }
+  [data-family=media] .tgl { width: 30px; height: 30px; }
+  [data-family=media] .vol-icon { width: 30px; height: 30px; }
+  [data-family=media] .vol { width: 72px; }
+  [data-family=media] .eq-tgl { height: 30px; }
+}

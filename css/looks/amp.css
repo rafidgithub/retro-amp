@@ -272,3 +272,17 @@
   --th-sh: var(--gold-sh), 0 0 0 1px #000;
 }
 [data-look=amp] .eq-note { font: var(--pix); line-height: 1.5; text-transform: uppercase; }
+
+/* ---------- phones: same query as wm.isMobile() ---------- */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  /* transport and toggles get their own full-width rows, with finger-sized buttons */
+  [data-look=amp] .player-body { grid-template-areas: "lcd title" "lcd meta" "lcd vol" "seek seek" "transport transport" "toggles toggles"; }
+  [data-look=amp] .transport button { flex: 1; height: 36px; }
+  [data-look=amp] .transport .t-eject { flex: .8; height: 32px; }
+  [data-look=amp] .transport .ico { width: 14px; height: 14px; }
+  [data-look=amp] .toggles { flex-wrap: wrap; justify-content: stretch; gap: 4px; }
+  [data-look=amp] .toggles .tgl { flex: 1; justify-content: center; height: 30px; }
+  [data-look=amp] .vol { --th-w: 18px; --th-h: 16px; }
+  [data-look=amp] .seek { --th-h: 14px; }
+  [data-look=amp] .eq-presets { height: 28px; }
+}

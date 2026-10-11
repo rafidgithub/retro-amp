@@ -17,6 +17,10 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+/* --vh: the visible height on phones (100vh there includes the hidden toolbars) */
+:root { --vh: 100vh; }
+@supports (height: 100dvh) { :root { --vh: 100dvh; } }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 html, body { height: 100%; margin: 0; }
 body {
   overflow: hidden;
@@ -139,7 +143,7 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
 .progress-fill { position: absolute; top: 0; bottom: 0; left: 0; }
 
 #w-playlist { min-height: 140px; }
-#w-search { width: 560px; height: 430px; max-width: calc(100vw - 16px); max-height: calc(100vh - var(--tb-h) - 16px); }
+#w-search { width: 560px; height: 430px; max-width: calc(100vw - 16px); max-height: calc(var(--vh) - var(--tb-h) - 16px); }
 #w-about { width: 380px; }
 .about-head { display: flex; align-items: center; gap: 12px; }
 .about-logo { width: 40px; height: 40px; flex: none; }
@@ -223,7 +227,7 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
 /* ---------- skin picker ---------- */
 #tray-skin { display: flex; align-items: center; gap: 4px; height: 22px; padding: 0 6px; white-space: nowrap; }
 #tray-skin .ico { width: 16px; height: 16px; }
-#w-skins { width: 720px; height: min(640px, calc(100vh - var(--tb-h) - 16px)); max-width: calc(100vw - 16px); }
+#w-skins { width: 720px; height: min(640px, calc(var(--vh) - var(--tb-h) - 16px)); max-width: calc(100vw - 16px); }
 .skins-body { display: flex; flex-direction: column; min-height: 0; }
 .skin-groups { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
 .skin-groups h3 { margin: 0 0 6px; font-size: inherit; }
@@ -315,14 +319,59 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
 }
 
-/* ---------- phones: windows stack in a scrolling column ---------- */
-@media (max-width: 720px) {
-  #desktop { overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 8px 16px; }
-  .win { position: relative; left: auto !important; top: auto !important; flex: none; }
+/* Long Start menus scroll instead of running off short screens. */
+#start-menu { max-height: calc(var(--vh) - var(--tb-h) - 4px); }
+.sm-items { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+
+/* ---------- phones: windows stack in a scrolling column ----------
+   Same query as wm.isMobile(): narrow screens, and phones held sideways. */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  #desktop { overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 8px 16px; }
+  .win { position: relative; left: auto !important; top: auto !important; flex: none; max-width: 100%; }
   .win.is-min { display: none; }
   #w-video.is-min { display: flex; position: absolute; left: -10000px !important; } /* keep the player alive */
-  .win.dialog { position: fixed; inset: 8px 8px auto !important; width: auto; z-index: 800; }
-  #w-search { height: calc(100vh - var(--tb-h) - 16px); }
+  .win.dialog { position: fixed; inset: 8px 8px auto !important; width: auto; max-height: calc(var(--vh) - var(--tb-h) - 16px); z-index: 800; }
+  .win.dialog > .win-body { overflow: auto; overscroll-behavior: contain; }
+  #w-search { height: calc(var(--vh) - var(--tb-h) - 16px); }
   .titlebar { touch-action: auto; }
   #icons, #tray-skin span, #clock { display: none; }
+  /* no window shade: in a column there's nothing to roll up out of the way of */
+  [data-wm=shade] { display: none !important; }
+  /* the player, playlist, equalizer and video fill the column instead of shrinking */
+  #w-player, #w-playlist, #w-eq, #w-video { width: 100% !important; }
+  #w-playlist { height: clamp(220px, calc(var(--vh) * .45), 460px) !important; resize: none !important; }
+  #w-video .screen { width: 100%; height: auto; aspect-ratio: 4 / 3; }
+  .pl-foot .btn { min-width: 0; }
+  /* dialog hints get their own line above the buttons */
+  .dlg-foot { flex-wrap: wrap; justify-content: flex-end; row-gap: 6px; }
+  .dlg-foot > .search-status { flex: 1 0 100%; white-space: normal; }
 }
+
+/* phones held sideways: a readable column, and a video that fits the screen height */
+@media (pointer: coarse) and (max-height: 520px) and (min-width: 721px) {
+  #w-player, #w-playlist, #w-eq { width: min(100%, 620px) !important; }
+  #w-video { width: min(100%, calc((var(--vh) - var(--tb-h) - 70px) * 4 / 3)) !important; }
+}
+
+/* ---------- touch screens (html.touch, set by boot.js) ---------- */
+.touch-only { display: none; }
+.touch .touch-only { display: revert; }
+.touch :is(.mouse-only, .mi-key, .tooltip) { display: none !important; }
+html.touch { touch-action: manipulation; } /* no double-tap zoom; pinch zoom still works */
+.touch body { -webkit-touch-callout: none; }
+.touch-tips { margin: 12px 0; padding-left: 18px; line-height: 1.5; }
+/* iOS zooms the whole page into any text field set under 16px */
+.touch :is(input[type=text], input[type=search], input[type=url], input:not([type]), textarea, select) { min-height: 34px; font-size: 16px !important; }
+/* finger-sized targets */
+.touch .btn { min-height: 34px; }
+.touch .lv-row { min-height: 36px; }
+.touch .menu .mi { min-height: 40px; }
+.touch .sm-items button { min-height: 42px; }
+.touch .chip { display: inline-block; padding: 5px 0; }
+/* small chrome keeps its look but gets a bigger invisible hit area */
+.touch :is(.tb-btns button, .tgl, .vol-icon, .balloon-x) { position: relative; }
+.touch :is(.tb-btns button, .tgl, .vol-icon, .balloon-x)::after { content: ''; position: absolute; inset: -8px -3px; }
+.touch input[type=range] { box-sizing: content-box; padding-block: 10px; margin-block: -10px; }
+.touch .eq-slot input[type=range] { padding-block: 0; margin-block: 0; touch-action: none; } /* vertical: drag the band, not the page */
+/* iPhone/iPad: only the hardware buttons set a YouTube video's volume (main.js sets this) */
+[data-hw-volume] .vol { visibility: hidden; }

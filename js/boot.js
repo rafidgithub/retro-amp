@@ -8,3 +8,14 @@ try {
 } catch {
   // storage blocked (private mode) — keep the default skin
 }
+
+// Finger-first screens get html.touch (bigger targets, touch wording, no
+// mouse-only extras); iPhone/iPad also get html.ios (no page-set YouTube volume).
+{
+  const root = document.documentElement;
+  const touch = matchMedia('(hover: none) and (pointer: coarse)');
+  const sync = () => root.classList.toggle('touch', touch.matches);
+  sync();
+  touch.addEventListener?.('change', sync);
+  if (/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) root.classList.add('ios');
+}

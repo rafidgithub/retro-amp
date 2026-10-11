@@ -221,7 +221,7 @@
 }
 [data-look=mac] .task span { display: none; }
 [data-look=mac] .task .ico { width: 26px; height: 26px; }
-[data-look=mac] .task:hover { transform: translateY(-8px) scale(1.2); }
+@media (hover: hover) { [data-look=mac] .task:hover { transform: translateY(-8px) scale(1.2); } } /* a tap would leave it stuck up */
 [data-look=mac] .task::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--dock-dot); }
 
 /* Apple-style menu drops down from the top-left */
@@ -250,9 +250,14 @@
 [data-look=mac] #shutdown { background: #000; }
 [data-look=mac] #shutdown p { color: #fff; font: 22px/1.5 "Lucida Grande", Geneva, sans-serif; }
 
-/* phones: keep dialogs clear of the top menu bar and the Dock */
-@media (max-width: 720px) {
-  [data-look=mac] .win.dialog { top: calc(var(--tb-h) + 8px) !important; }
-  [data-look=mac] #w-search { height: calc(100vh - var(--tb-h) - 92px); }
+/* phones (same query as wm.isMobile()): keep dialogs clear of the top menu bar
+   and the Dock; a full Dock scrolls sideways instead of running off the screen */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  [data-look=mac] .win.dialog { top: calc(var(--tb-h) + 8px) !important; max-height: calc(var(--vh) - var(--tb-h) - 100px); }
+  [data-look=mac] #w-search { height: calc(var(--vh) - var(--tb-h) - 92px); }
   [data-look=mac] #desktop { padding-bottom: 92px; }
+  [data-look=mac] #tasks { max-width: calc(100vw - 12px); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; gap: 6px; padding: 6px 8px 10px; }
+  [data-look=mac] #tasks::-webkit-scrollbar { display: none; }
+  [data-look=mac] .task { width: 42px; height: 42px; }
+  [data-look=mac] .task::after { bottom: -6px; }
 }
