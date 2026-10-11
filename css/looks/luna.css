@@ -1,5 +1,5 @@
 /* Luna look — XP title bars, caption buttons, taskbar and start menu.
-   Player, lists and dialogs come from media.css; skins in skins-media.css
+   Player, lists and dialogs come from looks/media.css; skins in skins/media.css
    (Olive, Silver, Royale, Noir, Aero…) recolor the variables below. */
 
 [data-look=luna] {

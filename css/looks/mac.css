@@ -1,6 +1,6 @@
 /* Mac look — menu bar across the top, window controls on the left with a
    centered title, and a Dock for open windows. Defaults are Aqua (2001);
-   System 7, Platinum, Leopard, Big Sur and Liquid Glass (skins-media.css)
+   System 7, Platinum, Leopard, Big Sur and Liquid Glass (skins/media.css)
    recolor it. */
 
 [data-look=mac] {

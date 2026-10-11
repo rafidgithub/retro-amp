@@ -1,6 +1,6 @@
 /* Amp look — the 1998 brushed-metal player with the green LCD.
-   Dialogs, menus and the taskbar use the Win98 chrome from classic.css.
-   Liquid Chrome (variants.css) recolors it through the --m-* variables. */
+   Dialogs, menus and the taskbar use the Win98 chrome from looks/classic.css.
+   Liquid Chrome (skins/classic.css) recolors it through the --m-* variables. */
 
 [data-look=amp] {
   --lcd-on: #00e000;

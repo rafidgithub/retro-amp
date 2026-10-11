@@ -1,6 +1,6 @@
 /* Modern look — flat 2010s–2020s desktops: thin caption buttons, flat taskbar
    with an accent underline, card-style menus. Metro, Tiles, Material, Mica,
-   Holo… (skins-media.css) recolor it through these variables. */
+   Holo… (skins/media.css) recolor it through these variables. */
 
 [data-look=modern] {
   --ui-font: 13px/1.4 "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;

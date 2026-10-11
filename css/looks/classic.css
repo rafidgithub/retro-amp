@@ -1,6 +1,6 @@
 /* Win9x chrome — desktop, taskbar, Start menu, menus and dialogs shared by the
    Amp and Chicago looks, plus the complete Chicago window look.
-   Color schemes (Rainy Day, Desert, Hot Dog Stand…) live in variants.css. */
+   Color schemes (Rainy Day, Desert, Hot Dog Stand…) live in css/skins/classic.css. */
 
 [data-family=classic] {
   --face: #c0c0c0;

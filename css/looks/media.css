@@ -1,7 +1,7 @@
 /* Media family — layout shared by the Luna (XP), Modern (2010s+) and Mac looks:
    buttons, fields, list views, dialogs, menus, and the album-art media player.
    Everything here reads variables; each look sets defaults and each skin
-   (skins-media.css) recolors them. */
+   (skins/media.css) recolors them. */
 
 [data-family=media] {
   --ui-font: 11px/1.35 Tahoma, Verdana, Geneva, sans-serif;

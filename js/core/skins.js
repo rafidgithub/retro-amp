@@ -1,6 +1,6 @@
-// Skin catalog. A "look" decides layout and renderers (amp.css, classic.css,
-// media.css + luna/modern/mac.css); a skin is a look plus a color scheme
-// (skins-classic.css / skins-media.css). Looks belong to a family: "classic"
+// Skin catalog. A "look" decides layout and renderers (css/looks/: amp,
+// classic, media + luna/modern/mac); a skin is a look plus a color scheme
+// (css/skins/classic.css / media.css). Looks belong to a family: "classic"
 // (Win9x chrome) or "media" (album-art player).
 
 const smooth = (bar, gap, reflect = false) => ({ pixel: false, bar, gap, reflect });

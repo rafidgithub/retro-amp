@@ -1,9 +1,9 @@
-// Retro camera + photo gallery windows. js/camera.js loads this the first time
+// Retro camera + photo gallery windows. js/camera/index.js loads this the first time
 // either window opens. The camera runs only while the Camera window is open and
 // the tab is visible; photos stay in this browser (store.js).
-import { $$, h } from '../util.js';
-import * as wm from '../wm.js';
-import { Static } from '../viz.js';
+import { $$, h } from '../core/util.js';
+import * as wm from '../core/wm.js';
+import { Static } from '../player/viz.js';
 import { FILTERS, filterById, render, capture } from './filters.js';
 import * as store from './store.js';
 

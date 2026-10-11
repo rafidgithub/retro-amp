@@ -2,8 +2,8 @@
 // speeds up after 4 and 12 hits and on first touching the orange and red rows,
 // and the paddle shrinks to half once the ball reaches the back wall.
 import { crisp, loop, toLocal, PIXEL_FONT, fontReady } from './common.js';
-import { isMenuOpen } from '../menu.js';
-import { h } from '../util.js';
+import { isMenuOpen } from '../core/menu.js';
+import { h } from '../core/util.js';
 
 const W = 360;
 const H = 300;

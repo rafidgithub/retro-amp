@@ -1,7 +1,7 @@
 // Retro camera: desktop icons and Start menu entries. The Camera and Gallery
 // windows (js/camera/app.js) load the first time one opens, so nothing asks
 // for the camera, or even lists cameras, before someone opens it.
-import { $, h } from './util.js';
+import { $, h } from '../core/util.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const sprite = document.createElementNS(NS, 'svg');
@@ -27,7 +27,7 @@ let app = null;
 async function open(which) {
   document.documentElement.classList.add('cam-wait');
   try {
-    app ||= import('./camera/app.js');
+    app ||= import('./app.js');
     const m = await app;
     if (which === 'gallery') m.openGallery();
     else m.openCamera();

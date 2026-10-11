@@ -4,9 +4,9 @@
 // A game module's default export is create(host) → game:
 //   host: { body, win, store: { get, set }, setTitle(text), alert(opts), pad(buttons) }
 //   game: { newGame(), menu() → items, help, key(e) → handled?, keyup?(e), pause?(), pad?(act, down) }
-import { $, $$, h } from './util.js';
-import * as wm from './wm.js';
-import { openMenu, closeMenus, isMenuOpen } from './menu.js';
+import { $, $$, h } from '../core/util.js';
+import * as wm from '../core/wm.js';
+import { openMenu, closeMenus, isMenuOpen } from '../core/menu.js';
 
 const GAMES = [
   { id: 'minesweeper', name: 'Minesweeper', icon: 'g-mines', era: '1990 · Windows 3.1' },
@@ -108,7 +108,7 @@ async function launch(id) {
     loading.add(id);
     document.documentElement.classList.add('g-wait');
     try {
-      const [mod] = await Promise.all([import(`./games/${id}.js`), loadCss(id)]);
+      const [mod] = await Promise.all([import(`./${id}.js`), loadCss(id)]);
       g = build(def, mod.default);
       running.set(id, g);
     } catch (err) {

@@ -1,5 +1,5 @@
 // Snake — a late-90s phone Snake homage on a green-gray LCD.
-import { h } from '../util.js';
+import { h } from '../core/util.js';
 import { crisp, loop, swipe, PIXEL_FONT, fontReady } from './common.js';
 
 const COLS = 24;

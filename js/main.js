@@ -1,13 +1,13 @@
 // RetroAmp — a Windows 95/98/XP-era audio player that streams YouTube through
 // the official embedded player. No accounts, no API keys; state lives in localStorage.
-import { $, $$, h, clamp, fmtTime, debounce, cleanArtist, parseYouTube, loadState, saveState, VIDEO_ID } from './util.js';
-import { createPlayer } from './yt.js';
-import { createLocal, EQ_BANDS, EQ_RANGE } from './local.js';
-import { Visualizer, Lcd, Static } from './viz.js';
-import { ListView } from './listview.js';
-import { openMenu, closeMenus, isMenuOpen } from './menu.js';
-import * as wm from './wm.js';
-import { LOOKS, SKINS, TIMELINE, YEARS, skinGroups, skinOrder, skinConfig } from './skins.js';
+import { $, $$, h, clamp, fmtTime, debounce, cleanArtist, parseYouTube, loadState, saveState, VIDEO_ID } from './core/util.js';
+import { createPlayer } from './player/yt.js';
+import { createLocal, EQ_BANDS, EQ_RANGE } from './player/local.js';
+import { Visualizer, Lcd, Static } from './player/viz.js';
+import { ListView } from './core/listview.js';
+import { openMenu, closeMenus, isMenuOpen } from './core/menu.js';
+import * as wm from './core/wm.js';
+import { LOOKS, SKINS, TIMELINE, YEARS, skinGroups, skinOrder, skinConfig } from './core/skins.js';
 
 const VIZ_MODES = [
   ['spectrum', 'Spectrum analyzer'],

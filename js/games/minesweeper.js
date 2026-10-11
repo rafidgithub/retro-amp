@@ -1,7 +1,7 @@
 // Minesweeper, Windows 3.1 to XP. Left click opens, right click flags, click a
 // number whose flags are all placed to open its neighbors (chord).
 import { crisp } from './common.js';
-import { h } from '../util.js';
+import { h } from '../core/util.js';
 
 const LEVELS = {
   beginner: { name: 'Beginner', rows: 9, cols: 9, mines: 10 },

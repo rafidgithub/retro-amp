@@ -1,5 +1,5 @@
 // Blocks — a 1989 handheld-style falling-blocks puzzle in four shades of green.
-import { h } from '../util.js';
+import { h } from '../core/util.js';
 import { crisp, loop, swipe, shuffle, PIXEL_FONT, fontReady } from './common.js';
 
 const COLS = 10;

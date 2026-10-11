@@ -1,7 +1,6 @@
 /* RetroAmp — structure shared by every skin.
-   Each skin belongs to a "look" (html[data-look]) that sets the layout:
-   classic.css (Win9x chrome + Chicago), amp.css and luna.css.
-   variants.css recolors a look into the other skins (html[data-skin]). */
+   Each skin belongs to a "look" (html[data-look]) that sets the layout, in
+   css/looks/; css/skins/ recolors a look into each skin (html[data-skin]). */
 
 /* Silkscreen by Jason Kottke, SIL Open Font License (assets/fonts/OFL.txt) */
 @font-face {
