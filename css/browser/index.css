@@ -1,0 +1,482 @@
+/* Internet window (js/browser/index.js). The window frame comes from the skin like
+   every other window; #w-web[data-era] swaps the browser chrome inside it:
+   mosaic (1993), lynx (text mode), nav (1995–97), ie5 (1998–2000), ie6
+   (2001–06), tabs (2007–09), safari (Mac 2001–09), chrome (2010s), modern
+   (2020s). Colors read the skin's variables, so every skin tints its browser;
+   the eras set layout, icons and loaders. All artwork is our own. */
+
+#w-web {
+  width: 820px;
+  height: 600px;
+  min-width: 340px;
+  min-height: 260px;
+  max-width: 100%;
+  max-height: 100%;
+  /* classic bevels, with flat fallbacks for the media family */
+  --wb-raised: var(--raised, inset 0 0 0 1px var(--btn-border, #888));
+  --wb-sunken: var(--sunken, inset 0 0 0 1px var(--field-border, #888));
+  --wb-hair-in: var(--hair-in, inset 0 0 0 1px var(--rule, #aaa));
+  --wb-hair-out: var(--hair-out, inset 0 0 0 1px var(--rule, #aaa));
+  --wb-line: var(--sh, var(--rule, #999));
+  --wb-light: var(--hi, rgba(255, 255, 255, .7));
+  --wb-btn: var(--btn, var(--face));
+  --wb-field: var(--field, #fff);
+  --wb-sel: var(--sel, #000080);
+  --wb-page: #fff;
+  --wb-strip: color-mix(in srgb, var(--face) 84%, var(--text));
+  --wb-p: 0;
+  /* toolbar icon colors; monochrome eras reset them to currentColor */
+  --wb-arrow: #1f8f2f;
+  --wb-ink: rgba(0, 0, 0, .55);
+  --wb-stop: #d9261c;
+  --wb-reload: #1f6fd0;
+  --wb-roof: #c8361e;
+  --wb-house: #f4ead2;
+  --wb-full: #2a4f9e;
+  --wb-go: #2fa236;
+  --wb-lock: #c99a1e;
+  --wb-key: #c99a1e;
+}
+#w-web.wb-max { left: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; }
+
+.wb-body { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.wb-chrome { display: grid; flex: none; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+
+/* ---------- parts, hidden until an era places them ---------- */
+.wb-menubar { grid-area: menu; display: none; align-self: stretch; align-items: center; }
+.wb-menubar button { padding: 1px 7px 2px; }
+.wb-menubar button:is(:hover, .open) { background: var(--wb-sel); color: var(--sel-text, #fff); }
+[data-family=media] .wb-menubar u { text-decoration: none; }
+.wb-tools { grid-area: tools; display: flex; align-items: center; min-width: 0; overflow: hidden; }
+.wb-title { grid-area: title; display: none; align-items: center; gap: 6px; min-width: 0; }
+.wb-title-val { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-addr { grid-area: addr; display: flex; align-items: center; gap: 5px; min-width: 0; }
+.wb-find { grid-area: find; display: none; min-width: 0; }
+.wb-tabs { grid-area: tabs; display: none; align-self: end; min-width: 0; }
+.wb-more { grid-area: more; display: none; align-items: center; justify-content: center; gap: 4px; height: 28px; padding: 0 6px; }
+.wb-throb { grid-area: throb; position: relative; display: none; align-self: stretch; overflow: hidden; }
+/* out of flow, so the canvas never sizes its grid row */
+.wb-throb canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+.wb-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; flex: none; min-width: 48px; padding: 2px 4px; white-space: nowrap; }
+.wb-ico { display: grid; place-items: center; }
+.wb-ico svg { width: 24px; height: 24px; fill: currentColor; }
+.wb-ico .wb-x, .wb-more .wb-gear, .wb-full, .wb-sep, .wb-go { display: none; }
+.wb-btn:disabled { opacity: .5; }
+.wb-btn:disabled .wb-ico { filter: grayscale(1); }
+.wb-sep { flex: none; width: 2px; align-self: stretch; margin: 5px 3px; box-shadow: var(--wb-hair-in); }
+
+.wb-addr-lbl { flex: none; white-space: nowrap; }
+.wb-addr-box, .wb-find-box { position: relative; display: flex; align-items: center; flex: 1; min-width: 0; height: 22px; background: var(--wb-field); color: var(--text); box-shadow: var(--wb-sunken); }
+#w-web :is(.wb-addr-box, .wb-find-box) input {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.wb-fill { position: absolute; left: 0; top: 0; bottom: 0; display: none; width: calc(var(--wb-p) * 100%); pointer-events: none; }
+.wb-addr-ico, .wb-addr-lock { position: relative; display: none; place-items: center; flex: none; padding-left: 4px; }
+:is(.wb-addr-ico, .wb-addr-lock) svg { width: 16px; height: 16px; }
+.wb-ab { position: relative; display: none; place-items: center; flex: none; width: 22px; height: 100%; }
+.wb-ab .wb-ico svg { width: 14px; height: 14px; }
+.wb-go { align-items: center; gap: 4px; flex: none; height: 22px; padding: 0 6px; }
+.wb-go .wb-ico svg { width: 16px; height: 16px; }
+.wb-find-box { width: 100%; }
+.wb-find-go { display: grid; place-items: center; flex: none; width: 24px; height: 100%; }
+.wb-find-go svg { width: 13px; height: 13px; fill: currentColor; }
+
+/* the tab: favicon turns into a spinner while loading */
+.wb-tab { display: flex; align-items: center; gap: 7px; width: 230px; max-width: 100%; height: 28px; padding: 0 5px 0 10px; }
+.wb-tab-ico { display: grid; place-items: center; flex: none; width: 16px; height: 16px; }
+.wb-tab-ico svg { width: 16px; height: 16px; }
+.wb-tab-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-tab-x { display: grid; place-items: center; flex: none; width: 18px; height: 18px; border-radius: 50%; }
+.wb-tab-x .wb-ico svg { width: 12px; height: 12px; }
+.wb-tab-x:hover { background: rgba(127, 127, 127, .25); }
+.wb-loading .wb-tab-ico svg { display: none; }
+.wb-loading .wb-tab-ico { border-radius: 50%; animation: wb-spin .8s linear infinite; }
+@keyframes wb-spin { to { transform: rotate(360deg); } }
+
+/* ---------- the page ---------- */
+.wb-view { position: relative; flex: 1; min-height: 0; overflow: hidden; background: var(--wb-page); }
+.wb-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.wb-drag .wb-frame { pointer-events: none; }
+/* 1990s: the page paints in from the top, a few rows at a time */
+.wb-wipe { position: absolute; inset: 0; z-index: 1; display: none; background: var(--wb-page); pointer-events: none; }
+.wb-wipe.on { display: block; }
+.wb-wipe.reveal { display: block; animation: wb-reveal .5s steps(7) forwards; }
+@keyframes wb-reveal { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(100% 0 0 0); } }
+.wb-line { position: absolute; left: 0; top: 0; z-index: 2; display: none; width: calc(var(--wb-p) * 100%); height: 2px; background: var(--accent, var(--wb-sel)); opacity: 0; pointer-events: none; }
+.wb-loading .wb-line { opacity: 1; }
+
+/* progress: one number (--wb-p), drawn as a status bar, an address-bar fill or a line */
+:is(.wb-st-prog i, .wb-fill, .wb-line) { transition: width .25s ease-out, opacity .3s; }
+.wb-creep :is(.wb-st-prog i, .wb-fill, .wb-line) { transition: width 9s cubic-bezier(.08, .6, .2, 1), opacity .3s; }
+.wb-snap :is(.wb-st-prog i, .wb-fill, .wb-line) { transition: none; }
+
+/* error + about pages, laid over the frame */
+.wb-page { position: absolute; inset: 0; z-index: 3; overflow: auto; padding: 22px 26px; background: var(--wb-page); color: #000; font: 13px/1.45 Verdana, Tahoma, Geneva, sans-serif; -webkit-user-select: text; user-select: text; }
+.wb-pg { max-width: 560px; }
+.wb-pg-head { display: flex; align-items: center; gap: 12px; }
+.wb-pg h1 { margin: 0; font-size: 20px; line-height: 1.25; }
+.wb-pg-ico { flex: none; width: 32px; height: 32px; fill: currentColor; }
+.wb-pg-logo { flex: none; width: 48px; height: 48px; }
+.wb-pg p { margin: 10px 0; white-space: pre-line; }
+.wb-pg ul { margin: 6px 0 12px; padding-left: 22px; }
+.wb-pg li { margin: 4px 0; }
+.wb-pg-sub { opacity: .75; }
+.wb-pg-head .wb-pg-sub { margin: 2px 0 0; }
+.wb-pg-code { font: 11px/1.4 "Courier New", monospace; letter-spacing: .5px; opacity: .6; }
+.wb-pg-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.wb-pg hr { margin: 12px 0; border: 0; border-top: 1px solid #c0c0c0; }
+.wb-pg-foot { font-size: 11px; color: #555; }
+
+/* ---------- status bar ---------- */
+.wb-status { position: relative; display: flex; align-items: stretch; gap: 2px; flex: none; height: 22px; padding: 2px 16px 0 0; white-space: nowrap; }
+.wb-nostatus .wb-status { display: none; }
+.wb-st-text { flex: 1; min-width: 0; padding: 0 4px; overflow: hidden; text-overflow: ellipsis; line-height: 20px; }
+.wb-st-ico, .wb-st-lock, .wb-st-zone { display: none; align-items: center; justify-content: center; gap: 4px; flex: none; padding: 0 4px; }
+:is(.wb-st-ico, .wb-st-lock, .wb-st-zone) svg { width: 16px; height: 16px; }
+.wb-st-zone { width: 120px; justify-content: flex-start; }
+.wb-st-lock .wb-keyico { display: none; }
+.wb-st-prog { display: none; flex: none; width: 110px; padding: 3px; }
+.wb-st-prog i { display: block; width: calc(var(--wb-p) * 100%); height: 100%; background: var(--wb-sel); }
+.wb-st-spin, .wb-st-help { display: none; }
+.wb-grip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  background:
+    linear-gradient(135deg, transparent 0 48%, var(--wb-line) 48% 56%, transparent 56% 64%, var(--wb-line) 64% 72%, transparent 72% 80%, var(--wb-line) 80% 88%, transparent 88%),
+    linear-gradient(135deg, transparent 0 56%, var(--wb-light) 56% 61%, transparent 61% 72%, var(--wb-light) 72% 77%, transparent 77% 88%, var(--wb-light) 88% 93%, transparent 93%);
+}
+.wb-max .wb-grip { display: none; }
+
+/* ---------- maximize / restore caption button, per look ---------- */
+:is([data-look=chicago], [data-look=amp]) #w-web .tb-btns [data-wb=max] {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath fill-rule='evenodd' d='M0 0h9v9H0zM1 2v6h7V2z'/%3E%3C/svg%3E");
+}
+:is([data-look=chicago], [data-look=amp]) #w-web.wb-max .tb-btns [data-wb=max] {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h7v6H7V2H3v1H2z'/%3E%3Cpath fill-rule='evenodd' d='M0 3h6v6H0zM1 5v3h4V5z'/%3E%3C/svg%3E");
+}
+[data-look=luna] #w-web .tb-btns [data-wb=max] {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11'%3E%3Cpath d='M1.5 1.5h8v8h-8z' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3Cpath d='M1 1h9v2.5H1z' fill='%23fff'/%3E%3C/svg%3E") center no-repeat;
+}
+[data-look=luna] #w-web.wb-max .tb-btns [data-wb=max] {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11'%3E%3Cpath d='M3.5 1.5h6v6' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3Cpath d='M1.5 4.5h6v5h-6z' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3Cpath d='M1 4h7v2H1z' fill='%23fff'/%3E%3C/svg%3E") center no-repeat;
+}
+[data-look=modern] #w-web .tb-btns [data-wb=max]::before { content: '\25A1'; font-size: 15px; }
+[data-look=modern] #w-web.wb-max .tb-btns [data-wb=max]::before { content: '\2750'; font-size: 13px; }
+[data-look=mac] .tb-btns [data-wb=max] { order: 3; --light: var(--light-zoom); }
+[data-look=mac] .tb-btns:hover [data-wb=max]::before { content: '+'; }
+
+/* ---------- Start menu ---------- */
+.wb-sm-entry .ico { flex: none; }
+
+/* =====================================================================
+   1993 — Mosaic: text buttons, Title and URL fields, a spinning globe
+   ===================================================================== */
+#w-web[data-era=mosaic] { --wb-page: #c0c0c0; }
+[data-era=mosaic] .wb-chrome { grid-template-areas: "menu menu" "tools throb" "title throb" "addr throb"; gap: 4px 6px; padding: 0 3px 5px; border-bottom: 2px solid var(--wb-line); }
+[data-era=mosaic] :is(.wb-menubar, .wb-title) { display: flex; }
+[data-era=mosaic] .wb-tools { gap: 4px; padding-top: 2px; }
+[data-era=mosaic] .wb-btn { min-width: 0; padding: 3px 9px; background: var(--wb-btn); box-shadow: var(--wb-raised); }
+[data-era=mosaic] .wb-btn:active:not(:disabled) { box-shadow: var(--wb-sunken); }
+[data-era=mosaic] .wb-ico { display: none; }
+[data-era=mosaic] :is(.wb-title-lbl, .wb-addr-lbl) { flex: none; width: 34px; text-align: right; }
+[data-era=mosaic] .wb-title-val { height: 22px; padding: 3px 5px; background: var(--face); box-shadow: var(--wb-sunken); }
+[data-era=mosaic] .wb-throb { display: block; width: 76px; background: var(--wb-field); box-shadow: var(--wb-sunken); }
+[data-era=mosaic] .wb-throb canvas { image-rendering: pixelated; }
+[data-era=mosaic] .wb-status { padding-left: 2px; }
+[data-era=mosaic] .wb-page { font-family: "Times New Roman", Times, serif; font-size: 15px; }
+
+/* =====================================================================
+   Text mode: the whole browser is characters
+   ===================================================================== */
+#w-web[data-era=lynx] { --wb-page: var(--face); }
+[data-era=lynx] .wb-body { font: 13px/1.35 "Lucida Console", Menlo, Consolas, "Courier New", monospace; }
+[data-era=lynx] .wb-chrome { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "tools" "addr"; gap: 3px; padding: 2px 6px 4px; border-bottom: 1px solid var(--wb-line); }
+[data-era=lynx] .wb-title { display: flex; justify-content: flex-end; color: var(--hi, var(--text)); }
+[data-era=lynx] .wb-title-lbl { display: none; }
+[data-era=lynx] .wb-title-val { flex: none; max-width: 100%; }
+[data-era=lynx] .wb-tools { flex-wrap: wrap; gap: 0 1.5ch; }
+[data-era=lynx] .wb-btn { min-width: 0; padding: 0; }
+[data-era=lynx] .wb-ico { display: none; }
+[data-era=lynx] .wb-lbl::before { content: '['; }
+[data-era=lynx] .wb-lbl::after { content: ']'; }
+[data-era=lynx] .wb-btn:is(:hover, :focus-visible):not(:disabled) { background: var(--wb-sel); color: var(--sel-text, #000); }
+[data-era=lynx] .wb-addr-box { background: transparent; box-shadow: none; border-bottom: 1px dashed var(--wb-line); }
+[data-era=lynx] .wb-addr-box:focus-within { background: var(--wb-sel); color: var(--sel-text, #000); }
+[data-era=lynx] .wb-status { flex-wrap: wrap; height: auto; padding: 2px 16px 2px 6px; border-top: 1px solid var(--wb-line); }
+[data-era=lynx] .wb-st-text { line-height: inherit; padding: 0; }
+[data-era=lynx] .wb-st-spin { display: block; flex: none; width: 2ch; }
+[data-era=lynx] .wb-st-help { display: block; flex-basis: 100%; color: var(--hi, var(--text)); overflow: hidden; text-overflow: ellipsis; }
+[data-era=lynx] .wb-page { color: var(--text); font: inherit; }
+[data-era=lynx] .wb-pg h1 { font-size: inherit; color: var(--link, var(--text)); }
+[data-era=lynx] .wb-pg-ico, [data-era=lynx] .wb-pg-logo { display: none; }
+
+/* =====================================================================
+   1995–97 — big beveled buttons, "Location:", the night-sky throbber
+   ===================================================================== */
+#w-web[data-era=nav] { --wb-page: #c0c0c0; }
+[data-era=nav] .wb-chrome { grid-template-areas: "menu menu" "tools throb" "addr throb"; gap: 0 4px; padding-bottom: 4px; border-bottom: 1px solid var(--wb-line); box-shadow: 0 1px var(--wb-light); }
+[data-era=nav] .wb-menubar { display: flex; margin-bottom: 3px; padding-bottom: 1px; border-bottom: 1px solid var(--wb-line); box-shadow: 0 1px var(--wb-light); }
+[data-era=nav] .wb-tools { gap: 2px; padding: 0 2px 4px; }
+[data-era=nav] .wb-btn { min-width: 52px; height: 46px; padding: 3px 4px 2px; background: var(--wb-btn); box-shadow: var(--wb-raised); }
+[data-era=nav] .wb-btn:active:not(:disabled) { box-shadow: var(--pressed, var(--wb-sunken)); }
+[data-era=nav] .wb-btn:active:not(:disabled) > * { transform: translate(1px, 1px); }
+[data-era=nav] .wb-btn:disabled { opacity: 1; color: var(--wb-line); text-shadow: 1px 1px var(--wb-light); }
+[data-era=nav] .wb-btn:disabled .wb-ico { opacity: .45; }
+[data-era=nav] .wb-addr { padding: 0 2px; }
+[data-era=nav] .wb-throb { display: block; width: 80px; margin-right: 3px; box-shadow: var(--wb-sunken); }
+[data-era=nav] .wb-throb canvas { inset: 2px; width: calc(100% - 4px); height: calc(100% - 4px); }
+[data-era=nav] .wb-throb canvas { image-rendering: pixelated; }
+[data-era=nav] .wb-status { gap: 3px; padding-left: 2px; }
+[data-era=nav] :is(.wb-st-text, .wb-st-lock, .wb-st-prog) { box-shadow: var(--wb-hair-in); }
+[data-era=nav] .wb-st-lock { display: flex; order: -1; width: 26px; }
+[data-era=nav] .wb-st-lock .wb-padlock { display: none; }
+[data-era=nav] .wb-st-lock .wb-keyico { display: block; }
+[data-era=nav] .wb-st-prog { display: block; width: 130px; padding: 5px 4px; }
+[data-era=nav] .wb-page { font-family: "Times New Roman", Times, serif; font-size: 15px; }
+
+/* =====================================================================
+   1998–2000 — coolbar with grippers, gray icons that color on hover
+   ===================================================================== */
+[data-era=ie5] .wb-chrome { grid-template-areas: "menu throb" "tools throb" "addr addr"; }
+[data-era=ie5] :is(.wb-menubar, .wb-tools, .wb-addr) { position: relative; padding-left: 11px; border-bottom: 1px solid var(--wb-line); box-shadow: 0 1px var(--wb-light); }
+[data-era=ie5] :is(.wb-menubar, .wb-tools, .wb-addr)::before { content: ''; position: absolute; left: 3px; top: 3px; bottom: 3px; width: 3px; box-shadow: var(--wb-hair-out); }
+[data-era=ie5] .wb-menubar { display: flex; height: 22px; }
+[data-era=ie5] .wb-menubar button:is(:hover, .open) { background: none; color: inherit; box-shadow: var(--wb-hair-out); }
+[data-era=ie5] .wb-menubar button.open { box-shadow: var(--wb-hair-in); }
+[data-era=ie5] .wb-tools { gap: 1px; padding-top: 2px; padding-bottom: 2px; }
+[data-era=ie5] .wb-btn { min-width: 54px; height: 44px; padding: 2px 5px; }
+[data-era=ie5] :is(.wb-btn, .wb-go):hover:not(:disabled) { box-shadow: var(--wb-hair-out); }
+[data-era=ie5] :is(.wb-btn, .wb-go):active:not(:disabled) { box-shadow: var(--wb-hair-in); }
+[data-era=ie5] .wb-btn .wb-ico { filter: grayscale(1) contrast(.8); }
+[data-era=ie5] .wb-btn:hover:not(:disabled) .wb-ico { filter: none; }
+[data-era=ie5] :is(.wb-full, .wb-sep) { display: flex; }
+[data-era=ie5] .wb-addr { height: 29px; padding-right: 4px; }
+[data-era=ie5] .wb-addr-lbl { opacity: .7; }
+[data-era=ie5] .wb-addr-ico { display: grid; }
+[data-era=ie5] .wb-go { display: flex; }
+[data-era=ie5] .wb-throb { display: block; width: 50px; margin: 2px 2px 3px 0; background: linear-gradient(#fff, #dde6f3); box-shadow: var(--wb-sunken); }
+[data-era=ie5] .wb-status { gap: 2px; padding-left: 2px; }
+[data-era=ie5] :is(.wb-st-text, .wb-st-prog, .wb-st-lock, .wb-st-zone) { box-shadow: var(--wb-hair-in); }
+[data-era=ie5] .wb-st-ico { display: flex; padding-right: 0; }
+[data-era=ie5] .wb-st-prog { display: block; }
+[data-era=ie5] .wb-st-prog i { background: repeating-linear-gradient(90deg, var(--wb-sel) 0 7px, transparent 7px 9px); }
+[data-era=ie5] :is(.wb-st-lock, .wb-st-zone) { display: flex; }
+
+/* =====================================================================
+   2001–06 — green orbs, "Address … Go", a small throbber by the menus
+   ===================================================================== */
+[data-era=ie6] .wb-chrome { grid-template-areas: "menu throb" "tools tools" "addr addr"; }
+[data-era=ie6] :is(.wb-menubar, .wb-tools, .wb-addr) { border-bottom: 1px solid var(--wb-line); box-shadow: 0 1px var(--wb-light); }
+[data-era=ie6] .wb-menubar { display: flex; height: 23px; padding-left: 2px; }
+[data-era=ie6] .wb-tools { gap: 2px; height: 40px; padding: 2px 4px; }
+[data-era=ie6] .wb-btn { flex-direction: row; gap: 4px; min-width: 0; height: 34px; padding: 0 6px; border-radius: 3px; }
+[data-era=ie6] :is(.wb-btn, .wb-go):hover:not(:disabled) { box-shadow: var(--wb-hair-out); }
+[data-era=ie6] :is(.wb-btn, .wb-go):active:not(:disabled) { box-shadow: var(--wb-hair-in); }
+[data-era=ie6] .wb-btn .wb-lbl { display: none; }
+[data-era=ie6] .wb-back .wb-lbl { display: block; }
+[data-era=ie6] :is(.wb-back, .wb-forward) .wb-ico {
+  --wb-arrow: #fff;
+  --wb-ink: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 28%, #e2fad4, #5cc63a 42%, #23831a 78%, #17600f);
+  box-shadow: inset 0 0 0 1px #1d6110, 0 1px 1px rgba(0, 0, 0, .3);
+}
+[data-era=ie6] .wb-forward .wb-ico { width: 24px; height: 24px; }
+[data-era=ie6] :is(.wb-back, .wb-forward) .wb-ico svg { width: 17px; height: 17px; }
+[data-era=ie6] :is(.wb-full, .wb-sep) { display: flex; }
+[data-era=ie6] .wb-addr { height: 29px; padding: 0 4px; }
+[data-era=ie6] .wb-addr-lbl { opacity: .65; }
+[data-era=ie6] .wb-addr-ico { display: grid; }
+[data-era=ie6] .wb-go { display: flex; border-radius: 3px; }
+[data-era=ie6] .wb-throb { display: block; width: 40px; border-left: 1px solid var(--wb-line); background: linear-gradient(#fff, #e6eefb); }
+[data-era=ie6] .wb-status { gap: 0; padding-top: 0; border-top: 1px solid var(--wb-line); }
+[data-era=ie6] :is(.wb-st-prog, .wb-st-lock, .wb-st-zone) { border-left: 1px solid var(--wb-line); }
+[data-era=ie6] .wb-st-ico { display: flex; padding-right: 0; }
+[data-era=ie6] .wb-st-prog { display: block; padding: 4px; }
+[data-era=ie6] .wb-st-prog i { background: repeating-linear-gradient(90deg, #2bc72b 0 6px, transparent 6px 8px); }
+[data-era=ie6] :is(.wb-st-lock, .wb-st-zone) { display: flex; }
+
+/* =====================================================================
+   2007–09 — glass orbs, refresh/stop inside the address bar, a search box, tabs
+   ===================================================================== */
+[data-era=tabs] .wb-chrome { grid-template-columns: auto minmax(0, 1fr) minmax(90px, 24%) auto; grid-template-areas: "tools addr find find" "tabs tabs tabs more"; gap: 4px 6px; padding: 5px 6px 0; }
+[data-era=tabs] .wb-tools { overflow: visible; }
+[data-era=tabs] .wb-tools :is(.wb-stop, .wb-reload, .wb-home), [data-era=tabs] .wb-btn .wb-lbl { display: none; }
+[data-era=tabs] .wb-btn { min-width: 0; padding: 0; }
+[data-era=tabs] :is(.wb-back, .wb-forward) .wb-ico {
+  --wb-arrow: #fff;
+  --wb-ink: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 18%, #f2f9ff, #78b6f2 38%, #2165c8 72%, #12408c);
+  box-shadow: inset 0 0 0 1px #0e3a7a, 0 1px 2px rgba(0, 0, 0, .35);
+}
+[data-era=tabs] .wb-forward .wb-ico { width: 25px; height: 25px; margin-left: -3px; }
+[data-era=tabs] :is(.wb-back, .wb-forward) .wb-ico svg { width: 17px; height: 17px; }
+[data-era=tabs] .wb-btn:hover:not(:disabled) .wb-ico { filter: brightness(1.12); }
+[data-era=tabs] :is(.wb-addr-box, .wb-find-box) { height: 24px; border: 1px solid var(--field-border, #8a8a8a); border-radius: 2px; box-shadow: none; }
+[data-era=tabs] .wb-addr-ico { display: grid; }
+[data-era=tabs] .wb-ab { display: grid; border-left: 1px solid var(--rule, #ccc); }
+[data-era=tabs] .wb-ab.wb-reload { --wb-reload: #2b9a2b; }
+[data-era=tabs] .wb-ab.wb-stop { color: #c62a1c; }
+[data-era=tabs] .wb-ab:hover:not(:disabled) { background: rgba(127, 127, 127, .18); }
+[data-era=tabs] .wb-find { display: block; }
+[data-era=tabs] .wb-tabs { display: flex; }
+[data-era=tabs] .wb-tab { height: 26px; border: 1px solid var(--field-border, #8a8a8a); border-bottom: 0; border-radius: 3px 3px 0 0; background: linear-gradient(var(--wb-field), color-mix(in srgb, var(--wb-field) 90%, #9ab)); }
+[data-era=tabs] .wb-more { display: flex; align-self: end; height: 24px; margin-bottom: 1px; border-radius: 3px; }
+[data-era=tabs] .wb-more:hover { background: rgba(127, 127, 127, .18); }
+[data-era=tabs] .wb-more .wb-ico svg:first-child { display: none; }
+[data-era=tabs] .wb-more .wb-gear { display: block; width: 16px; height: 16px; }
+[data-era=tabs] .wb-more .wb-lbl::after { content: ' ▾'; font-size: 9px; }
+[data-era=tabs].wb-loading .wb-tab-ico {
+  background: repeating-conic-gradient(#3b8be8 0 24deg, transparent 24deg 45deg);
+  -webkit-mask: radial-gradient(circle, transparent 3.5px, #000 4px 7.5px, transparent 8px);
+  mask: radial-gradient(circle, transparent 3.5px, #000 4px 7.5px, transparent 8px);
+  animation: wb-spin .9s steps(8) infinite;
+}
+[data-era=tabs] .wb-view { border-top: 1px solid var(--field-border, #8a8a8a); }
+[data-era=tabs] .wb-status { gap: 0; padding-top: 0; border-top: 1px solid var(--rule, #ccc); }
+[data-era=tabs] :is(.wb-st-prog, .wb-st-zone) { border-left: 1px solid var(--rule, #ccc); }
+[data-era=tabs] .wb-st-prog { display: block; padding: 5px; }
+[data-era=tabs] .wb-st-prog i { border-radius: 2px; background: linear-gradient(#a6f08e, #30b524 50%, #22961a); }
+[data-era=tabs] .wb-st-zone { display: flex; }
+[data-era=tabs] .wb-page { font-family: "Segoe UI", Tahoma, sans-serif; }
+
+/* =====================================================================
+   Mac 2001–09 — capsule back/forward, the blue progress fill in the address
+   ===================================================================== */
+[data-era=safari] .wb-chrome { grid-template-columns: auto minmax(0, 1fr) minmax(100px, 24%) auto; grid-template-areas: "tools addr find more"; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--rule, #999); }
+[data-era=safari] .wb-tools :is(.wb-stop, .wb-reload, .wb-home), [data-era=safari] .wb-btn .wb-lbl { display: none; }
+[data-era=safari] :is(.wb-btn, .wb-more) {
+  --wb-arrow: currentColor;
+  --wb-ink: none;
+  min-width: 0;
+  width: 30px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #8a8a8a;
+  background: linear-gradient(#fdfdfd, #e3e3e3 50%, #d6d6d6 51%, #ececec);
+  color: #3c3c3c;
+}
+[data-era=safari] .wb-back { border-radius: 5px 0 0 5px; }
+[data-era=safari] .wb-forward { border-left: 0; border-radius: 0 5px 5px 0; }
+[data-era=safari] .wb-more { display: flex; border-radius: 5px; }
+[data-era=safari] :is(.wb-btn, .wb-more) .wb-ico svg { width: 15px; height: 15px; }
+[data-era=safari] .wb-more .wb-ico svg:first-child { display: none; }
+[data-era=safari] .wb-more .wb-gear { display: block; }
+[data-era=safari] :is(.wb-btn, .wb-more):active:not(:disabled) { background: linear-gradient(#c4c4c4, #dcdcdc); }
+[data-era=safari] .wb-addr-box { height: 24px; overflow: hidden; border: 1px solid #8a8a8a; border-radius: 4px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .22); background: #fff; color: #000; }
+[data-era=safari] .wb-fill { display: block; background: linear-gradient(#cfe2ff, #8fbaf3); }
+[data-era=safari] .wb-addr-ico { display: grid; }
+[data-era=safari] .wb-ab.wb-reload { display: grid; --wb-reload: #555; }
+[data-era=safari] .wb-ab.wb-stop { color: #555; }
+[data-era=safari].wb-loading .wb-ab.wb-reload { display: none; }
+[data-era=safari].wb-loading .wb-ab.wb-stop { display: grid; }
+[data-era=safari] .wb-find { display: block; }
+[data-era=safari] .wb-find-box { height: 24px; padding-left: 6px; border: 1px solid #8a8a8a; border-radius: 12px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .22); background: #fff; color: #000; }
+[data-era=safari] .wb-status { height: 18px; padding-top: 0; border-top: 1px solid var(--rule, #999); font-size: 11px; }
+[data-era=safari] .wb-st-text { line-height: 17px; }
+[data-era=safari] .wb-page { font-family: "Lucida Grande", Geneva, sans-serif; }
+[data-era=safari] .wb-pg-head { flex-direction: column; text-align: center; }
+[data-era=safari] .wb-pg { margin: 40px auto 0; text-align: center; }
+
+/* =====================================================================
+   2010s — tabs on top, one row of round icon buttons, the omnibox
+   ===================================================================== */
+:is([data-era=chrome], [data-era=modern]) .wb-chrome { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "tabs tabs tabs" "tools addr more"; gap: 0 4px; padding: 0 4px 5px; border-bottom: 1px solid var(--rule, #ccc); }
+:is([data-era=chrome], [data-era=modern]) .wb-tabs { display: flex; margin: 0 -4px; padding: 6px 8px 0; background: var(--wb-strip); }
+:is([data-era=chrome], [data-era=modern]) .wb-tab { height: 32px; border-radius: 8px 8px 0 0; background: var(--face); }
+:is([data-era=chrome], [data-era=modern]) .wb-tools { gap: 2px; padding-top: 5px; }
+:is([data-era=chrome], [data-era=modern]) :is(.wb-btn, .wb-more) {
+  --wb-arrow: currentColor;
+  --wb-ink: none;
+  --wb-reload: currentColor;
+  --wb-roof: currentColor;
+  --wb-house: currentColor;
+  min-width: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--muted, currentColor);
+}
+:is([data-era=chrome], [data-era=modern]) :is(.wb-btn, .wb-more):hover:not(:disabled) { background: var(--hover, rgba(127, 127, 127, .16)); }
+:is([data-era=chrome], [data-era=modern]) :is(.wb-btn, .wb-more) .wb-ico svg { width: 18px; height: 18px; }
+:is([data-era=chrome], [data-era=modern]) .wb-btn .wb-lbl { display: none; }
+:is([data-era=chrome], [data-era=modern]) .wb-tools .wb-stop, :is([data-era=chrome], [data-era=modern]).wb-loading .wb-tools .wb-reload { display: none; }
+:is([data-era=chrome], [data-era=modern]).wb-loading .wb-tools .wb-stop { display: flex; }
+:is([data-era=chrome], [data-era=modern]) .wb-stop .wb-ico svg:first-child { display: none; }
+:is([data-era=chrome], [data-era=modern]) .wb-stop .wb-x { display: block; }
+:is([data-era=chrome], [data-era=modern]) .wb-addr { padding-top: 5px; }
+:is([data-era=chrome], [data-era=modern]) .wb-addr-lock { display: grid; padding-left: 8px; }
+:is([data-era=chrome], [data-era=modern]) .wb-more { display: flex; margin-top: 5px; }
+[data-era=chrome] .wb-addr-box { height: 32px; border: 1px solid var(--field-border, #bbb); border-radius: 3px; box-shadow: none; }
+[data-era=chrome] .wb-addr-lock { --wb-lock: #188038; }
+/* waiting: a gray arc turning backwards; loading: a colored arc turning forwards */
+:is([data-era=chrome], [data-era=modern]).wb-loading .wb-tab-ico { border: 2px solid transparent; border-top-color: var(--accent, #1a73e8); border-right-color: var(--accent, #1a73e8); }
+[data-era=chrome].wb-loading[data-phase=wait] .wb-tab-ico { border-top-color: var(--muted, #999); border-right-color: var(--muted, #999); animation-direction: reverse; }
+[data-era=chrome] .wb-status {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+  max-width: 60%;
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid var(--field-border, #bbb);
+  border-width: 1px 1px 0 0;
+  border-radius: 0 4px 0 0;
+  background: var(--wb-field);
+  color: var(--text);
+  font-size: 12px;
+}
+[data-era=chrome] .wb-status.wb-empty { display: none; }
+[data-era=chrome] .wb-st-text { padding: 0; line-height: 21px; }
+:is([data-era=chrome], [data-era=modern]) .wb-page { padding-top: 60px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #3c4043; }
+:is([data-era=chrome], [data-era=modern]) .wb-pg { margin: 0 auto; }
+:is([data-era=chrome], [data-era=modern]) .wb-pg-head { flex-direction: column; align-items: flex-start; gap: 18px; }
+:is([data-era=chrome], [data-era=modern]) .wb-pg h1 { font-size: 24px; font-weight: 500; color: #202124; }
+:is([data-era=chrome], [data-era=modern]) .wb-pg-ico { width: 56px; height: 56px; color: #9aa0a6; }
+:is([data-era=chrome], [data-era=modern]) .wb-pg .btn { min-width: 0; height: 34px; padding: 0 16px; border: 0; border-radius: 4px; background: #1a73e8; box-shadow: none; color: #fff; }
+
+/* =====================================================================
+   2020s — pill omnibox, rounded tab, a thin progress line under the toolbar
+   ===================================================================== */
+[data-era=modern] .wb-tab { border-radius: 10px 10px 0 0; }
+[data-era=modern] .wb-addr-box { height: 34px; padding-right: 6px; border: 0; border-radius: 999px; box-shadow: none; background: var(--wb-strip); }
+[data-era=modern] .wb-addr-box:focus-within { background: var(--wb-field); box-shadow: 0 0 0 2px var(--accent, var(--wb-sel)); }
+[data-era=modern] .wb-addr-lock { padding-left: 12px; opacity: .7; }
+[data-era=modern] .wb-line { display: block; }
+[data-era=modern] .wb-status { display: none; }
+[data-era=modern] .wb-pg .btn { border-radius: 999px; }
+
+/* ---------- phones (same breakpoint as wm.isMobile(), landscape included) ---------- */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  #w-web { width: auto !important; height: calc(100dvh - var(--tb-h) - 16px) !important; min-width: 0; }
+  [data-look=mac] #w-web { height: calc(100dvh - var(--tb-h) - 92px) !important; }
+  #w-web :is(.wb-throb, .wb-find, .wb-grip, .wb-full, .wb-sep, .wb-st-zone, .wb-st-help, .wb-go .wb-lbl) { display: none !important; }
+  #w-web:not([data-era=mosaic], [data-era=lynx]) .wb-btn .wb-lbl { display: none; }
+  #w-web:is([data-era=nav], [data-era=ie5]) .wb-btn { min-width: 40px; height: 34px; }
+  [data-era=tabs] .wb-chrome { grid-template-areas: "tools addr addr addr" "tabs tabs tabs more"; }
+  [data-era=safari] .wb-chrome { grid-template-areas: "tools addr addr more"; }
+  .wb-page { padding: 16px; }
+}

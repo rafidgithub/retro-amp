@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; img-src 'self' data: blob: https://i.ytimg.com; style-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.google.com; img-src 'self' data: blob: https://i.ytimg.com; style-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="description" content="New music, old pixels: a Windows 95–XP era audio player for YouTube. No accounts, no API keys.">
 <title>RetroAmp</title>
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -19,10 +19,12 @@
 <link rel="stylesheet" href="css/skins/media.css">
 <link rel="stylesheet" href="css/games/index.css">
 <link rel="stylesheet" href="css/camera/index.css">
+<link rel="stylesheet" href="css/browser/index.css">
 <script src="js/boot.js"></script>
 <script type="module" src="js/main.js"></script>
 <script type="module" src="js/games/index.js"></script>
 <script type="module" src="js/camera/index.js"></script>
+<script type="module" src="js/browser/index.js"></script>
 </head>
 <body>
 <svg class="sprite" aria-hidden="true">
