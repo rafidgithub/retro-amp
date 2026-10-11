@@ -11,10 +11,11 @@ RetroAmp is a Windows 95–XP era music player for YouTube. Vanilla JS, no build
 
 - Vanilla ES modules. No bundler, no framework, no build step. `./start.sh` runs it.
 - No runtime npm dependencies. Third-party code is vendored as one pinned file in `js/vendor/` with its version and SHA-256 in a header comment. No script CDNs at runtime.
-- Build DOM with `h()` / `textContent` from `js/util.js`. Never put user- or network-supplied text into `innerHTML`, `outerHTML`, `insertAdjacentHTML` or `document.write`.
+- Build DOM with `h()` / `textContent` from `js/core/util.js`. Never put user- or network-supplied text into `innerHTML`, `outerHTML`, `insertAdjacentHTML` or `document.write`.
 - Wrap every `localStorage` access in try/catch; the app keeps working without storage.
 - `server.js` mirrors Vercel: every `api/*.js` function is mounted in `server.js` too, and security headers in `vercel.json` and `server.js` stay identical.
-- Every new window goes through `js/wm.js` (`register`, `show`, `hide`) and is styled for every look in `js/skins.js`, plus the mobile layout (`wm.isMobile()`).
+- Every new window goes through `js/core/wm.js` (`register`, `show`, `hide`) and is styled for every look in `js/core/skins.js`, plus the mobile layout (`wm.isMobile()`).
+- File layout: shared code in `js/core/`, player code in `js/player/`, `js/main.js` is the app entry. Each feature module is `js/<module>/index.js` + `css/<module>/index.css` (games, camera, browser…): it registers its own windows, desktop icon and Start-menu entry, and lazy-loads heavy code. Looks live in `css/looks/`, skin colors in `css/skins/`.
 - YouTube embed rules in README still apply.
 - Update README (features, file map, Privacy) in the same change as the feature.
 - Example secrets in code, docs and commits use `[PLACEHOLDER]` format. No real keys, tokens, emails or passwords in the repo.
@@ -37,9 +38,9 @@ RetroAmp is a Windows 95–XP era music player for YouTube. Vanilla JS, no build
 
 Why: Vercel functions can't hold WebSocket connections, and auth must not be hand-rolled (password hashing, email verification, session refresh, rate limits). Supabase covers all of it from the browser with no build step.
 
-- Client: vendored UMD build at `js/vendor/supabase.js` (exact pinned 2.x version), lazy-loaded the way `js/yt.js` loads the YouTube API — only when someone opens sign-in or the messenger. Guests never download it.
-- One client instance, created in `js/supa.js`. Nothing else calls `createClient`.
-- Config in `js/config.js`:
+- Client: vendored UMD build at `js/vendor/supabase.js` (exact pinned 2.x version), lazy-loaded the way `js/player/yt.js` loads the YouTube API — only when someone opens sign-in or the messenger. Guests never download it.
+- One client instance, created in `js/social/supa.js`. Nothing else calls `createClient`.
+- Config in `js/social/config.js`:
   ```js
   export const SUPABASE_URL = 'https://[PROJECT_REF].supabase.co';
   export const SUPABASE_ANON_KEY = '[SUPABASE_ANON_KEY]';
@@ -55,12 +56,12 @@ Why: Vercel functions can't hold WebSocket connections, and auth must not be han
 
 | File | Job |
 | --- | --- |
-| `js/config.js` | Supabase URL + anon key |
-| `js/supa.js` | Lazy-loads the vendored client, single instance, session events |
-| `js/auth.js` | Guest / sign-up / sign-in / reset / sign-out / delete-account windows |
-| `js/friends.js` | Find by username, requests, friend list, unfriend, block, report |
-| `js/im.js` | Buddy list, presence, chat windows, nudge, typing, unread |
-| `css/im.css` | Auth + messenger window structure; per-look colors go in the skin files |
+| `js/social/config.js` | Supabase URL + anon key |
+| `js/social/supa.js` | Lazy-loads the vendored client, single instance, session events |
+| `js/social/auth.js` | Guest / sign-up / sign-in / reset / sign-out / delete-account windows |
+| `js/social/friends.js` | Find by username, requests, friend list, unfriend, block, report |
+| `js/social/im.js` | Buddy list, presence, chat windows, nudge, typing, unread |
+| `css/social/index.css` | Auth + messenger window structure; per-look colors go in the skin files |
 | `api/account.js` | `DELETE` own account: verifies the user's JWT, then admin-deletes |
 | `assets/avatars/` | Built-in pixel avatars |
 | `supabase/migrations/` | Tables, RLS, RPC functions, triggers |
@@ -169,7 +170,7 @@ messages             (id, conversation_id, sender_id, kind text,  -- 'text' | 'n
   default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; img-src 'self' data: blob: https://i.ytimg.com; connect-src 'self' https://[PROJECT_REF].supabase.co wss://[PROJECT_REF].supabase.co; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
   ```
   Add `https://challenges.cloudflare.com` to `script-src` and `frame-src` when Turnstile goes in.
-  Keep `blob:` in `img-src` (Gallery thumbnails) and `camera=(self)` in `Permissions-Policy` (Camera window).
+  Keep `blob:` in `img-src` (Gallery thumbnails), `https://www.google.com` in `frame-src` (Internet window) and `camera=(self)` in `Permissions-Policy` (Camera window).
 
 ## Privacy
 
@@ -190,7 +191,7 @@ Phase 2 ends README's "no accounts" promise. Rewrite the README intro and Privac
 
 Do one step, verify it, then stop and show the user before starting the next.
 
-1. **Foundation** — Supabase project, migrations (all tables, RLS, RPCs, triggers), pgTAP tests, `js/config.js`, `js/supa.js`, vendored client. *Done when* `supabase test db` passes and a guest session makes zero Supabase requests.
+1. **Foundation** — Supabase project, migrations (all tables, RLS, RPCs, triggers), pgTAP tests, `js/social/config.js`, `js/social/supa.js`, vendored client. *Done when* `supabase test db` passes and a guest session makes zero Supabase requests.
 2. **Accounts** — guest default, sign-up, email confirm, sign-in, reset, sign-out, delete account (`api/account.js`, mounted in `server.js`). *Done when* an account can be created, confirmed, used and fully deleted.
 3. **Friends** — find by username, requests, accept/decline, unfriend, block, report, avatars. *Done when* two accounts become friends and block works both ways.
 4. **Buddy list** — presence, status, personal message, now-playing opt-in, sign-in toasts. *Done when* a friend sees a status change within seconds and a stranger sees nothing.
@@ -202,7 +203,7 @@ Do one step, verify it, then stop and show the user before starting the next.
 - pgTAP tests for every policy and RPC with five actors: owner, friend, stranger, blocked user, anon. A stranger must never read another user's messages, friends, presence or now playing, or anyone's email.
 - Manual: two browsers (normal + private window), two accounts, full flow: sign up → friend → chat → nudge → block → delete account.
 - Guest regression: as a guest, DevTools Network shows zero requests to `supabase.co`; with that domain blocked, the player still works.
-- Every look in `js/skins.js` renders the auth, buddy list and chat windows correctly, on desktop and mobile.
+- Every look in `js/core/skins.js` renders the auth, buddy list and chat windows correctly, on desktop and mobile.
 
 ## Open decisions (defaults apply until the user says otherwise)
 
