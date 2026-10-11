@@ -2,3 +2,4 @@
 server.js
 start.sh
 CLAUDE.md
+.env*
