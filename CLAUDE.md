@@ -166,9 +166,10 @@ messages             (id, conversation_id, sender_id, kind text,  -- 'text' | 'n
 - Users see generic error messages. Details go to the console only in local dev.
 - Tighten CSP in both `vercel.json` and `server.js`. Starting point — verify every skin, the games and YouTube playback with the console open before shipping:
   ```
-  default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; img-src 'self' data: https://i.ytimg.com; connect-src 'self' https://[PROJECT_REF].supabase.co wss://[PROJECT_REF].supabase.co; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; img-src 'self' data: blob: https://i.ytimg.com; connect-src 'self' https://[PROJECT_REF].supabase.co wss://[PROJECT_REF].supabase.co; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
   ```
   Add `https://challenges.cloudflare.com` to `script-src` and `frame-src` when Turnstile goes in.
+  Keep `blob:` in `img-src` (Gallery thumbnails) and `camera=(self)` in `Permissions-Policy` (Camera window).
 
 ## Privacy
 

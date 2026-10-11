@@ -268,6 +268,7 @@ async function start(video = { facingMode: { ideal: P.facing } }, { quiet = fals
     return false;
   };
   stopTracks();
+  if (document.visibilityState === 'hidden') return fail('off'); // visibilitychange starts it later
   if (!window.isSecureContext) return fail('insecure');
   if (!media()?.getUserMedia || !media().enumerateDevices) return fail('unsupported');
   watchDevices();

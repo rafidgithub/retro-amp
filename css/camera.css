@@ -19,6 +19,7 @@
   overflow: hidden;
   background: #000;
 }
+[data-look=mac] .cam-screen { max-height: calc(100vh - var(--tb-h) - 310px); } /* leave room for the Dock */
 [data-family=classic] .cam-screen { margin: 2px; box-shadow: -1px -1px var(--sh), 1px 1px var(--hi), -2px -2px var(--dk), 2px 2px var(--lt); }
 [data-family=media] .cam-screen { border: 1px solid var(--field-border); border-radius: 3px; }
 /* the raw camera feed sits under the preview: it has to stay "visible" for
@@ -42,7 +43,7 @@
   pointer-events: none;
 }
 .cam-osd::before { content: '●'; margin-right: 5px; color: #ff3b30; animation: blink 1.4s steps(1) infinite; }
-.cam-screen:not([data-state=live]) .cam-osd { display: none; }
+.cam-screen:not([data-state=live]) :is(.cam-osd, .cam-sound) { display: none; }
 .cam-sound {
   position: absolute;
   right: 6px;
@@ -163,14 +164,14 @@
 .gal-empty p:first-child { font-weight: bold; }
 .gal-empty .btn { margin-top: 10px; }
 
-.gal-view { display: grid; place-items: center; padding: 8px; overflow: hidden; background: #111; }
+.gal-view { position: relative; overflow: hidden; background: #111; }
 [data-family=classic] .gal-view { box-shadow: var(--sunken); }
 [data-family=media] .gal-view { border-radius: var(--field-r, 0); }
-.gal-photo { display: block; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 2px 10px rgba(0, 0, 0, .6); }
+.gal-photo { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; }
 .gal-photo.pixel { image-rendering: pixelated; }
 
 .gal-foot, .gal-ask { flex-wrap: wrap; row-gap: 4px; }
-.gal-foot .gal-nav { min-width: 32px; padding: 0 6px; }
+.gal-foot .btn.gal-nav { min-width: 32px; padding: 0 8px; }
 .gal-info { min-width: 120px; }
 
 /* ---------- phones ---------- */
@@ -185,5 +186,5 @@
   [data-look=mac] #w-gallery { height: calc(100vh - var(--tb-h) - 92px); }
   .gal-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
   .gal-item img { width: 100%; height: auto; aspect-ratio: 4 / 3; }
-  .gal-foot .btn { min-width: 0; }
+  .gal-foot .btn, .gal-ask .btn { min-width: 0; }
 }
