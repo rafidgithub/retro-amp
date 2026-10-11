@@ -1,0 +1,2 @@
+/* Solitaire: the score strip under the felt. */
+.sol-status { align-self: stretch; display: flex; justify-content: flex-end; gap: 24px; padding: 3px 8px 1px; color: var(--text, #000); font-variant-numeric: tabular-nums; white-space: nowrap; }

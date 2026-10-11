@@ -1,0 +1,274 @@
+/* Amp look — the 1998 brushed-metal player with the green LCD.
+   Dialogs, menus and the taskbar use the Win98 chrome from classic.css.
+   Liquid Chrome (variants.css) recolors it through the --m-* variables. */
+
+[data-look=amp] {
+  --lcd-on: #00e000;
+  --lcd-off: #0b260b;
+  --lcd-bg: #000;
+  --lcd-dim: #2f4a2f;
+  --viz-top: #ef3110;
+  --viz-mid: #d6b521;
+  --viz-bot: #29ce10;
+  --viz-peak: #bdbdbd;
+  --viz-scope: #ffd94a;
+  --viz-dots: #1c1c1c;
+  --m-bg: linear-gradient(180deg, #46465f 0%, #32324a 40%, #26263a 100%);
+  --m-edge: #06060b;
+  --m-text: #cacadf;
+  --m-glow: 3px 3px 0 rgba(0, 0, 0, .25);
+  --m-radius: 0;
+  --m-raised: inset 1px 1px #76769a, inset -1px -1px #13131f;
+  --m-sunken: inset 1px 1px #07070c, inset -1px -1px #5c5c7c;
+  --m-btn: linear-gradient(180deg, #dcdce6 0%, #aeaebf 45%, #8a8a9e 100%);
+  --m-btn-down: linear-gradient(180deg, #84849a, #b4b4c6);
+  --m-btn-sh: inset 1px 1px #f6f6ff, inset -1px -1px #565668;
+  --m-btn-text: #18181f;
+  --m-btn-radius: 0;
+  --m-small: linear-gradient(180deg, #a6a6c0, #60607c);
+  --m-small-sh: inset 1px 1px #cbcbe0;
+  --m-small-text: #14141c;
+  --rib-dim: #5d5d7a;
+  --rib-a: #d9c47d;
+  --rib-b: #5e5226;
+  --rib-text: #f2e6a8;
+  --rib-text-dim: #7c7c98;
+  --gold: linear-gradient(180deg, #ece2b8, #a0946a);
+  --gold-sh: inset 1px 1px #fff8dc, inset -1px -1px #4a4430;
+  --groove: #10101a;
+  --led-off: #1d361d;
+  --led-on: #3cff3c;
+  --pl-text: var(--lcd-on);
+  --pl-cur: #fff;
+  --pl-sel: #0000c6;
+  --pl-bad: #a03030;
+  --pix: 8px/1 Silkscreen, "Courier New", monospace;
+}
+
+[data-look=amp] .win:not(.dialog) {
+  padding: 1px 3px 4px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-edge);
+  border-radius: var(--m-radius);
+  box-shadow: var(--m-raised), var(--m-glow);
+  color: var(--m-text);
+  font: var(--pix);
+}
+
+/* title bar: ribs that light up when the window is active */
+[data-look=amp] .win:not(.dialog) .titlebar { height: 16px; gap: 4px; padding: 0 1px; }
+[data-look=amp] .win:not(.dialog) .tb-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--rib-text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+[data-look=amp] .win:not(.dialog) .tb-title::before,
+[data-look=amp] .win:not(.dialog) .tb-title::after {
+  content: '';
+  flex: 1;
+  height: 7px;
+  background: repeating-linear-gradient(180deg, var(--rib-dim) 0 1px, transparent 1px 2px);
+}
+[data-look=amp] .win.active:not(.dialog) .tb-title { color: var(--rib-text); }
+[data-look=amp] .win.active:not(.dialog) .tb-title::before,
+[data-look=amp] .win.active:not(.dialog) .tb-title::after { background: repeating-linear-gradient(180deg, var(--rib-a) 0 1px, var(--rib-b) 1px 2px); }
+[data-look=amp] .win:not(.dialog) :is(.tb-icon, .tb-btns button) {
+  width: 12px;
+  height: 11px;
+  border: 1px solid var(--m-edge);
+  border-radius: calc(var(--m-btn-radius) / 3);
+  background: var(--glyph, linear-gradient(transparent 0 0)), var(--m-small);
+  box-shadow: var(--m-small-sh);
+  color: var(--rib-text);
+}
+[data-look=amp] .win:not(.dialog) .tb-icon { background: var(--lcd-bg); box-shadow: var(--m-sunken); }
+[data-look=amp] .win:not(.dialog) .tb-icon .ico { width: 8px; height: 8px; }
+[data-look=amp] .win:not(.dialog) .tb-btns { gap: 2px; }
+[data-look=amp] .win:not(.dialog) .tb-btns button:active { box-shadow: inset 1px 1px rgba(0, 0, 0, .5); }
+[data-look=amp] .win:not(.dialog) [data-wm=min] { --glyph: linear-gradient(#111 0 0) 50% 6px / 6px 2px no-repeat; }
+[data-look=amp] .win:not(.dialog) [data-wm=shade] { --glyph: linear-gradient(#111 0 0) 50% 1px / 6px 2px no-repeat; }
+[data-look=amp] .win:not(.dialog) [data-wm=close] { --glyph: var(--x-glyph) center no-repeat; }
+[data-look=amp] .tb-mini { color: var(--lcd-on); background: var(--lcd-bg); padding: 1px 4px; box-shadow: var(--m-sunken); }
+
+/* ---------- player ---------- */
+[data-look=amp] #w-player { width: 440px; }
+[data-look=amp] .player-body {
+  grid-template-columns: 164px minmax(0, 1fr);
+  grid-template-areas: "lcd title" "lcd meta" "lcd vol" "seek seek" "transport toggles";
+  gap: 5px 8px;
+  align-items: center;
+  padding: 4px 4px 1px;
+}
+[data-look=amp] .lcd {
+  grid-template-columns: 12px 1fr;
+  grid-template-areas: "icon time" "viz viz";
+  gap: 5px 2px;
+  align-items: center;
+  justify-items: end;
+  align-self: stretch;
+  padding: 4px 5px 3px;
+  background: var(--lcd-bg);
+  border: 1px solid #000;
+  border-radius: calc(var(--m-radius) / 2);
+  box-shadow: var(--m-sunken);
+}
+[data-look=amp] .state-icon { justify-self: start; width: 8px; height: 9px; }
+[data-state=playing][data-look=amp] .state-icon { background: var(--lcd-on); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+[data-state=buffering][data-look=amp] .state-icon { background: var(--lcd-on); clip-path: polygon(0 0, 100% 50%, 0 100%); animation: blink .5s steps(1) infinite; }
+[data-state=paused][data-look=amp] .state-icon { background: linear-gradient(90deg, var(--lcd-on) 0 3px, transparent 3px 5px, var(--lcd-on) 5px); }
+[data-state=stopped][data-look=amp] .state-icon { background: var(--lcd-on); clip-path: inset(1px 0); }
+
+[data-look=amp] .marquee {
+  height: 22px;
+  padding: 0 4px;
+  background: var(--lcd-bg);
+  border: 1px solid #000;
+  border-radius: calc(var(--m-radius) / 3);
+  box-shadow: var(--m-sunken);
+  color: var(--lcd-on);
+  font: 16px/20px Silkscreen, "Courier New", monospace;
+}
+[data-look=amp] .meta { display: flex; align-items: center; gap: 3px; overflow: hidden; }
+[data-look=amp] .meta > * { flex: none; }
+[data-look=amp] .meta-box {
+  min-width: 30px;
+  padding: 1px 3px;
+  background: var(--lcd-bg);
+  box-shadow: var(--m-sunken);
+  color: var(--lcd-on);
+  font: 16px/14px Silkscreen, monospace;
+  text-align: right;
+}
+[data-look=amp] .meta-lbl { margin-right: 5px; text-transform: uppercase; }
+[data-look=amp] .ch { margin-left: 4px; color: var(--lcd-dim); text-transform: uppercase; }
+:is([data-state=playing], [data-state=paused], [data-state=buffering])[data-look=amp] .ch.stereo { color: var(--lcd-on); text-shadow: 0 0 4px var(--lcd-on); }
+
+/* sliders: the volume groove shifts green → red as it gets louder */
+[data-look=amp] .vol {
+  --trk-h: 8px;
+  --trk-r: calc(var(--m-btn-radius) / 3);
+  --trk-bg: repeating-linear-gradient(90deg, transparent 0 3px, rgba(0, 0, 0, .3) 3px 4px), hsl(calc(120 - var(--vol, .8) * 120) 80% 36%);
+  --trk-sh: inset 1px 1px #000, inset -1px -1px rgba(255, 255, 255, .25);
+  --th-w: 14px;
+  --th-h: 11px;
+  --th-r: calc(var(--m-btn-radius) / 3);
+  --th-bg: var(--gold);
+  --th-sh: var(--gold-sh), 0 0 0 1px #000;
+}
+[data-look=amp] .seek {
+  --trk-h: 10px;
+  --trk-r: calc(var(--m-btn-radius) / 2);
+  --trk-bg: var(--groove);
+  --trk-sh: inset 1px 1px #000, inset -1px -1px rgba(255, 255, 255, .25);
+  --th-w: 29px;
+  --th-h: 10px;
+  --th-r: calc(var(--m-btn-radius) / 2);
+  --th-bg: var(--gold);
+  --th-sh: var(--gold-sh);
+}
+[data-look=amp] .seek-row { padding: 2px 0; }
+
+/* transport */
+[data-look=amp] .transport button {
+  width: 31px;
+  height: 25px;
+  margin-right: -1px;
+  background: var(--m-btn);
+  border: 1px solid var(--m-edge);
+  box-shadow: var(--m-btn-sh);
+  color: var(--m-btn-text);
+}
+[data-look=amp] .transport button:first-child { border-radius: var(--m-btn-radius) 0 0 var(--m-btn-radius); }
+[data-look=amp] .transport .t-next { border-radius: 0 var(--m-btn-radius) var(--m-btn-radius) 0; }
+[data-look=amp] .transport button:active { background: var(--m-btn-down); box-shadow: inset 1px 1px rgba(0, 0, 0, .45), inset -1px -1px rgba(255, 255, 255, .6); }
+[data-look=amp] .transport button:active .ico { transform: translate(1px, 1px); }
+[data-look=amp] .transport .ico { width: 12px; height: 12px; }
+[data-look=amp] .transport .t-eject { width: 29px; height: 21px; margin-left: 8px; border-radius: var(--m-btn-radius); }
+
+[data-look=amp] .toggles { gap: 2px; justify-content: flex-end; }
+[data-look=amp] :is(.tgl, .eq-tgl) {
+  gap: 3px;
+  height: 16px;
+  padding: 0 4px 0 3px;
+  background: var(--m-small);
+  border: 1px solid var(--m-edge);
+  border-radius: calc(var(--m-btn-radius) / 3);
+  box-shadow: var(--m-small-sh);
+  color: var(--m-small-text);
+  text-transform: uppercase;
+}
+[data-look=amp] :is(.tgl, .eq-tgl)::before { content: ''; width: 4px; height: 4px; background: var(--led-off); box-shadow: 0 0 0 1px rgba(0, 0, 0, .7); }
+[data-look=amp] :is(.tgl, .eq-tgl)[aria-pressed=true]::before { background: var(--led-on); box-shadow: 0 0 0 1px rgba(0, 0, 0, .7), 0 0 5px var(--led-on); }
+[data-look=amp] :is(.tgl, .eq-tgl):active { box-shadow: inset 1px 1px rgba(0, 0, 0, .5); }
+[data-look=amp] .tgl .lbl-s { display: inline; }
+[data-look=amp] .tgl-skin::before { display: none; }
+[data-look=amp] .tgl-skin { padding-left: 4px; }
+
+/* ---------- playlist ---------- */
+[data-look=amp] #w-playlist { width: 440px; height: 232px; resize: vertical; overflow: hidden; }
+[data-look=amp] .pl-body { gap: 4px; padding: 3px 1px 0; }
+[data-look=amp] #playlist {
+  --lv-cols: 2.8em minmax(0, 1fr) 3.6em;
+  background: var(--lcd-bg);
+  border: 1px solid #000;
+  border-radius: calc(var(--m-radius) / 3);
+  box-shadow: var(--m-sunken);
+  color: var(--pl-text);
+  font: 12px/16px Arial, Helvetica, sans-serif;
+  scrollbar-color: #8484a2 #14141e;
+}
+[data-look=amp] #playlist .lv-head, [data-look=amp] #playlist .c-channel { display: none; }
+[data-look=amp] #playlist .c-num { padding-right: 0; }
+[data-look=amp] #playlist .lv-row.current { color: var(--pl-cur); }
+[data-look=amp] #playlist .lv-row.sel { background: var(--pl-sel); }
+[data-look=amp] #playlist .lv-row.bad { color: var(--pl-bad); text-decoration: line-through; }
+[data-look=amp] #playlist .lv-empty { font: var(--pix); line-height: 1.6; text-transform: uppercase; }
+[data-look=amp] :is(.pl-foot .btn, #playlist .btn) {
+  height: 15px;
+  padding: 0 5px;
+  background: var(--m-small);
+  border: 1px solid var(--m-edge);
+  border-radius: calc(var(--m-btn-radius) / 3);
+  box-shadow: var(--m-small-sh);
+  color: var(--m-small-text);
+  font: var(--pix);
+  text-transform: uppercase;
+}
+[data-look=amp] #playlist .btn { height: 20px; padding: 0 10px; }
+[data-look=amp] :is(.pl-foot .btn, #playlist .btn):active { box-shadow: inset 1px 1px rgba(0, 0, 0, .5); }
+[data-look=amp] .pl-foot { gap: 3px; }
+[data-look=amp] .pl-total { flex: 0 1 auto; margin-left: auto; padding: 3px 5px 2px; background: var(--lcd-bg); box-shadow: var(--m-sunken); color: var(--lcd-on); }
+
+/* ---------- video ---------- */
+[data-look=amp] .video-body { padding: 3px 1px 0; }
+[data-look=amp] .screen { border: 1px solid #000; border-radius: calc(var(--m-radius) / 2); box-shadow: 0 0 0 1px rgba(255, 255, 255, .2); }
+
+/* ---------- equalizer ---------- */
+[data-look=amp] #w-eq { width: 440px; }
+[data-look=amp] .eq-body { padding: 4px 4px 2px; gap: 6px; }
+[data-look=amp] .eq-graph { height: 26px; background: var(--lcd-bg); border: 1px solid #000; box-shadow: var(--m-sunken); }
+[data-look=amp] .eq-presets {
+  height: 16px;
+  padding: 0 6px;
+  background: var(--m-small);
+  border: 1px solid var(--m-edge);
+  border-radius: calc(var(--m-btn-radius) / 3);
+  box-shadow: var(--m-small-sh);
+  color: var(--m-small-text);
+  font: var(--pix);
+  text-transform: uppercase;
+}
+[data-look=amp] .eq-tgl { text-transform: uppercase; }
+[data-look=amp] #w-eq input[type=range] {
+  --trk-h: 6px;
+  --trk-bg: linear-gradient(90deg, var(--viz-bot), var(--viz-mid) var(--pct, 50%), var(--groove) var(--pct, 50%));
+  --trk-sh: inset 1px 1px #000, inset -1px -1px rgba(255, 255, 255, .2);
+  --th-w: 11px;
+  --th-h: 15px;
+  --th-bg: var(--gold);
+  --th-sh: var(--gold-sh), 0 0 0 1px #000;
+}
+[data-look=amp] .eq-note { font: var(--pix); line-height: 1.5; text-transform: uppercase; }

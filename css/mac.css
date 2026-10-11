@@ -1,0 +1,258 @@
+/* Mac look — menu bar across the top, window controls on the left with a
+   centered title, and a Dock for open windows. Defaults are Aqua (2001);
+   System 7, Platinum, Leopard, Big Sur and Liquid Glass (skins-media.css)
+   recolor it. */
+
+[data-look=mac] {
+  --ui-font: 12px/1.35 "Lucida Grande", "Lucida Sans Unicode", Geneva, Tahoma, sans-serif;
+  --tb-h: 24px;
+  --desk-bg: radial-gradient(ellipse 90% 70% at 50% 40%, #6fb3ef, #2d6fc2 55%, #123d82);
+
+  --face: repeating-linear-gradient(180deg, #ececec 0 2px, #f7f7f7 2px 4px);
+  --text: #000;
+  --muted: #777;
+  --rule: #b8b8b8;
+  --frame: #9a9a9a;
+  --frame-dim: #c4c4c4;
+  --win-r: 7px 7px 4px 4px;
+  --win-sh: 0 10px 28px rgba(0, 0, 0, .35);
+  --win-blur: none;
+  --title: linear-gradient(180deg, #f2f2f2, #d4d4d4);
+  --title-dim: linear-gradient(180deg, #f6f6f6, #e6e6e6);
+  --title-text: #222;
+  --title-dim-text: #8a8a8a;
+  --title-font: 13px/1 "Lucida Grande", Geneva, sans-serif;
+  --title-h: 22px;
+  --title-rule: #9a9a9a;
+  --light-r: 50%;
+  --light-size: 13px;
+  --light-close: radial-gradient(circle at 50% 30%, #ffd2cc, #ff5f52 45%, #c0221a);
+  --light-min: radial-gradient(circle at 50% 30%, #fff1c2, #ffbd2e 45%, #c58612);
+  --light-zoom: radial-gradient(circle at 50% 30%, #d7ffc8, #28c840 45%, #138a24);
+  --light-off: radial-gradient(circle at 50% 30%, #fff, #cfcfcf 50%, #a2a2a2);
+  --light-sh: inset 0 0 0 1px rgba(0, 0, 0, .25);
+  --sel: #3875d7;
+  --sel-text: #fff;
+  --cur-text: #1d4fbf;
+  --field: #fff;
+  --field-alt: #edf3fe;
+  --field-border: #8f8f8f;
+  --field-r: 0;
+  --head: linear-gradient(180deg, #fff, #dcdcdc);
+  --head-border: #b0b0b0;
+  --row-h: 19px;
+  --btn: linear-gradient(180deg, #fff, #e8e8e8 50%, #d2d2d2 51%, #f2f2f2);
+  --btn-down: linear-gradient(180deg, #a9d1ff, #5b9ff0 50%, #3c86e8 51%, #8fc4ff);
+  --btn-border: #7d7d7d;
+  --btn-hover: none;
+  --btn-r: 11px;
+  --status: linear-gradient(180deg, #e8e8e8, #d4d4d4);
+  --menu-bg: rgba(250, 250, 250, .97);
+  --menu-border: #a8a8a8;
+  --menu-r: 0 0 5px 5px;
+  --menu-pad: 4px 0;
+  --menu-sh: 0 6px 16px rgba(0, 0, 0, .3);
+  --mi-h: 20px;
+  --mi-r: 0;
+  --link: #1d4fbf;
+
+  /* player (iTunes-era LCD) */
+  --body: repeating-linear-gradient(180deg, #e3e3e3 0 2px, #efefef 2px 4px);
+  --body-text: #222;
+  --body-m: 0;
+  --body-r: 0;
+  --body-pad: 12px 14px 10px;
+  --body-sh: none;
+  --artist: #555;
+  --screen: linear-gradient(180deg, #f3f6e4, #d9dfc2);
+  --screen-r: 8px;
+  --screen-sh: inset 0 1px 3px rgba(0, 0, 0, .45), 0 1px #fff;
+  --art-bg: linear-gradient(135deg, #cfd8e8, #8d9bb3);
+  --art-r: 2px;
+  --art-sh: 0 1px 3px rgba(0, 0, 0, .45);
+  --np-font: bold 14px/18px "Lucida Grande", Geneva, sans-serif;
+  --np-text: #1a1a1a;
+  --np-shadow: 0 1px #fff;
+  --artist-font: 11px/14px "Lucida Grande", Geneva, sans-serif;
+  --small-font: 11px "Lucida Grande", Geneva, sans-serif;
+  --orb: radial-gradient(circle at 50% 25%, #ffffff 0, #e8f2ff 20%, #8fbff2 55%, #2f7fe0 85%, #1d5fb8 100%);
+  --orb-big: radial-gradient(circle at 50% 25%, #ffffff 0, #d8ebff 18%, #6aa9f0 52%, #1d6fe0 82%, #0c4aa8 100%);
+  --orb-off: radial-gradient(circle at 50% 25%, #fff 0, #f2f2f2 25%, #c9c9c9 70%, #9a9a9a 100%);
+  --orb-ring: #4a6f9e;
+  --orb-text: #fff;
+  --glow: rgba(90, 160, 255, .6);
+  --fill-a: #5a9cf0;
+  --fill-b: #9fcaff;
+  --groove: #bfc6cf;
+  --lcd-on: #2a3418;
+  --lcd-off: transparent;
+  --viz-top: #4a5a2a;
+  --viz-mid: #6e8040;
+  --viz-bot: #8a9a5a;
+  --viz-peak: #2a3418;
+  --viz-scope: #3a4a20;
+
+  /* menu bar + dock */
+  --menubar-bg: linear-gradient(180deg, #ffffff, #e9e9e9);
+  --menubar-text: #000;
+  --menubar-rule: #9a9a9a;
+  --menubar-blur: none;
+  --menubar-font: 13px/1 "Lucida Grande", Geneva, sans-serif;
+  --dock-display: flex;
+  --dock: rgba(255, 255, 255, .35);
+  --dock-edge: rgba(255, 255, 255, .55);
+  --dock-tile: linear-gradient(180deg, #ffffff, #c9d9f2);
+  --dock-glyph: #1d4fbf;
+  --dock-dot: #000;
+  --balloon-bg: #ffffe1;
+}
+
+[data-look=mac] #desktop { inset: var(--tb-h) 0 0 0; }
+[data-look=mac] #icons { left: auto; right: 8px; }
+
+/* ---------- windows ---------- */
+[data-look=mac] .win {
+  overflow: hidden;
+  background: var(--face);
+  border: 1px solid var(--frame);
+  border-radius: var(--win-r);
+  box-shadow: var(--win-sh);
+  backdrop-filter: var(--win-blur);
+}
+[data-look=mac] .win:not(.active) { border-color: var(--frame-dim); }
+[data-look=mac] .titlebar {
+  height: var(--title-h);
+  gap: 7px;
+  padding: 0 8px;
+  background: var(--title);
+  border-bottom: 1px solid var(--title-rule);
+  color: var(--title-text);
+  font: var(--title-font);
+}
+[data-look=mac] .win:not(.active) .titlebar { background: var(--title-dim); color: var(--title-dim-text); }
+[data-look=mac] .tb-icon { display: none; }
+[data-look=mac] .tb-title { text-align: center; padding-right: 50px; }
+[data-look=mac] .win:not(#w-player) .tb-title { padding-right: 16px; }
+[data-look=mac] .tb-btns { order: -1; gap: 7px; }
+[data-look=mac] .tb-btns button {
+  position: relative;
+  width: var(--light-size);
+  height: var(--light-size);
+  border-radius: var(--light-r);
+  background: var(--light);
+  box-shadow: var(--light-sh);
+}
+[data-look=mac] .tb-btns [data-wm=close] { order: 1; --light: var(--light-close); }
+[data-look=mac] .tb-btns [data-wm=min] { order: 2; --light: var(--light-min); }
+[data-look=mac] .tb-btns [data-wm=shade] { order: 3; --light: var(--light-zoom); }
+[data-look=mac] .win:not(.active) .tb-btns button { --light: var(--light-off); }
+[data-look=mac] .tb-btns:hover button::before { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(0, 0, 0, .55); font: bold 10px/1 system-ui, sans-serif; }
+[data-look=mac] .tb-btns:hover [data-wm=close]::before { content: '×'; }
+[data-look=mac] .tb-btns:hover [data-wm=min]::before { content: '−'; }
+[data-look=mac] .tb-btns:hover [data-wm=shade]::before { content: '+'; }
+[data-look=mac] .win .menubar { display: none; }
+[data-look=mac] .tb-mini { font: var(--small-font); }
+
+/* Aqua "barber pole" progress */
+[data-look=mac] .progress { height: 12px; border: 1px solid #7d7d7d; border-radius: 6px; background: #e5e5e5; }
+[data-look=mac] .progress-fill {
+  right: 0;
+  border-radius: 6px;
+  background: repeating-linear-gradient(-45deg, #4a90e8 0 8px, #a9d0ff 8px 16px);
+  background-size: 22.6px 22.6px;
+  animation: barber .6s linear infinite;
+}
+@keyframes barber { to { background-position: 22.6px 0; } }
+
+/* ---------- menu bar (the taskbar moves to the top) ---------- */
+[data-look=mac] #taskbar {
+  top: 0;
+  bottom: auto;
+  gap: 2px;
+  padding: 0 10px 0 6px;
+  background: var(--menubar-bg);
+  color: var(--menubar-text);
+  box-shadow: 0 1px 0 var(--menubar-rule);
+  font: var(--menubar-font);
+}
+[data-look=mac] #taskbar::before { content: ''; position: absolute; inset: 0; z-index: -1; backdrop-filter: var(--menubar-blur); }
+[data-look=mac] #start-btn { height: 100%; padding: 0 9px; }
+[data-look=mac] #start-btn span { display: none; }
+[data-look=mac] .mac-menus { display: flex; height: 100%; }
+[data-look=mac] .mac-menus button { height: 100%; padding: 0 9px; }
+[data-look=mac] .mac-menus b { display: flex; align-items: center; padding: 0 9px 0 4px; }
+[data-look=mac] :is(#start-btn, .mac-menus button):is(:hover, .open, [aria-expanded=true]) { background: var(--sel); color: var(--sel-text); }
+[data-look=mac] #tray { margin-left: auto; height: 100%; gap: 12px; }
+[data-look=mac] #tray-skin { height: 100%; }
+[data-look=mac] #tray-skin:hover { background: var(--sel); color: var(--sel-text); }
+
+/* the Dock */
+[data-look=mac] #tasks {
+  position: fixed;
+  left: 50%;
+  bottom: 6px;
+  z-index: 900;
+  display: var(--dock-display);
+  flex: none;
+  gap: 8px;
+  padding: 7px 10px 9px;
+  overflow: visible;
+  transform: translateX(-50%);
+  border: 1px solid var(--dock-edge);
+  border-radius: 16px;
+  background: var(--dock);
+  backdrop-filter: blur(14px) saturate(1.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+}
+[data-look=mac] .task {
+  position: relative;
+  flex: none;
+  justify-content: center;
+  width: 46px;
+  min-width: 0;
+  height: 46px;
+  padding: 0;
+  border-radius: 11px;
+  background: var(--dock-tile);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .3), inset 0 1px rgba(255, 255, 255, .6);
+  color: var(--dock-glyph);
+  overflow: visible;
+  transition: transform .15s ease-out;
+}
+[data-look=mac] .task span { display: none; }
+[data-look=mac] .task .ico { width: 26px; height: 26px; }
+[data-look=mac] .task:hover { transform: translateY(-8px) scale(1.2); }
+[data-look=mac] .task::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--dock-dot); }
+
+/* Apple-style menu drops down from the top-left */
+[data-look=mac] #start-menu {
+  top: var(--tb-h);
+  bottom: auto;
+  left: 4px;
+  flex-direction: column;
+  min-width: 230px;
+  padding: 4px 0;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--menu-r);
+  background: var(--menu-bg);
+  box-shadow: var(--menu-sh);
+  color: var(--text);
+  backdrop-filter: var(--win-blur);
+}
+[data-look=mac] .sm-band { display: none; }
+[data-look=mac] .sm-items button { height: 22px; padding: 0 16px 0 12px; gap: 8px; }
+[data-look=mac] .sm-items .ico { width: 14px; height: 14px; }
+[data-look=mac] .sm-items button:hover { background: var(--sel); color: var(--sel-text); }
+[data-look=mac] .sm-items hr { margin: 4px 0; border: 0; border-top: 1px solid var(--rule); }
+
+[data-look=mac] .tooltip, [data-look=mac] .balloon { border-radius: 4px; box-shadow: 0 4px 12px rgba(0, 0, 0, .25); }
+[data-look=mac] .zoom-ghost { border-radius: 6px; background: var(--title); opacity: .8; }
+[data-look=mac] #shutdown { background: #000; }
+[data-look=mac] #shutdown p { color: #fff; font: 22px/1.5 "Lucida Grande", Geneva, sans-serif; }
+
+/* phones: keep dialogs clear of the top menu bar and the Dock */
+@media (max-width: 720px) {
+  [data-look=mac] .win.dialog { top: calc(var(--tb-h) + 8px) !important; }
+  [data-look=mac] #w-search { height: calc(100vh - var(--tb-h) - 92px); }
+  [data-look=mac] #desktop { padding-bottom: 92px; }
+}

@@ -1,0 +1,195 @@
+/* Modern look — flat 2010s–2020s desktops: thin caption buttons, flat taskbar
+   with an accent underline, card-style menus. Metro, Tiles, Material, Mica,
+   Holo… (skins-media.css) recolor it through these variables. */
+
+[data-look=modern] {
+  --ui-font: 13px/1.4 "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+  --tb-h: 40px;
+  --accent: #0078d4;
+  --desk-bg: radial-gradient(ellipse 80% 70% at 70% 40%, #2b88d8, transparent 70%), linear-gradient(135deg, #001b3a, #00315e 50%, #0a5ea8);
+
+  --face: #f3f3f3;
+  --text: #1b1b1b;
+  --muted: #6b6b6b;
+  --rule: #e3e3e3;
+  --frame: #bdbdbd;
+  --frame-dim: #d6d6d6;
+  --win-r: 0;
+  --win-sh: 0 10px 30px rgba(0, 0, 0, .3);
+  --win-blur: none;
+  --title: var(--face);
+  --title-dim: var(--face);
+  --title-text: var(--text);
+  --title-dim-text: var(--muted);
+  --title-font: 12px/1 "Segoe UI", system-ui, -apple-system, sans-serif;
+  --title-h: 32px;
+  --title-case: none;
+  --cap-hover: rgba(0, 0, 0, .08);
+  --hover: rgba(0, 0, 0, .05);
+  --sel: var(--accent);
+  --sel-text: #fff;
+  --cur-text: var(--accent);
+  --field: #fff;
+  --field-alt: #fff;
+  --field-border: #d0d0d0;
+  --field-r: 4px;
+  --head: #fff;
+  --head-border: #ececec;
+  --head-font: 600 11px/1 "Segoe UI", system-ui, sans-serif;
+  --row-h: 26px;
+  --head-h: 26px;
+  --btn: #fdfdfd;
+  --btn-down: #ececec;
+  --btn-border: #cfcfcf;
+  --btn-hover: inset 0 0 0 1px var(--accent);
+  --btn-r: 4px;
+  --status: var(--face);
+  --menu-bg: #fff;
+  --menu-border: #d9d9d9;
+  --menu-r: 6px;
+  --menu-pad: 4px;
+  --menu-sh: 0 8px 24px rgba(0, 0, 0, .18);
+  --mi-h: 28px;
+  --mi-r: 4px;
+  --link: var(--accent);
+
+  /* player */
+  --body: #1f1f1f;
+  --body-text: #fff;
+  --body-m: 0;
+  --body-r: 0;
+  --body-pad: 14px 16px 12px;
+  --body-sh: none;
+  --artist: #b9b9b9;
+  --screen: #141414;
+  --screen-r: 4px;
+  --screen-sh: none;
+  --art-bg: #333;
+  --art-r: 4px;
+  --art-sh: none;
+  --np-font: 600 16px/20px "Segoe UI", system-ui, -apple-system, sans-serif;
+  --np-shadow: none;
+  --np-text: #fff;
+  --artist-font: 12px/16px "Segoe UI", system-ui, -apple-system, sans-serif;
+  --small-font: 11px "Segoe UI", system-ui, sans-serif;
+  --orb: transparent;
+  --orb-big: var(--accent);
+  --orb-off: transparent;
+  --orb-ring: transparent;
+  --orb-text: #fff;
+  --orb-sh: none;
+  --orb-on-sh: inset 0 0 0 2px var(--accent);
+  --glyph-sh: none;
+  --glow: transparent;
+  --play-size: 46px;
+  --fill-a: var(--accent);
+  --fill-b: var(--accent);
+  --groove: rgba(255, 255, 255, .22);
+  --lcd-on: #fff;
+  --lcd-off: transparent;
+  --viz-top: #ffffff;
+  --viz-mid: var(--accent);
+  --viz-bot: var(--accent);
+  --viz-peak: #ffffff;
+  --viz-scope: #ffffff;
+
+  /* taskbar + start */
+  --taskbar: #1f1f1f;
+  --taskbar-text: #fff;
+  --taskbar-blur: none;
+  --task-hover: rgba(255, 255, 255, .1);
+  --task-active: rgba(255, 255, 255, .16);
+  --task-mark: var(--accent);
+  --sm-head: var(--accent);
+  --sm-head-text: #fff;
+  --sm-gap: 0px;
+  --tip-bg: #2b2b2b;
+  --tip-text: #fff;
+  --tip-border: #2b2b2b;
+  --balloon-bg: #ffffff;
+  --balloon-text: #1b1b1b;
+  --balloon-border: #d0d0d0;
+}
+
+/* ---------- windows ---------- */
+[data-look=modern] .win {
+  overflow: hidden;
+  background: var(--face);
+  border: 1px solid var(--frame);
+  border-radius: var(--win-r);
+  box-shadow: var(--win-sh);
+  backdrop-filter: var(--win-blur);
+}
+[data-look=modern] .win:not(.active) { border-color: var(--frame-dim); }
+[data-look=modern] .titlebar {
+  height: var(--title-h);
+  gap: 8px;
+  padding-left: 12px;
+  background: var(--title);
+  color: var(--title-text);
+  font: var(--title-font);
+  text-transform: var(--title-case);
+}
+[data-look=modern] .win:not(.active) .titlebar { background: var(--title-dim); color: var(--title-dim-text); }
+[data-look=modern] .tb-icon .ico { width: 14px; height: 14px; }
+[data-look=modern] .tb-btns { align-self: stretch; }
+[data-look=modern] .tb-btns button { display: grid; place-items: center; width: 46px; height: 100%; font: 12px/1 "Segoe UI Symbol", system-ui, sans-serif; }
+[data-look=modern] .tb-btns button:hover { background: var(--cap-hover); }
+[data-look=modern] .tb-btns [data-wm=min]::before { content: '—'; font-size: 11px; }
+[data-look=modern] .tb-btns [data-wm=close]::before { content: '✕'; }
+[data-look=modern] .tb-btns [data-wm=close]:hover { background: #e81123; color: #fff; }
+[data-look=modern] .tb-btns [data-wm=shade] { display: none; }
+
+[data-look=modern] .menubar { border-bottom: 0; padding: 0 4px 2px; }
+[data-look=modern] .menubar button { padding: 4px 9px; }
+[data-look=modern] .menubar button:is(:hover, .open) { background: var(--hover); color: var(--text); }
+[data-look=modern] .lv-row:hover:not(.sel) { background: var(--hover); }
+[data-look=modern] .lv-head > span { border-right: 0; padding-top: 8px; }
+
+/* indeterminate progress: a thin accent bar sliding across */
+[data-look=modern] .progress { height: 4px; border-radius: 2px; background: var(--rule); }
+[data-look=modern] .progress-fill { width: 30%; border-radius: 2px; background: var(--accent); animation: modern-slide 1.3s ease-in-out infinite; }
+@keyframes modern-slide { from { left: -30%; } to { left: 100%; } }
+
+/* ---------- taskbar ---------- */
+[data-look=modern] #taskbar { gap: 2px; background: var(--taskbar); color: var(--taskbar-text); backdrop-filter: var(--taskbar-blur); justify-content: var(--tb-justify, flex-start); }
+[data-look=modern] #start-btn { justify-content: center; width: 48px; height: 100%; }
+[data-look=modern] #start-btn span { display: none; }
+[data-look=modern] #start-btn .ico { width: 20px; height: 20px; }
+[data-look=modern] #start-btn:hover, [data-look=modern] #start-btn[aria-expanded=true] { background: var(--task-hover); }
+[data-look=modern] #tasks { gap: 2px; height: 100%; }
+[data-look=modern] .task { position: relative; height: 100%; padding: 0 12px; }
+[data-look=modern] .task:hover { background: var(--task-hover); }
+[data-look=modern] .task.active { background: var(--task-active); }
+[data-look=modern] .task::after { content: ''; position: absolute; left: 6px; right: 6px; bottom: 0; height: 2px; background: var(--task-mark); opacity: .45; }
+[data-look=modern] .task.active::after { opacity: 1; }
+[data-look=modern] #tray { height: 100%; padding: 0 12px 0 4px; }
+[data-look=modern] #tray-skin { height: 30px; border-radius: 4px; }
+[data-look=modern] #tray-skin:hover { background: var(--task-hover); }
+
+/* ---------- start menu ---------- */
+[data-look=modern] #start-menu {
+  flex-direction: column;
+  bottom: calc(var(--tb-h) + var(--sm-gap));
+  width: 320px;
+  overflow: hidden;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--menu-r);
+  background: var(--menu-bg);
+  box-shadow: var(--menu-sh);
+  color: var(--text);
+  backdrop-filter: var(--win-blur);
+}
+[data-look=modern] .sm-band { padding: 14px 16px; background: var(--sm-head); }
+[data-look=modern] .sm-band span { color: var(--sm-head-text); font: 600 16px "Segoe UI", system-ui, sans-serif; }
+[data-look=modern] .sm-items { padding: 6px; }
+[data-look=modern] .sm-items button { height: 36px; padding: 0 12px; border-radius: var(--mi-r); }
+[data-look=modern] .sm-items .ico { width: 20px; height: 20px; color: var(--accent); }
+[data-look=modern] .sm-items button:hover { background: var(--hover); }
+[data-look=modern] .sm-items hr { margin: 4px 8px; border: 0; border-top: 1px solid var(--rule); }
+
+[data-look=modern] .tooltip, [data-look=modern] .balloon { border-radius: 6px; box-shadow: 0 6px 18px rgba(0, 0, 0, .2); }
+[data-look=modern] .zoom-ghost { border-radius: var(--win-r); background: var(--accent); opacity: .5; }
+[data-look=modern] #shutdown { background: var(--accent); }
+[data-look=modern] #shutdown p { color: #fff; font: 300 30px/1.4 "Segoe UI", system-ui, sans-serif; }
+[data-look=modern] #shutdown small { color: rgba(255, 255, 255, .7); }

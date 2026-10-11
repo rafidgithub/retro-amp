@@ -1,0 +1,265 @@
+/* Win9x chrome — desktop, taskbar, Start menu, menus and dialogs shared by the
+   Amp and Chicago looks, plus the complete Chicago window look.
+   Color schemes (Rainy Day, Desert, Hot Dog Stand…) live in variants.css. */
+
+[data-family=classic] {
+  --face: #c0c0c0;
+  --hi: #fff;
+  --lt: #dfdfdf;
+  --sh: #808080;
+  --dk: #0a0a0a;
+  --text: #000;
+  --field: #fff;
+  --sel: #000080;
+  --sel-text: #fff;
+  --title: #000080;
+  --title-text: #fff;
+  --title-dim: var(--sh);
+  --title-dim-text: var(--face);
+  --band: var(--sh);
+  --link: #0000ee;
+  --lcd-bg: #000;
+  --raised: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--sh), inset 2px 2px var(--lt);
+  --sunken: inset -1px -1px var(--hi), inset 1px 1px var(--sh), inset -2px -2px var(--lt), inset 2px 2px var(--dk);
+  --pressed: inset -1px -1px var(--hi), inset 1px 1px var(--dk), inset -2px -2px var(--lt), inset 2px 2px var(--sh);
+  --hair-in: inset -1px -1px var(--hi), inset 1px 1px var(--sh);
+  --hair-out: inset -1px -1px var(--sh), inset 1px 1px var(--hi);
+  --x-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='7' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h2v1H0zM6 0h2v1H6zM1 1h2v1H1zM5 1h2v1H5zM2 2h4v1H2zM3 3h2v1H3zM2 4h4v1H2zM1 5h2v1H1zM5 5h2v1H5zM0 6h2v1H0zM6 6h2v1H6z'/%3E%3C/svg%3E");
+  --check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' shape-rendering='crispEdges'%3E%3Cpath d='M6 0h1v1H6zM5 1h2v1H5zM0 2h1v1H0zM4 2h3v1H4zM0 3h2v1H0zM3 3h3v1H3zM0 4h5v1H0zM1 5h3v1H1zM2 6h1v1H2z'/%3E%3C/svg%3E");
+  --desk-bg: #008080;
+  --tb-h: 28px;
+  --ui-font: 11px/1.3 "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, Verdana, sans-serif;
+}
+/* Amp's dialogs and Start menu use the Windows 98 gradient captions */
+[data-look=amp] {
+  --title: linear-gradient(90deg, #000080, #1084d0);
+  --title-dim: linear-gradient(90deg, #808080, #b5b5b5);
+  --band: linear-gradient(0deg, #000080, #1084d0);
+}
+
+/* ---------- classic windows: every Chicago window, and Amp's dialogs ---------- */
+:is([data-look=chicago] .win, [data-look=amp] .dialog) {
+  padding: 3px;
+  background: var(--face);
+  box-shadow: var(--raised);
+  color: var(--text);
+  font: var(--ui-font);
+}
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .titlebar {
+  height: 18px;
+  gap: 3px;
+  padding: 0 2px;
+  background: var(--title);
+  color: var(--title-text);
+  font-weight: bold;
+}
+:is([data-look=chicago] .win, [data-look=amp] .dialog):not(.active) .titlebar { background: var(--title-dim); color: var(--title-dim-text); }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-icon .ico { width: 14px; height: 14px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns button {
+  width: 16px;
+  height: 14px;
+  background: var(--face) var(--glyph, none) center no-repeat;
+  box-shadow: var(--raised);
+}
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns button:active { box-shadow: var(--pressed); background-position: 5px 4px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns [data-wm=min] { --glyph: linear-gradient(#000 0 0); background-size: 6px 2px; background-position: 4px 9px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns [data-wm=min]:active { background-position: 5px 10px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns [data-wm=close] { --glyph: var(--x-glyph); margin-left: 2px; }
+[data-look=chicago] .tb-btns [data-wm=shade] { display: none; }
+
+/* buttons, inputs, list views, progress */
+:is([data-look=chicago], [data-look=amp] .dialog) .btn {
+  min-width: 75px;
+  height: 23px;
+  padding: 0 10px;
+  background: var(--face);
+  box-shadow: var(--raised);
+}
+:is([data-look=chicago], [data-look=amp] .dialog) .btn:active { box-shadow: var(--pressed); padding: 2px 9px 0 11px; }
+:is([data-look=chicago], [data-look=amp] .dialog) .btn:focus-visible { outline: 1px dotted var(--text); outline-offset: -5px; }
+:is([data-look=chicago], [data-look=amp] .dialog) input[type=text] {
+  height: 23px;
+  padding: 3px 5px;
+  border: 0;
+  background: var(--field);
+  box-shadow: var(--sunken);
+  color: var(--text);
+}
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .listview { padding: 2px; background: var(--field); box-shadow: var(--sunken); }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .lv-head { background: var(--face); }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .lv-head > span {
+  height: 18px;
+  padding: 2px 5px;
+  box-shadow: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--sh);
+  text-align: left;
+}
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .lv-row { height: 17px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .lv-row.sel { background: var(--sel); color: var(--sel-text); }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .lv-row.current { font-weight: bold; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .lv-row.bad { color: var(--sh); text-decoration: line-through; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .progress { height: 18px; padding: 3px; background: var(--face); box-shadow: var(--hair-in); }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .progress-fill {
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  background: repeating-linear-gradient(90deg, var(--sel) 0 8px, transparent 8px 10px);
+  animation: chunks 2.6s steps(26) infinite;
+}
+@keyframes chunks { from { width: 0; } to { width: calc(100% - 6px); } }
+
+:is([data-look=chicago] .win, [data-look=amp] .dialog) :is(.search-body, .skins-body) { padding: 8px 6px 4px; gap: 8px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .dlg-foot { gap: 6px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .about-body { padding: 14px 14px 8px; gap: 2px; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .about-body p { margin: 12px 0; }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .skin-groups { padding: 8px; background: var(--field); box-shadow: var(--sunken); }
+:is([data-look=chicago] .win, [data-look=amp] .dialog) .skin-card:hover { background: var(--face); }
+
+/* ---------- Chicago: menubar ---------- */
+[data-look=chicago] .menubar { display: flex; padding: 1px 0 3px; }
+[data-look=chicago] .menubar button { padding: 1px 7px 2px; }
+[data-look=chicago] .menubar button:hover { box-shadow: var(--hair-out); }
+[data-look=chicago] .menubar button.open { box-shadow: var(--hair-in); }
+
+/* ---------- Chicago: player (CD Player lineage) ---------- */
+[data-look=chicago] {
+  --lcd-on: #ffc21a;
+  --lcd-off: #2a1f05;
+  --viz-top: #fff3b0;
+  --viz-mid: #ffc21a;
+  --viz-bot: #b05a00;
+  --viz-peak: #fff;
+  --viz-scope: #ffc21a;
+}
+[data-look=chicago] #w-player { width: 426px; }
+[data-look=chicago] .player-body {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "lcd transport" "title title" "artist artist" "seek seek" "toggles vol";
+  gap: 7px 10px;
+  padding: 8px 6px 6px;
+  border-top: 1px solid var(--sh);
+  box-shadow: inset 0 1px var(--hi);
+}
+[data-look=chicago] .lcd {
+  grid-template-areas: "time" "viz";
+  gap: 5px;
+  place-content: center;
+  padding: 7px 8px;
+  background: var(--lcd-bg);
+  box-shadow: var(--sunken);
+}
+[data-look=chicago] .state-icon { display: none; }
+[data-look=chicago] .transport {
+  display: grid;
+  grid-template-columns: repeat(5, 26px);
+  grid-auto-rows: 25px;
+  gap: 3px 2px;
+  align-content: center;
+  align-items: stretch;
+}
+[data-look=chicago] .transport button { background: var(--face); box-shadow: var(--raised); color: var(--text); }
+[data-look=chicago] .transport button:active { box-shadow: var(--pressed); }
+[data-look=chicago] .transport button:active .ico { transform: translate(1px, 1px); }
+[data-look=chicago] .transport .ico { width: 12px; height: 12px; }
+[data-look=chicago] .t-play { grid-area: 1 / 1 / 2 / 4; }
+[data-look=chicago] .t-pause { grid-area: 1 / 4; }
+[data-look=chicago] .t-stop { grid-area: 1 / 5; }
+[data-look=chicago] .t-prev { grid-area: 2 / 1; }
+[data-look=chicago] .transport .t-rew { grid-area: 2 / 2; display: grid; }
+[data-look=chicago] .transport .t-ff { grid-area: 2 / 3; display: grid; }
+[data-look=chicago] .t-next { grid-area: 2 / 4; }
+[data-look=chicago] .t-eject { grid-area: 2 / 5; }
+[data-look=chicago] .field { display: grid; grid-template-columns: 7ch minmax(0, 1fr); }
+[data-look=chicago] .f-label { display: block; }
+[data-look=chicago] .player-body .f-artist { display: grid; }
+[data-look=chicago] :is(.marquee, .artist) { height: 22px; padding: 4px 5px; background: var(--field); box-shadow: var(--sunken); }
+[data-look=chicago] .seek-row { position: relative; padding: 0 2px 6px; }
+[data-look=chicago] .seek-row::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  bottom: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--text) 0 1px, transparent 1px calc(10% - .1px)), linear-gradient(90deg, transparent calc(100% - 1px), var(--text) 0);
+}
+[data-look=chicago] :is(.seek, .vol) {
+  --trk-h: 4px;
+  --trk-bg: var(--face);
+  --trk-sh: var(--sunken);
+  --th-w: 11px;
+  --th-h: 21px;
+  --th-bg: var(--face);
+  --th-sh: var(--raised);
+}
+[data-look=chicago] .vol { --th-h: 17px; width: 80px; }
+[data-look=chicago] .vol-row { gap: 5px; justify-self: end; }
+[data-look=chicago] .vol-row .f-label { display: none; }
+[data-look=chicago] .vol-icon { display: grid; place-items: center; width: 20px; height: 20px; }
+[data-look=chicago] .vol-icon:active { box-shadow: var(--hair-in); }
+[data-look=chicago] .toggles { display: grid; grid-template-rows: auto auto; grid-auto-flow: column; gap: 3px 10px; justify-content: start; align-items: center; min-width: 0; }
+[data-look=chicago] .tgl { gap: 6px; padding: 1px 2px; }
+[data-look=chicago] :is(.tgl:not(.tgl-skin), .eq-tgl)::before { content: ''; flex: none; width: 13px; height: 13px; background: var(--field) center no-repeat; box-shadow: var(--sunken); }
+[data-look=chicago] :is(.tgl, .eq-tgl)[aria-pressed=true]::before { background-image: var(--check); }
+[data-look=chicago] .tgl:active::before { background-color: var(--face); }
+[data-look=chicago] .tgl .lbl-l { display: inline; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+[data-look=chicago] .tgl:focus-visible .lbl-l { outline: 1px dotted var(--text); }
+[data-look=chicago] .tgl-skin { grid-row: 1 / span 2; gap: 5px; height: 40px; padding: 0 8px; background: var(--face); box-shadow: var(--raised); }
+[data-look=chicago] .tgl-skin:active { box-shadow: var(--pressed); }
+[data-look=chicago] .tgl-skin .ico { display: block; width: 20px; height: 20px; }
+[data-look=chicago] .statusbar { display: flex; gap: 2px; margin-top: 2px; }
+[data-look=chicago] .sb { flex: 1; min-width: 0; height: 18px; padding: 2px 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-shadow: var(--hair-in); }
+[data-look=chicago] .sb-state { flex: 0 0 96px; }
+[data-look=chicago] .tb-mini { padding: 0 6px; font-weight: normal; }
+
+/* playlist + video */
+[data-look=chicago] #w-playlist { width: 426px; height: 250px; resize: vertical; overflow: hidden; }
+[data-look=chicago] .pl-body { gap: 6px; padding: 4px 3px 3px; }
+[data-look=chicago] .pl-foot { gap: 6px; }
+[data-look=chicago] .pl-total { text-align: right; padding-right: 4px; }
+[data-look=chicago] .video-body { padding: 5px 4px 3px; }
+[data-look=chicago] .screen { box-shadow: -1px -1px var(--sh), 1px 1px var(--hi), -2px -2px var(--dk), 2px 2px var(--lt); margin: 2px; }
+
+/* ---------- desktop chrome: taskbar ---------- */
+[data-family=classic] #taskbar { gap: 4px; padding: 3px 2px 1px; background: var(--face); box-shadow: inset 0 1px var(--lt), inset 0 2px var(--hi); color: var(--text); }
+[data-family=classic] #start-btn { height: 22px; gap: 4px; padding: 0 6px 0 4px; font-weight: bold; background: var(--face); box-shadow: var(--raised); }
+[data-family=classic] #start-btn[aria-expanded=true] { box-shadow: var(--pressed); padding: 1px 5px 0 5px; }
+[data-family=classic] #tasks { gap: 3px; padding-left: 2px; border-left: 1px solid var(--sh); box-shadow: -1px 0 var(--hi) inset; }
+[data-family=classic] .task { height: 22px; padding: 0 6px; background: var(--face); box-shadow: var(--raised); }
+[data-family=classic] .task.active {
+  font-weight: bold;
+  background: repeating-conic-gradient(var(--hi) 0 25%, var(--face) 0 50%) 0 0 / 2px 2px;
+  box-shadow: var(--pressed);
+}
+[data-family=classic] #tray { height: 22px; padding: 0 10px 0 2px; box-shadow: var(--hair-in); }
+[data-family=classic] #tray-skin { height: 18px; margin-right: 2px; }
+[data-family=classic] #tray-skin:hover { box-shadow: var(--hair-out); }
+[data-family=classic] #tray-skin:active { box-shadow: var(--hair-in); }
+
+/* Start menu */
+[data-family=classic] #start-menu { bottom: calc(var(--tb-h) - 3px); padding: 3px; background: var(--face); box-shadow: var(--raised); color: var(--text); }
+[data-family=classic] .sm-band { display: flex; align-items: flex-end; width: 24px; background: var(--band); }
+[data-family=classic] .sm-band span { display: block; padding: 8px 0; writing-mode: vertical-rl; transform: rotate(180deg); color: var(--lt); font: bold 18px/24px Arial, Helvetica, sans-serif; letter-spacing: -.5px; }
+[data-family=classic] .sm-band b { color: #fff; }
+[data-family=classic] .sm-items button { height: 30px; padding: 0 12px 0 6px; }
+[data-family=classic] .sm-items .ico { width: 20px; height: 20px; }
+[data-family=classic] .sm-items button:hover { background: var(--sel); color: var(--sel-text); }
+[data-family=classic] .sm-items hr { margin: 2px 0; border: 0; border-top: 1px solid var(--sh); border-bottom: 1px solid var(--hi); }
+
+/* menus */
+[data-family=classic] .menu { padding: 3px; background: var(--face); box-shadow: var(--raised); color: var(--text); }
+[data-family=classic] .mi { height: 19px; padding-right: 4px; }
+[data-family=classic] .mi:hover:not(:disabled), [data-family=classic] .mi.hot { background: var(--sel); color: var(--sel-text); }
+[data-family=classic] .mi:disabled { color: var(--sh); text-shadow: 1px 1px var(--hi); }
+[data-family=classic] .menu hr { margin: 3px 1px; border: 0; border-top: 1px solid var(--sh); border-bottom: 1px solid var(--hi); }
+
+[data-family=classic] .zoom-ghost { background: var(--title); outline: 1px solid var(--face); }
+
+[data-family=classic] #shutdown p { color: #f0821e; font: 30px/1.5 "Arial Black", Arial, sans-serif; letter-spacing: .5px; }
+
+/* ---------- Chicago: equalizer ---------- */
+[data-look=chicago] #w-eq { width: 426px; }
+[data-look=chicago] .eq-body { padding: 8px 6px 6px; border-top: 1px solid var(--sh); box-shadow: inset 0 1px var(--hi); }
+[data-look=chicago] .eq-tgl { gap: 6px; padding: 1px 2px; }
+[data-look=chicago] .eq-graph { height: 30px; background: var(--lcd-bg); box-shadow: var(--sunken); }
+[data-look=chicago] .eq-presets { min-width: 0; }
+[data-look=chicago] #w-eq input[type=range] { --trk-h: 4px; --trk-bg: var(--face); --trk-sh: var(--sunken); --th-w: 11px; --th-h: 19px; --th-bg: var(--face); --th-sh: var(--raised); }

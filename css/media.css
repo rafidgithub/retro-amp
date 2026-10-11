@@ -1,0 +1,227 @@
+/* Media family — layout shared by the Luna (XP), Modern (2010s+) and Mac looks:
+   buttons, fields, list views, dialogs, menus, and the album-art media player.
+   Everything here reads variables; each look sets defaults and each skin
+   (skins-media.css) recolors them. */
+
+[data-family=media] {
+  --ui-font: 11px/1.35 Tahoma, Verdana, Geneva, sans-serif;
+  --btn-r: 3px;
+  --btn-text: var(--text);
+  --field-r: 0;
+  --row-h: 19px;
+  --head-h: 21px;
+  --head-font: inherit;
+  --menu-r: 0;
+  --menu-pad: 2px;
+  --menu-sh: 2px 2px 3px rgba(0, 0, 0, .3);
+  --mi-h: 21px;
+  --mi-r: 0;
+  --body-m: 4px;
+  --body-r: 7px;
+  --body-pad: 10px 12px;
+  --body-sh: inset 0 1px rgba(255, 255, 255, .3), inset 0 0 0 1px rgba(0, 0, 0, .6), 0 1px 2px rgba(0, 0, 0, .3);
+  --art-r: 4px;
+  --art-sh: 0 0 0 1px #000, 0 2px 6px rgba(0, 0, 0, .5);
+  --screen-r: 4px;
+  --screen-sh: inset 0 0 0 1px #000, inset 0 2px 8px rgba(0, 0, 0, .8);
+  --np-font: bold 14px/18px Tahoma, sans-serif;
+  --np-text: #fff;
+  --np-shadow: 0 1px 2px #000;
+  --artist-font: 11px/14px Tahoma, sans-serif;
+  --small-font: 11px Tahoma, sans-serif;
+  --orb-r: 50%;
+  --orb-text: #fff;
+  --orb-sh: 0 0 0 1px var(--orb-ring), inset 0 1px 1px rgba(255, 255, 255, .9), 0 2px 4px rgba(0, 0, 0, .6);
+  --orb-on-sh: var(--orb-sh), 0 0 8px var(--glow);
+  --glyph-sh: drop-shadow(0 1px 1px rgba(0, 0, 0, .7));
+  --play-size: 44px;
+  --dicon-text: #fff;
+  --dicon-shadow: 1px 1px 2px rgba(0, 0, 0, .9);
+}
+
+[data-family=media] .win { color: var(--text); }
+
+/* ---------- buttons + fields ---------- */
+[data-family=media] .btn {
+  min-width: 75px;
+  height: 23px;
+  padding: 0 10px;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--btn-r);
+  background: var(--btn);
+  color: var(--btn-text);
+}
+[data-family=media] .btn:hover { box-shadow: var(--btn-hover); }
+[data-family=media] .btn:active { background: var(--btn-down); box-shadow: none; }
+[data-family=media] .btn:focus-visible { outline: 2px solid var(--sel); outline-offset: 1px; }
+[data-family=media] input[type=text] {
+  height: 23px;
+  padding: 3px 6px;
+  border: 1px solid var(--field-border);
+  border-radius: var(--field-r);
+  background: var(--field);
+  color: var(--text);
+}
+[data-family=media] input[type=text]:focus { border-color: var(--sel); }
+
+/* ---------- list views (playlist + search results) ---------- */
+[data-family=media] .listview { background: var(--field); border: 1px solid var(--field-border); border-radius: var(--field-r); }
+[data-family=media] .lv-head { background: var(--head); border-bottom: 1px solid var(--head-border); }
+[data-family=media] .lv-head > span { height: var(--head-h); padding: 4px 6px; border-right: 1px solid var(--head-border); text-align: left; font: var(--head-font); }
+[data-family=media] .lv-row { height: var(--row-h); }
+[data-family=media] .lv-row:nth-child(odd) { background: var(--field-alt); }
+[data-family=media] .lv-row.current { color: var(--cur-text); font-weight: bold; }
+[data-family=media] .lv-row.current .c-num::before { content: '▶ '; font-size: 8px; vertical-align: 1px; }
+[data-family=media] .lv-row.sel { background: var(--sel); color: var(--sel-text); }
+[data-family=media] .lv-row.bad { color: var(--muted); text-decoration: line-through; }
+
+/* ---------- dialogs ---------- */
+[data-family=media] :is(.search-body, .skins-body) { padding: 10px 10px 8px; gap: 8px; }
+[data-family=media] .dlg-foot { gap: 6px; }
+[data-family=media] .about-body { padding: 14px 14px 10px; }
+[data-family=media] .about-body p { margin: 12px 0; }
+[data-family=media] .skin-groups { padding: 10px; background: var(--field); border: 1px solid var(--field-border); border-radius: var(--field-r); }
+[data-family=media] .skin-card { border-radius: 4px; }
+[data-family=media] .skin-card:hover { background: var(--field-alt); }
+[data-family=media] .skin-card[aria-checked=true] { background: color-mix(in srgb, var(--sel) 14%, transparent); }
+
+/* ---------- menus + menubar ---------- */
+[data-family=media] .menubar { display: flex; padding: 1px 2px; border-bottom: 1px solid var(--rule); }
+[data-family=media] .menubar button { padding: 2px 7px; border-radius: var(--mi-r); }
+[data-family=media] .menubar button:hover, [data-family=media] .menubar button.open { background: var(--sel); color: var(--sel-text); }
+[data-family=media] .menubar u { text-decoration: none; }
+[data-family=media] .menu {
+  padding: var(--menu-pad);
+  border: 1px solid var(--menu-border);
+  border-radius: var(--menu-r);
+  background: var(--menu-bg);
+  box-shadow: var(--menu-sh);
+  color: var(--text);
+}
+[data-family=media] .mi { height: var(--mi-h); padding-right: 6px; border-radius: var(--mi-r); }
+[data-family=media] .mi:hover:not(:disabled), [data-family=media] .mi.hot { background: var(--sel); color: var(--sel-text); }
+[data-family=media] .mi:disabled { color: var(--muted); }
+[data-family=media] .menu hr { margin: 3px 2px; border: 0; border-top: 1px solid var(--menu-border); }
+
+/* ---------- player: album-art media layout ---------- */
+[data-family=media] .player-body {
+  grid-template-columns: 100px minmax(0, 1fr) auto;
+  grid-template-areas: "art lcd lcd" "title title title" "artist artist artist" "seek seek seek" "toggles transport vol";
+  gap: 6px 8px;
+  align-items: center;
+  margin: var(--body-m);
+  padding: var(--body-pad);
+  border-radius: var(--body-r);
+  background: var(--body);
+  box-shadow: var(--body-sh);
+  color: var(--body-text);
+}
+[data-family=media] .art {
+  display: block;
+  width: 100px;
+  height: 100px;
+  border-radius: var(--art-r);
+  background: var(--art-bg);
+  box-shadow: var(--art-sh);
+  animation: fade-in .6s;
+}
+[data-family=media] .lcd {
+  height: 100px;
+  overflow: hidden;
+  border-radius: var(--screen-r);
+  background: var(--screen);
+  box-shadow: var(--screen-sh);
+}
+[data-family=media] .lcd-viz { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: auto; }
+[data-family=media] .lcd-time { position: absolute; right: 6px; bottom: 5px; }
+[data-family=media] .state-icon { position: absolute; left: 8px; bottom: 6px; color: var(--lcd-on); font: var(--small-font); text-shadow: 0 0 6px var(--viz-mid); pointer-events: none; }
+[data-family=media] .state-icon::after { content: 'Ready'; }
+[data-state=playing][data-family=media] .state-icon::after { content: 'Playing'; }
+[data-state=paused][data-family=media] .state-icon::after { content: 'Paused'; }
+[data-state=stopped][data-family=media] .state-icon::after { content: 'Stopped'; }
+[data-state=buffering][data-family=media] .state-icon::after { content: 'Buffering…'; animation: blink 1s steps(1) infinite; }
+
+[data-family=media] .marquee { height: 20px; color: var(--np-text); font: var(--np-font); text-shadow: var(--np-shadow); }
+[data-family=media] .player-body .f-artist { display: flex; margin-top: -4px; }
+[data-family=media] .artist { color: var(--artist); font: var(--artist-font); }
+
+[data-family=media] :is(.seek, .vol) {
+  --trk-h: 5px;
+  --trk-r: 3px;
+  --trk-bg: linear-gradient(90deg, var(--fill-a) 0, var(--fill-b) var(--pct, 0%), var(--groove) var(--pct, 0%));
+  --trk-sh: inset 0 1px 1px rgba(0, 0, 0, .8), 0 1px rgba(255, 255, 255, .12);
+  --th-w: 13px;
+  --th-h: 13px;
+  --th-r: 50%;
+  --th-bg: var(--orb);
+  --th-sh: 0 0 0 1px var(--orb-ring), 0 1px 3px rgba(0, 0, 0, .6);
+}
+[data-family=media] .vol { width: 64px; }
+[data-family=media] .vol-row { gap: 6px; }
+
+[data-family=media] :is(.transport button, .tgl, .vol-icon) {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--orb-r);
+  background: var(--orb);
+  box-shadow: var(--orb-sh);
+  color: var(--orb-text);
+}
+[data-family=media] :is(.transport button, .tgl, .vol-icon) .ico { width: 12px; height: 12px; filter: var(--glyph-sh); }
+[data-family=media] :is(.transport button, .tgl, .vol-icon):hover { filter: brightness(1.15); }
+[data-family=media] :is(.transport button, .tgl, .vol-icon):active { filter: brightness(.85); transform: translateY(1px); }
+[data-family=media] .transport { gap: 6px; justify-content: center; }
+[data-family=media] .transport button:is(.t-pause, .t-rew, .t-ff) { display: none; }
+[data-family=media] .transport .t-play { width: var(--play-size); height: var(--play-size); background: var(--orb-big); color: var(--play-text, var(--orb-text)); }
+[data-family=media] .transport .t-play .ico { width: 18px; height: 18px; }
+[data-state=playing][data-family=media] .t-play { animation: media-glow 2s ease-in-out infinite; }
+[data-state=playing][data-family=media] .t-play .i-play { display: none; }
+[data-state=playing][data-family=media] .t-play .i-pause { display: block; }
+@keyframes media-glow { 50% { box-shadow: var(--orb-sh), 0 0 14px 3px var(--glow); } }
+[data-family=media] .toggles { gap: 3px; }
+[data-family=media] .tgl { width: 21px; height: 21px; background: var(--orb-off); }
+[data-family=media] .tgl .ico { display: block; }
+[data-family=media] .tgl[aria-pressed=true], [data-family=media] .tgl-skin { background: var(--orb); box-shadow: var(--orb-on-sh); }
+[data-family=media] .vol-icon { width: 22px; height: 22px; }
+
+[data-family=media] .statusbar { display: flex; height: 22px; border-top: 1px solid var(--rule); background: var(--status); }
+[data-family=media] .sb { flex: 1; min-width: 0; padding: 4px 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; border-left: 1px solid var(--rule); }
+[data-family=media] .sb:first-child { border-left: 0; flex: 0 0 110px; }
+[data-family=media] .tb-mini { font: bold 12px Tahoma, sans-serif; padding: 0 6px; }
+
+/* playlist + video */
+[data-family=media] #w-player { width: 470px; }
+[data-family=media] #w-playlist { width: 470px; height: 260px; resize: vertical; overflow: hidden; }
+[data-family=media] .pl-body { gap: 6px; padding: 6px; }
+[data-family=media] #playlist { --lv-cols: 3.2em minmax(0, 1fr) 9em 4.4em; }
+[data-family=media] .pl-foot { gap: 6px; }
+[data-family=media] .pl-total { text-align: right; color: var(--muted); }
+[data-family=media] .video-body { padding: 6px; }
+[data-family=media] .screen { border: 1px solid var(--field-border); border-radius: calc(var(--field-r) / 2); }
+
+/* desktop icons */
+[data-family=media] .dicon span { color: var(--dicon-text); text-shadow: var(--dicon-shadow); }
+[data-family=media] .dicon.sel span { text-shadow: none; }
+
+[data-family=media] .zoom-ghost { border-radius: 6px 6px 0 0; background: var(--title); opacity: .85; }
+
+/* equalizer */
+[data-family=media] #w-eq { width: 470px; }
+[data-family=media] .eq-body { padding: 10px 12px 8px; }
+[data-family=media] .eq-tgl { height: 23px; padding: 0 11px; border: 1px solid var(--btn-border); border-radius: 12px; background: var(--btn); color: var(--btn-text); }
+[data-family=media] .eq-tgl[aria-pressed=true] { border-color: var(--sel); background: var(--sel); color: var(--sel-text); }
+[data-family=media] .eq-graph { height: 32px; border-radius: var(--screen-r); background: var(--screen); box-shadow: var(--screen-sh); }
+[data-family=media] .eq-presets { min-width: 0; }
+[data-family=media] #w-eq input[type=range] {
+  --trk-h: 5px;
+  --trk-r: 3px;
+  --trk-bg: linear-gradient(90deg, var(--fill-a), var(--fill-b) var(--pct, 50%), var(--groove) var(--pct, 50%));
+  --trk-sh: inset 0 1px 1px rgba(0, 0, 0, .5);
+  --th-w: 13px;
+  --th-h: 13px;
+  --th-r: 50%;
+  --th-bg: var(--orb);
+  --th-sh: 0 0 0 1px var(--orb-ring), 0 1px 3px rgba(0, 0, 0, .5);
+}

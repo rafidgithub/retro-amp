@@ -1,0 +1,32 @@
+{
+  "name": "retroamp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Windows 95–XP era audio player for YouTube music. No API keys, no sign-in.",
+  "author": {
+    "name": "Rafid Khan",
+    "url": "https://rafidkhan.github.io/"
+  },
+  "contributors": [
+    {
+      "name": "Rafid Khan",
+      "url": "https://rafidkhan.github.io/"
+    }
+  ],
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafidgithub/retro-amp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rafidgithub/retro-amp/issues"
+  },
+  "homepage": "https://github.com/rafidgithub/retro-amp#readme"
+}

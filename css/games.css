@@ -1,0 +1,62 @@
+/* Games: the Games folder, game window menubar, message boxes and touch pads.
+   Each game's own board styles live in css/games/<id>.css (loaded on first open).
+   Colors come from the skin variables so every look recolors the chrome; the
+   boards themselves keep their period-correct palettes. */
+
+.g-wait, .g-wait * { cursor: progress !important; }
+
+/* ---------- game windows ---------- */
+.game .g-body { position: relative; display: flex; flex-direction: column; align-items: center; }
+.g-menubar { display: flex; flex: none; padding: 1px 0 2px; }
+.g-menubar button { padding: 1px 7px 2px; }
+.g-menubar button:is(:hover, .open) { background: var(--sel, #000080); color: var(--sel-text, #fff); }
+[data-family=media] .g-menubar { padding: 1px 2px; border-bottom: 1px solid var(--rule, #aaa); }
+[data-family=media] .g-menubar button { border-radius: var(--mi-r, 0); }
+[data-family=media] .g-menubar u, [data-look=mac] .g-menubar u { text-decoration: none; }
+.win.shaded .g-menubar { display: none; }
+.game canvas { display: block; max-width: 100%; height: auto; image-rendering: pixelated; touch-action: none; }
+
+/* message box: its own small dialog window (#w-gmsg) */
+#w-gmsg { width: 300px; max-width: calc(100vw - 16px); }
+.g-msg .win-body { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 10px; }
+.g-msg p { margin: 0; white-space: pre-line; -webkit-user-select: text; user-select: text; }
+.g-msg-foot { display: flex; justify-content: center; gap: 6px; margin-top: 4px; }
+.g-scores { display: grid; grid-template-columns: 1fr auto; gap: 2px 14px; margin: 0; }
+.g-scores dt { opacity: .8; }
+.g-scores dd { margin: 0; text-align: right; font-weight: bold; }
+
+/* touch-screen buttons */
+.g-pad { display: none; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 8px 0 2px; }
+.g-pad .btn { min-width: 54px; height: 44px; padding: 0 8px; font-size: 18px; touch-action: none; }
+.g-pad .btn.down { filter: brightness(.85); }
+@media (pointer: coarse) { .g-pad { display: flex; } }
+
+/* ---------- Games folder (Explorer window) ---------- */
+#w-games { width: 480px; max-width: calc(100vw - 16px); }
+.g-folder-win .win-body { display: flex; flex-direction: column; }
+.g-folder {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 84px);
+  align-content: start;
+  gap: 8px 4px;
+  min-height: 96px;
+  padding: 10px 6px;
+  background: var(--field, #fff);
+  color: var(--text, #000);
+  box-shadow: var(--sunken, inset 0 0 0 1px var(--rule, #999));
+}
+.g-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 3px 2px; text-align: center; }
+.g-item-ico { width: 32px; height: 32px; }
+.g-item span { padding: 1px 3px; line-height: 1.25; }
+.g-item[aria-selected=true] span { background: var(--sel, #000080); color: var(--sel-text, #fff); }
+.g-item[aria-selected=true] .g-item-ico { filter: brightness(.7) sepia(.6) hue-rotate(190deg) saturate(3); }
+.g-item:focus-visible span { outline: 1px dotted currentColor; }
+.g-folder-status { flex: none; margin-top: 3px; padding: 2px 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-shadow: var(--hair-in, none); }
+[data-family=media] .g-folder { border: 1px solid var(--field-border, #999); box-shadow: none; }
+
+/* Start menu entry */
+.g-sm-entry .g-sm-arrow { margin-left: auto; padding-left: 16px; font-size: 9px; }
+
+@media (max-width: 720px) {
+  .game .g-body { overflow: auto; }
+}

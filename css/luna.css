@@ -1,0 +1,199 @@
+/* Luna look — XP title bars, caption buttons, taskbar and start menu.
+   Player, lists and dialogs come from media.css; skins in skins-media.css
+   (Olive, Silver, Royale, Noir, Aero…) recolor the variables below. */
+
+[data-look=luna] {
+  --desk-bg:
+    radial-gradient(ellipse 30% 8% at 22% 24%, rgba(255, 255, 255, .85), transparent 70%),
+    radial-gradient(ellipse 22% 6% at 30% 21%, rgba(255, 255, 255, .7), transparent 70%),
+    radial-gradient(ellipse 26% 7% at 74% 14%, rgba(255, 255, 255, .75), transparent 70%),
+    radial-gradient(ellipse 140% 52% at 32% 108%, #7ccb45 0%, #57a832 52%, #3d8a20 69.5%, transparent 70%),
+    radial-gradient(ellipse 90% 44% at 98% 104%, #61ae36 0%, #418e24 59.5%, transparent 60%),
+    linear-gradient(180deg, #2a6fd6 0%, #4d95ea 34%, #8ec2f6 60%, #c2e0fb 78%);
+  --tb-h: 30px;
+
+  /* window chrome */
+  --face: #ece9d8;
+  --text: #000;
+  --muted: #555;
+  --rule: #d8d2bd;
+  --frame: #0842d6;
+  --frame-dim: #7b98e0;
+  --title: linear-gradient(180deg, #0997ff 0%, #0053ee 8%, #0050ee 40%, #0066ff 88%, #0066ff 93%, #005bff 95%, #003dd7 96%, #003dd7 100%);
+  --title-dim: linear-gradient(180deg, #7697e7 0%, #7e9ee3 3%, #94afe8 6%, #97b4e9 8%, #82a5e4 14%, #7c9fe2 17%, #7996de 25%, #7b99e1 56%, #82a9e9 81%, #80a5e7 89%, #7b96e1 94%, #7a93df 97%, #abbae3 100%);
+  --title-text: #fff;
+  --title-shadow: 1px 1px #0f1089;
+  --title-dim-text: #d8e4f8;
+  --cap-btn: radial-gradient(circle at 90% 90%, #0054e9 0%, #2263d5 55%, #4479e4 70%, #a3bbec 90%, #fff 100%);
+  --cap-edge: #fff;
+  --cap-glyph: #fff;
+  --sel: #316ac5;
+  --sel-text: #fff;
+  --cur-text: #0b3fa8;
+  --field: #fff;
+  --field-alt: #f7f8fb;
+  --field-border: #7f9db9;
+  --head: linear-gradient(180deg, #fff 0%, #f6f5f0 70%, #ebeadb 100%);
+  --head-border: #d6d2c2;
+  --btn: linear-gradient(180deg, #fff 0%, #ecebe6 86%, #d6d0c5 100%);
+  --btn-down: linear-gradient(180deg, #cdcac3 0%, #e3e3db 8%, #e5e5de 94%, #f2f2f1 100%);
+  --btn-border: #003c74;
+  --btn-hover: inset -1px 1px #fff0cf, inset 1px 2px #fdd889, inset -2px 2px #fbc761, inset 2px -2px #e5a01a;
+  --status: linear-gradient(180deg, #f4f2e8, #e6e2d0);
+  --menu-bg: #fff;
+  --menu-border: #aca899;
+  --link: #0b55c4;
+
+  /* media body */
+  --body: linear-gradient(180deg, #34497a 0%, #1b2847 40%, #0e1629 100%);
+  --body-text: #dbe8ff;
+  --artist: #9cc4ff;
+  --screen: radial-gradient(120% 100% at 50% 100%, #0d3070 0%, #040a18 72%);
+  --art-bg: radial-gradient(circle at 50% 40%, #4a6fb8, #142446 75%);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #dceaff 18%, #7aa6e0 52%, #2e5ca8 82%, #1d3f80 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #f0f8ff 0, #8cc4ff 22%, #2479e0 58%, #0c3c8c 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #b8c4d8 0, #6b7a96 50%, #2c3650 100%);
+  --orb-ring: #0d2550;
+  --glow: rgba(80, 170, 255, .75);
+  --fill-a: #3d8bff;
+  --fill-b: #8fd0ff;
+  --groove: #0a1324;
+  --lcd-on: #c4ecff;
+  --lcd-off: transparent;
+  --viz-top: #b8f4ff;
+  --viz-mid: #36a2ff;
+  --viz-bot: #0b46c8;
+  --viz-peak: #eafcff;
+  --viz-scope: #7fe0ff;
+
+  /* taskbar + start menu */
+  --taskbar: linear-gradient(180deg, #1f2f86 0, #3165c4 3%, #3682e5 6%, #4490e6 10%, #3883e5 12%, #2b71e0 15%, #2663da 18%, #235bd6 20%, #2258d5 23%, #2157d6 38%, #245ddb 54%, #2562df 86%, #245fdc 89%, #2158d4 92%, #1d4ec0 95%, #1941a5 98%);
+  --taskbar-text: #fff;
+  --task: linear-gradient(180deg, #67a3f6, #3c81f3 20%, #3874e9);
+  --task-active: #1e52b7;
+  --tray: linear-gradient(180deg, #0c59b9 1%, #139ee9 6%, #18b5f2 10%, #139beb 14%, #1290e8 19%, #0d8dea 63%, #0d9ff1 81%, #0f9eed 88%, #119be9 91%, #1392e2 94%, #137ed7 97%, #095bc9 100%);
+  --tray-edge: #092e8a;
+  --tray-glow: #18bbff;
+  --start: radial-gradient(ellipse 80% 70% at 30% 20%, rgba(255, 255, 255, .35), transparent 60%), linear-gradient(180deg, #3c9a3c 0%, #47b047 12%, #37a037 50%, #2c8c2c 88%, #1f6f1f 100%);
+  --start-shadow: #0d2f0d;
+  --start-r: 0 12px 12px 0;
+  --sm-head: linear-gradient(180deg, #1868ce, #0e60cb 12%, #1164cf 32%, #1b6cd3 47%, #2476dc 60%, #3482e3 77%, #428ee9 90%, #4791eb);
+  --sm-accent: #e8a03c;
+  --sm-icon: #1c4bb0;
+}
+
+/* ---------- windows ---------- */
+[data-look=luna] .win {
+  background: var(--face);
+  border: 3px solid var(--frame);
+  border-top: 0;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 2px 4px 14px rgba(0, 0, 0, .35);
+}
+[data-look=luna] .win:not(.active) { border-color: var(--frame-dim); }
+[data-look=luna] .titlebar {
+  height: 29px;
+  margin: 0 -3px;
+  padding: 0 5px 0 7px;
+  gap: 5px;
+  border-radius: 7px 7px 0 0;
+  background: var(--title);
+  color: var(--title-text);
+  font: bold 13px "Trebuchet MS", Tahoma, sans-serif;
+  text-shadow: var(--title-shadow);
+}
+[data-look=luna] .win:not(.active) .titlebar { background: var(--title-dim); color: var(--title-dim-text); text-shadow: none; }
+[data-look=luna] .tb-icon .ico { width: 16px; height: 16px; filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, .35)); }
+[data-look=luna] .tb-btns { gap: 2px; }
+[data-look=luna] .tb-btns button {
+  width: 21px;
+  height: 21px;
+  border: 1px solid var(--cap-edge);
+  border-radius: 3px;
+  background: var(--glyph, linear-gradient(transparent 0 0)), var(--cap-btn);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+}
+[data-look=luna] .tb-btns button:hover { filter: brightness(1.15); }
+[data-look=luna] .tb-btns button:active { filter: brightness(.85); }
+[data-look=luna] .tb-btns [data-wm=min] { --glyph: linear-gradient(var(--cap-glyph) 0 0) 5px 13px / 8px 3px no-repeat; }
+[data-look=luna] .tb-btns [data-wm=close] {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11'%3E%3Cpath d='M1.5 1.5l8 8M9.5 1.5l-8 8' stroke='%23fff' stroke-width='2.2' stroke-linecap='square'/%3E%3C/svg%3E") center no-repeat,
+    radial-gradient(circle at 90% 90%, #cc4600 0%, #dc6527 55%, #cd7546 70%, #ffccb2 90%, #fff 100%);
+}
+[data-look=luna] .tb-btns [data-wm=shade] { display: none; }
+[data-look=luna] .win:not(.active) .tb-btns button { opacity: .75; }
+
+/* XP marquee progress: three green blocks sliding across */
+[data-look=luna] .progress { height: 15px; padding: 1px; border: 1px solid #686868; border-radius: 3px; background: #fff; }
+[data-look=luna] .progress-fill {
+  top: 1px;
+  bottom: 1px;
+  width: 36px;
+  background: repeating-linear-gradient(90deg, transparent 0 2px, #2bd22b 2px 10px);
+  animation: luna-slide 1.6s linear infinite;
+}
+[data-look=luna] .progress-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 255, 255, .7), transparent 50%, rgba(0, 0, 0, .1)); }
+@keyframes luna-slide { from { left: -40px; } to { left: 100%; } }
+
+/* ---------- taskbar ---------- */
+[data-look=luna] #taskbar { gap: 6px; background: var(--taskbar); color: var(--taskbar-text); }
+[data-look=luna] #start-btn {
+  height: 100%;
+  gap: 6px;
+  padding: 0 24px 2px 10px;
+  border-radius: var(--start-r);
+  background: var(--start);
+  box-shadow: inset -2px -1px 3px rgba(0, 0, 0, .3), 2px 0 4px rgba(0, 0, 0, .35);
+  color: #fff;
+  font: italic bold 17px "Trebuchet MS", Tahoma, sans-serif;
+  text-shadow: 1px 1px 2px var(--start-shadow);
+  text-transform: lowercase;
+}
+[data-look=luna] #start-btn .ico { width: 20px; height: 20px; filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, .5)); }
+[data-look=luna] #start-btn:hover, [data-look=luna] #start-btn[aria-expanded=true] { filter: brightness(1.12); }
+[data-look=luna] #tasks { gap: 3px; }
+[data-look=luna] .task {
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 3px;
+  background: var(--task);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25), inset 1px 1px rgba(255, 255, 255, .35);
+}
+[data-look=luna] .task:hover { filter: brightness(1.1); }
+[data-look=luna] .task.active { background: var(--task-active); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .3), inset 1px 1px 3px rgba(0, 0, 0, .5); }
+[data-look=luna] #tray {
+  height: 100%;
+  padding: 0 12px 0 6px;
+  border-left: 1px solid var(--tray-edge);
+  background: var(--tray);
+  box-shadow: inset 1px 0 1px var(--tray-glow);
+}
+[data-look=luna] #tray-skin { border-radius: 3px; }
+[data-look=luna] #tray-skin:hover { background: rgba(255, 255, 255, .2); }
+
+/* ---------- start menu ---------- */
+[data-look=luna] #start-menu {
+  flex-direction: column;
+  width: 300px;
+  overflow: hidden;
+  border: 1px solid var(--frame);
+  border-radius: 8px 8px 0 0;
+  background: var(--menu-bg);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
+  color: var(--text);
+}
+[data-look=luna] .sm-band { padding: 10px 12px; background: var(--sm-head); box-shadow: inset 0 -2px var(--sm-accent); }
+[data-look=luna] .sm-band span { color: var(--title-text); font: bold 16px "Trebuchet MS", Tahoma, sans-serif; text-shadow: var(--title-shadow); }
+[data-look=luna] .sm-items { padding: 6px 2px; }
+[data-look=luna] .sm-items button { height: 30px; padding: 0 12px 0 8px; border-radius: 2px; }
+[data-look=luna] .sm-items .ico { width: 22px; height: 22px; color: var(--sm-icon); }
+[data-look=luna] .sm-items button:hover { background: var(--sel); color: var(--sel-text); }
+[data-look=luna] .sm-items button:hover .ico { color: var(--sel-text); }
+[data-look=luna] .sm-items hr { margin: 4px 6px; border: 0; border-top: 1px solid var(--rule); }
+
+[data-look=luna] .tooltip { box-shadow: 2px 2px 3px rgba(0, 0, 0, .3); }
+[data-look=luna] .balloon { border-radius: 8px; box-shadow: 2px 3px 6px rgba(0, 0, 0, .35); }
+
+[data-look=luna] #shutdown { background: linear-gradient(180deg, #00309c 0%, #5a7edc 50%, #00309c 100%); }
+[data-look=luna] #shutdown p { color: #fff; font: 26px/1.5 "Trebuchet MS", Tahoma, sans-serif; text-shadow: 1px 2px 3px rgba(0, 0, 0, .5); }
+[data-look=luna] #shutdown small { color: #c8d8ff; }

@@ -1,0 +1,612 @@
+/* Skins built on the Amp and Chicago looks. Each block overrides the look's
+   variables (plus a few skin-specific touches). Loaded after the looks. */
+
+/* ===================== Amp look ===================== */
+
+/* Liquid Chrome — Y2K custom skin: purple chrome, rounded corners, neon cyan */
+[data-skin=chrome] {
+  --desk-bg:
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, .35) 0 1.2%, transparent 1.6%),
+    radial-gradient(circle at 72% 64%, rgba(255, 255, 255, .25) 0 2.4%, transparent 2.9%),
+    radial-gradient(circle at 86% 22%, rgba(255, 255, 255, .2) 0 1.6%, transparent 2%),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, .18) 0 3.2%, transparent 3.7%),
+    radial-gradient(ellipse 60% 50% at 75% 30%, rgba(255, 120, 230, .45), transparent 70%),
+    linear-gradient(135deg, #12063a 0%, #3b1c8c 35%, #0d6fb8 70%, #6fe3ff 100%);
+  --lcd-on: #5ff7ff;
+  --lcd-off: #0f2448;
+  --lcd-bg: radial-gradient(ellipse at 50% 0%, #1a1350 0%, #05031a 80%);
+  --lcd-dim: #26407a;
+  --viz-top: #ff7bf0;
+  --viz-mid: #9b7bff;
+  --viz-bot: #39d8ff;
+  --viz-peak: #ffffff;
+  --viz-scope: #5ff7ff;
+  --viz-dots: #120c38;
+  --m-bg: linear-gradient(160deg, #b9b4ff 0%, #6f5fd8 18%, #3a2a96 48%, #5848c4 72%, #a59cf0 100%);
+  --m-edge: #1a0f4d;
+  --m-text: #e8e6ff;
+  --m-glow: 0 0 18px rgba(110, 200, 255, .45), 0 6px 14px rgba(10, 0, 40, .5);
+  --m-radius: 14px;
+  --m-raised: inset 1px 1px rgba(255, 255, 255, .7), inset -1px -1px rgba(20, 0, 60, .6);
+  --m-sunken: inset 1px 1px rgba(0, 0, 0, .6), inset -1px -1px rgba(255, 255, 255, .35);
+  --m-btn: linear-gradient(180deg, #ffffff 0%, #d5d9f5 40%, #8e93c8 52%, #c9cdf2 100%);
+  --m-btn-down: linear-gradient(180deg, #8e93c8 0%, #c9cdf2 100%);
+  --m-btn-sh: inset 0 1px #fff, inset 0 -1px rgba(60, 40, 140, .5);
+  --m-btn-text: #2a1f6b;
+  --m-btn-radius: 12px;
+  --m-small: linear-gradient(180deg, #f2f3ff, #a3a8dc);
+  --m-small-sh: inset 0 1px #fff;
+  --m-small-text: #2a1f6b;
+  --rib-dim: rgba(255, 255, 255, .25);
+  --rib-a: #9ff9ff;
+  --rib-b: rgba(40, 20, 120, .6);
+  --rib-text: #ffffff;
+  --rib-text-dim: #c9c3ff;
+  --gold: linear-gradient(180deg, #ffffff, #b6f5ff 45%, #4fc8e8);
+  --gold-sh: inset 0 1px #fff, inset 0 -1px rgba(0, 60, 100, .5);
+  --groove: #0d0a33;
+  --led-off: #24306a;
+  --led-on: #5ff7ff;
+  --pl-text: #9ef6ff;
+  --pl-cur: #ff9df5;
+  --pl-sel: #3b2a9a;
+  --pl-bad: #7a6aa8;
+}
+
+/* ===================== Chicago look (Win9x color schemes) ===================== */
+
+[data-skin=rainy] {
+  --face: #b6c0ca;
+  --hi: #eef2f6;
+  --lt: #d3dbe2;
+  --sh: #6a7988;
+  --dk: #1d262e;
+  --sel: #3d4f63;
+  --title: linear-gradient(90deg, #3d4f63, #8aa1b9);
+  --title-dim: linear-gradient(90deg, #7d8a97, #b9c3cd);
+  --title-dim-text: #e4e9ee;
+  --band: linear-gradient(0deg, #3d4f63, #8aa1b9);
+  --field: #f4f7fa;
+  --desk-bg: repeating-linear-gradient(100deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 9px), linear-gradient(180deg, #3b4c60, #62788f);
+  --lcd-on: #7fe8ff;
+  --lcd-off: #0c2630;
+  --viz-top: #e8fbff;
+  --viz-mid: #7fe8ff;
+  --viz-bot: #2a7fa8;
+  --viz-scope: #7fe8ff;
+}
+
+[data-skin=desert] {
+  --face: #d5ccbb;
+  --hi: #fbf8f2;
+  --lt: #e9e2d4;
+  --sh: #998b72;
+  --dk: #2b2417;
+  --sel: #8a5a2b;
+  --title: linear-gradient(90deg, #8a5a2b, #d6a66a);
+  --title-dim: linear-gradient(90deg, #a69a85, #d5ccbb);
+  --title-dim-text: #f3eee4;
+  --band: linear-gradient(0deg, #8a5a2b, #d6a66a);
+  --field: #fffdf7;
+  --link: #8a3a00;
+  --desk-bg:
+    radial-gradient(circle at 70% 34%, #fff4c8 0 4%, rgba(255, 220, 140, .6) 4.5%, transparent 12%),
+    radial-gradient(ellipse 120% 40% at 18% 102%, #c4935a 0 60%, transparent 60.5%),
+    radial-gradient(ellipse 100% 36% at 92% 104%, #b07f48 0 55%, transparent 55.5%),
+    radial-gradient(ellipse 140% 30% at 50% 112%, #9c6c3a 0 60%, transparent 60.5%),
+    linear-gradient(180deg, #f6c77d 0%, #eea75e 45%, #db8f5c 70%, #c9805a 100%);
+  --lcd-on: #a6ff5c;
+  --lcd-off: #142a08;
+  --viz-top: #f4ffd0;
+  --viz-mid: #a6ff5c;
+  --viz-bot: #3f8f1c;
+  --viz-scope: #a6ff5c;
+}
+
+/* The infamous Windows 3.1 color scheme. You asked for nostalgia. */
+[data-skin=hotdog] {
+  --face: #ffff00;
+  --hi: #ffffff;
+  --lt: #ffff9a;
+  --sh: #b8a000;
+  --dk: #000000;
+  --sel: #000000;
+  --sel-text: #ffff00;
+  --title: #ff0000;
+  --title-text: #ffffff;
+  --title-dim: #c00000;
+  --title-dim-text: #ffd0d0;
+  --band: #ff0000;
+  --field: #ffffff;
+  --link: #c00000;
+  --desk-bg: #ff0000;
+  --lcd-on: #ff3b2f;
+  --lcd-off: #330800;
+  --viz-top: #ffff00;
+  --viz-mid: #ff9a00;
+  --viz-bot: #ff1a00;
+  --viz-peak: #ffff00;
+  --viz-scope: #ffff00;
+}
+
+
+/* ===================== more Chicago-look skins ===================== */
+
+/* 1990 — Windows 3.0: bold system font, centered captions, dithered gray desktop */
+[data-skin=progman] {
+  --title-dim: #ffffff;
+  --title-dim-text: #000;
+  --band: #000080;
+  --ui-font: bold 12px/1.3 Arial, Helvetica, sans-serif;
+  --desk-bg: repeating-conic-gradient(#a9a9a9 0 25%, #b9b9b9 0 50%) 0 0 / 4px 4px;
+  --lcd-on: #00ff00;
+  --lcd-off: #003300;
+  --viz-top: #c8ffc8;
+  --viz-mid: #00ff00;
+  --viz-bot: #008000;
+  --viz-scope: #00ff00;
+}
+[data-skin=progman] .win { outline: 1px solid #000; }
+[data-skin=progman] .titlebar .tb-title { text-align: center; }
+[data-skin=progman] .player-body { font-size: 11px; }
+
+/* 1991 — Amiga Workbench 1.3 tracker: blue, white and orange */
+[data-skin=workbench] {
+  --face: #0055aa;
+  --hi: #ffffff;
+  --lt: #0055aa;
+  --sh: #001a40;
+  --dk: #000000;
+  --text: #ffffff;
+  --field: #00377a;
+  --sel: #ff8800;
+  --sel-text: #000;
+  --title: #ffffff;
+  --title-text: #0055aa;
+  --title-dim: #0055aa;
+  --title-dim-text: #9cc0ff;
+  --band: #ff8800;
+  --link: #ffb050;
+  --desk-bg: #0055aa;
+  --ui-font: 13px/1.25 "Topaz", "Lucida Console", Menlo, "Courier New", monospace;
+  --lcd-on: #ff8800;
+  --lcd-off: #2a1600;
+  --viz-top: #ffffff;
+  --viz-mid: #ff8800;
+  --viz-bot: #ff4400;
+  --viz-scope: #ff8800;
+}
+[data-skin=workbench] .win { outline: 2px solid #fff; }
+[data-skin=workbench] .tb-btns button { background-color: #ff8800; }
+[data-skin=workbench] .player-body { font-size: 11px; }
+
+/* 1993 — NeXT workstation: gray, black captions, Helvetica */
+[data-skin=next] {
+  --face: #aaaaaa;
+  --hi: #ffffff;
+  --lt: #c8c8c8;
+  --sh: #555555;
+  --sel: #555555;
+  --title: #000000;
+  --title-dim: #555555;
+  --title-dim-text: #aaaaaa;
+  --band: #000000;
+  --desk-bg: radial-gradient(ellipse at 50% 40%, #6a6a6a, #3c3c3c 75%);
+  --ui-font: 12px/1.3 Helvetica, Arial, sans-serif;
+  --lcd-on: #ffffff;
+  --lcd-off: #262626;
+  --viz-top: #ffffff;
+  --viz-mid: #c8c8c8;
+  --viz-bot: #808080;
+  --viz-scope: #ffffff;
+}
+[data-skin=next] .titlebar .tb-title { text-align: center; }
+
+/* 1994 — DOS text-mode mod player: blue panels, cyan double frames */
+[data-skin=dos] {
+  --face: #0000aa;
+  --hi: #55ffff;
+  --lt: #0000aa;
+  --sh: #00aaaa;
+  --dk: #000000;
+  --text: #ffffff;
+  --field: #000000;
+  --sel: #00aaaa;
+  --sel-text: #000;
+  --title: #00aaaa;
+  --title-text: #000;
+  --title-dim: #0000aa;
+  --title-dim-text: #55ffff;
+  --raised: inset 0 0 0 1px #55ffff;
+  --sunken: inset 0 0 0 1px #aaaaaa;
+  --pressed: inset 0 0 0 1px #ffff55;
+  --hair-in: inset 0 0 0 1px #00aaaa;
+  --hair-out: inset 0 0 0 1px #55ffff;
+  --band: #00aaaa;
+  --link: #ffff55;
+  --desk-bg: repeating-conic-gradient(#0000aa 0 25%, #000055 0 50%) 0 0 / 3px 3px;
+  --ui-font: 13px/1.3 "Lucida Console", Menlo, Consolas, "Courier New", monospace;
+  --lcd-on: #55ff55;
+  --lcd-off: #002200;
+  --viz-top: #ff5555;
+  --viz-mid: #ffff55;
+  --viz-bot: #55ff55;
+  --viz-scope: #55ffff;
+}
+[data-skin=dos] .win { padding: 5px; box-shadow: inset 0 0 0 1px #55ffff, inset 0 0 0 3px #0000aa, inset 0 0 0 4px #55ffff; }
+[data-skin=dos] .titlebar .tb-title { text-align: center; }
+[data-skin=dos] .player-body { font-size: 11px; }
+[data-skin=dos] .tb-btns button, [data-skin=dos] .tgl:not(.tgl-skin)::before { background-color: #00aaaa; }
+
+/* 2018 — vaporwave: Windows 95 in pastel, sunset grid desktop */
+[data-skin=vapor] {
+  --face: #e9cfff;
+  --hi: #ffffff;
+  --lt: #f6e8ff;
+  --sh: #a77bd1;
+  --dk: #4b2a6b;
+  --text: #2b1640;
+  --field: #fff7fd;
+  --sel: #ff4fbf;
+  --title: linear-gradient(90deg, #ff71ce, #b967ff 50%, #01cdfe);
+  --title-dim: linear-gradient(90deg, #d9b8e8, #b7d7ea);
+  --title-dim-text: #ffffff;
+  --band: linear-gradient(0deg, #ff71ce, #01cdfe);
+  --link: #b03ad8;
+  --desk-bg:
+    repeating-linear-gradient(90deg, rgba(255, 113, 206, .8) 0 2px, transparent 2px 72px) 0 100% / 100% 40% no-repeat,
+    repeating-linear-gradient(180deg, rgba(255, 113, 206, .8) 0 2px, transparent 2px 26px) 0 100% / 100% 40% no-repeat,
+    linear-gradient(180deg, transparent 60%, #2a0846 60%, #12031f 100%),
+    radial-gradient(circle at 50% 60%, #ffd319 0 70px, #ff901f 100px, #ff2975 130px, transparent 131px),
+    linear-gradient(180deg, #1c0638 0%, #5a1a85 35%, #ff6ec7 60%);
+  --lcd-on: #01cdfe;
+  --lcd-off: #10233a;
+  --viz-top: #ffffff;
+  --viz-mid: #ff71ce;
+  --viz-bot: #01cdfe;
+  --viz-peak: #fffb96;
+  --viz-scope: #01cdfe;
+}
+[data-skin=vapor] .titlebar .tb-title { letter-spacing: 3px; }
+
+/* ===================== more Amp-look skins ===================== */
+
+/* 1999 — organic Y2K-ready player: teal glass, huge curves */
+[data-skin=orbital] {
+  --desk-bg: radial-gradient(circle at 30% 30%, #1f6f8b, #0b2a3a 60%, #041219);
+  --lcd-on: #9ff3ff;
+  --lcd-off: #0c3340;
+  --lcd-bg: radial-gradient(ellipse at 50% 0%, #0f4a5c, #03161d 80%);
+  --lcd-dim: #1f5566;
+  --viz-top: #ffffff;
+  --viz-mid: #7ae8ff;
+  --viz-bot: #1aa3c8;
+  --viz-peak: #ffffff;
+  --viz-scope: #9ff3ff;
+  --viz-dots: #072631;
+  --m-bg: radial-gradient(ellipse 120% 90% at 30% 0%, #9fd9e6 0%, #3d8fa8 35%, #155a70 70%, #0b3442 100%);
+  --m-edge: #052a36;
+  --m-text: #e6fbff;
+  --m-glow: 0 0 22px rgba(80, 220, 255, .35), 0 8px 18px rgba(0, 0, 0, .5);
+  --m-radius: 26px;
+  --m-raised: inset 1px 1px rgba(255, 255, 255, .55), inset -1px -1px rgba(0, 0, 0, .45);
+  --m-sunken: inset 1px 1px rgba(0, 0, 0, .6), inset -1px -1px rgba(255, 255, 255, .25);
+  --m-btn: radial-gradient(circle at 50% 30%, #f2feff, #9fd9e6 45%, #3d8fa8);
+  --m-btn-down: radial-gradient(circle at 50% 70%, #f2feff, #7cc3d4 45%, #2a7a92);
+  --m-btn-sh: inset 0 1px #fff, inset 0 -2px rgba(0, 40, 60, .4);
+  --m-btn-text: #06303d;
+  --m-btn-radius: 14px;
+  --m-small: linear-gradient(180deg, #d9f6fb, #7cc3d4);
+  --m-small-sh: inset 0 1px #fff;
+  --m-small-text: #06303d;
+  --rib-dim: rgba(255, 255, 255, .2);
+  --rib-a: #bff6ff;
+  --rib-b: rgba(0, 60, 80, .6);
+  --rib-text: #ffffff;
+  --rib-text-dim: #9fd9e6;
+  --gold: radial-gradient(circle at 50% 30%, #fff, #9ff3ff 50%, #2fb5d6);
+  --gold-sh: inset 0 -1px rgba(0, 50, 70, .5);
+  --groove: #062430;
+  --led-off: #0f3a46;
+  --led-on: #9ff3ff;
+  --pl-text: #9ff3ff;
+  --pl-cur: #ffffff;
+  --pl-sel: #15607a;
+  --pl-bad: #4d7f8c;
+}
+
+/* 2002 — the v3 player: graphite panels, cool blue readouts */
+[data-skin=graphite] {
+  --desk-bg: linear-gradient(135deg, #1b2027, #2c3440 50%, #1b2027);
+  --lcd-on: #7fc4ff;
+  --lcd-off: #13253a;
+  --lcd-bg: #070b10;
+  --lcd-dim: #2a4560;
+  --viz-top: #e0f2ff;
+  --viz-mid: #4aa3ff;
+  --viz-bot: #1a5fae;
+  --viz-peak: #cfe8ff;
+  --viz-scope: #7fc4ff;
+  --viz-dots: #0d141c;
+  --m-bg: linear-gradient(180deg, #4a525e 0%, #323943 30%, #262c34 100%);
+  --m-edge: #0b0e12;
+  --m-text: #c9d3df;
+  --m-radius: 8px;
+  --m-raised: inset 1px 1px #6b7584, inset -1px -1px #12161b;
+  --m-btn: linear-gradient(180deg, #5d6775, #3a424d 55%, #2c333c);
+  --m-btn-down: linear-gradient(180deg, #2c333c, #3a424d);
+  --m-btn-sh: inset 1px 1px #7d8796, inset -1px -1px #161a20;
+  --m-btn-text: #d8e6f5;
+  --m-btn-radius: 4px;
+  --m-small: linear-gradient(180deg, #59626f, #343b45);
+  --m-small-sh: inset 1px 1px #7d8796;
+  --m-small-text: #d8e6f5;
+  --rib-dim: #3c444f;
+  --rib-a: #5d9de0;
+  --rib-b: #1e2b3a;
+  --rib-text: #e0f0ff;
+  --rib-text-dim: #7a8594;
+  --gold: linear-gradient(180deg, #9ec9f5, #3f7fc4);
+  --gold-sh: inset 1px 1px #d5ebff, inset -1px -1px #1e4a7a;
+  --groove: #0d1117;
+  --led-off: #1a2a3c;
+  --led-on: #4aa3ff;
+  --pl-text: #9fb6cf;
+  --pl-cur: #ffffff;
+  --pl-sel: #2b4f7a;
+  --pl-bad: #5a6573;
+}
+
+/* 2003 — the brushed-metal jukebox lands on Windows: pale LCD, gel buttons */
+[data-skin=brushed] {
+  --desk-bg: radial-gradient(ellipse at 50% 30%, #6a8fc8, #2f4f86 70%);
+  --lcd-on: #263016;
+  --lcd-off: #c3cba6;
+  --lcd-bg: linear-gradient(180deg, #edf1db, #ccd4af);
+  --lcd-dim: #9aa37c;
+  --viz-top: #263016;
+  --viz-mid: #4f5f2c;
+  --viz-bot: #77874a;
+  --viz-peak: #1a210d;
+  --viz-scope: #263016;
+  --viz-dots: rgba(0, 0, 0, .06);
+  --m-bg: repeating-linear-gradient(90deg, rgba(255, 255, 255, .08) 0 1px, rgba(0, 0, 0, .05) 1px 2px, transparent 2px 3px), linear-gradient(180deg, #dcdcdc, #b6b6b6 60%, #a6a6a6);
+  --m-edge: #6a6a6a;
+  --m-text: #222;
+  --m-radius: 9px;
+  --m-raised: inset 1px 1px rgba(255, 255, 255, .8), inset -1px -1px rgba(0, 0, 0, .25);
+  --m-sunken: inset 1px 1px rgba(0, 0, 0, .35), inset -1px -1px rgba(255, 255, 255, .7);
+  --m-btn: radial-gradient(circle at 50% 30%, #fff, #e0e0e0 45%, #a8a8a8);
+  --m-btn-down: radial-gradient(circle at 50% 70%, #fff, #c8c8c8 45%, #909090);
+  --m-btn-sh: inset 0 1px #fff, inset 0 -1px rgba(0, 0, 0, .3);
+  --m-btn-text: #333;
+  --m-btn-radius: 13px;
+  --m-small: linear-gradient(180deg, #f6f6f6, #c4c4c4);
+  --m-small-sh: inset 0 1px #fff;
+  --m-small-text: #333;
+  --rib-dim: rgba(0, 0, 0, .08);
+  --rib-a: rgba(0, 0, 0, .2);
+  --rib-b: rgba(255, 255, 255, .5);
+  --rib-text: #222;
+  --rib-text-dim: #777;
+  --gold: radial-gradient(circle at 50% 30%, #fff, #d8d8d8 50%, #9a9a9a);
+  --gold-sh: inset 0 -1px rgba(0, 0, 0, .3);
+  --groove: #8f8f8f;
+  --led-off: #8a9a6a;
+  --led-on: #e4ff9a;
+  --pl-text: #263016;
+  --pl-cur: #000000;
+  --pl-sel: #b5d0f5;
+  --pl-bad: #8a8f80;
+}
+[data-skin=brushed] #playlist { scrollbar-color: #888 #ddd; }
+
+/* 2022 — Y2K revival: pink-lilac chrome, sparkles */
+[data-skin=y2k] {
+  --desk-bg:
+    radial-gradient(circle at 20% 25%, rgba(255, 255, 255, .95) 0 .35%, transparent .6%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, .95) 0 .3%, transparent .5%),
+    radial-gradient(circle at 65% 18%, rgba(255, 255, 255, .9) 0 .3%, transparent .5%),
+    radial-gradient(circle at 40% 85%, rgba(255, 255, 255, .9) 0 .25%, transparent .45%),
+    radial-gradient(ellipse 70% 60% at 30% 70%, #ffb3e6, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, #b3e5ff, transparent 70%),
+    linear-gradient(135deg, #ff9ad5, #c5a3ff 50%, #8fd8ff);
+  --lcd-on: #ff4fd8;
+  --lcd-off: #3a0f33;
+  --lcd-bg: radial-gradient(ellipse at 50% 0%, #2a0a2a, #0b020b 80%);
+  --lcd-dim: #5a1f50;
+  --viz-top: #ffffff;
+  --viz-mid: #ff8af0;
+  --viz-bot: #b14fff;
+  --viz-peak: #ffffff;
+  --viz-scope: #ff8af0;
+  --viz-dots: #1a0619;
+  --m-bg: linear-gradient(160deg, #ffffff 0%, #ffd6f2 15%, #e9b8ff 40%, #c9e8ff 65%, #ffffff 80%, #f2c6ff 100%);
+  --m-edge: #9a5ab8;
+  --m-text: #4a1a5a;
+  --m-radius: 18px;
+  --m-glow: 0 0 20px rgba(255, 140, 230, .5), 0 6px 16px rgba(90, 20, 110, .35);
+  --m-raised: inset 1px 1px #fff, inset -1px -1px rgba(120, 40, 140, .4);
+  --m-sunken: inset 1px 1px rgba(0, 0, 0, .5), inset -1px -1px rgba(255, 255, 255, .6);
+  --m-btn: linear-gradient(180deg, #ffffff 0%, #ffe3f6 40%, #e2a8ff 55%, #fff0fb 100%);
+  --m-btn-down: linear-gradient(180deg, #e2a8ff, #fff0fb);
+  --m-btn-sh: inset 0 1px #fff, inset 0 -1px rgba(120, 40, 140, .4);
+  --m-btn-text: #7a2a8a;
+  --m-btn-radius: 14px;
+  --m-small: linear-gradient(180deg, #fff, #f0c8ff);
+  --m-small-sh: inset 0 1px #fff;
+  --m-small-text: #7a2a8a;
+  --rib-dim: rgba(150, 60, 170, .25);
+  --rib-a: #ff6fd8;
+  --rib-b: rgba(255, 255, 255, .7);
+  --rib-text: #7a2a8a;
+  --rib-text-dim: #b78ac8;
+  --gold: linear-gradient(180deg, #fff, #ffc2ee 50%, #ff6fd8);
+  --gold-sh: inset 0 1px #fff, inset 0 -1px rgba(120, 20, 100, .4);
+  --groove: #2a0a2a;
+  --led-off: #5a1f50;
+  --led-on: #ff4fd8;
+  --pl-text: #ff9df0;
+  --pl-cur: #ffffff;
+  --pl-sel: #6a1f7a;
+  --pl-bad: #7a4a7a;
+}
+
+/* 2023 — pocket field recorder: warm plastic, black screen, one orange key */
+[data-skin=field] {
+  --desk-bg: radial-gradient(circle, rgba(0, 0, 0, .14) 1px, transparent 1.6px) 0 0 / 18px 18px, linear-gradient(180deg, #dedbd4, #c9c5bc);
+  --lcd-on: #ffffff;
+  --lcd-off: #262626;
+  --lcd-bg: #0d0d0d;
+  --lcd-dim: #444;
+  --viz-top: #ff5a1f;
+  --viz-mid: #ffffff;
+  --viz-bot: #ffffff;
+  --viz-peak: #ff5a1f;
+  --viz-scope: #ffffff;
+  --viz-dots: #1c1c1c;
+  --m-bg: #e8e6e1;
+  --m-edge: #a9a49a;
+  --m-text: #2a2a2a;
+  --m-radius: 10px;
+  --m-glow: 0 10px 24px rgba(0, 0, 0, .18);
+  --m-raised: inset 0 1px rgba(255, 255, 255, .8);
+  --m-sunken: inset 0 0 0 1px #000;
+  --m-btn: #d4d0c8;
+  --m-btn-down: #bdb8ae;
+  --m-btn-sh: inset 0 -2px rgba(0, 0, 0, .12);
+  --m-btn-text: #1a1a1a;
+  --m-btn-radius: 6px;
+  --m-small: #d4d0c8;
+  --m-small-sh: none;
+  --m-small-text: #1a1a1a;
+  --rib-dim: transparent;
+  --rib-a: transparent;
+  --rib-b: transparent;
+  --rib-text: #1a1a1a;
+  --rib-text-dim: #8a857c;
+  --gold: #ff5a1f;
+  --gold-sh: none;
+  --groove: #c4c0b8;
+  --led-off: #b8b3a9;
+  --led-on: #ff5a1f;
+  --pl-text: #e8e6e1;
+  --pl-cur: #ff5a1f;
+  --pl-sel: #333333;
+  --pl-bad: #666666;
+}
+[data-skin=field] .transport .t-play { background: #ff5a1f; color: #fff; }
+
+/* ===================== secret (↑↑↓↓←→←→BA) ===================== */
+
+/* green phosphor terminal with CRT scanlines */
+[data-skin=phosphor] {
+  --face: #001a00;
+  --hi: #33ff66;
+  --lt: #001a00;
+  --sh: #0a5a1a;
+  --dk: #000;
+  --text: #33ff66;
+  --field: #000;
+  --sel: #33ff66;
+  --sel-text: #000;
+  --title: #33ff66;
+  --title-text: #000;
+  --title-dim: #003300;
+  --title-dim-text: #33ff66;
+  --raised: inset 0 0 0 1px #33ff66;
+  --sunken: inset 0 0 0 1px #1a8a3a;
+  --pressed: inset 0 0 0 1px #aaffaa;
+  --hair-in: inset 0 0 0 1px #1a8a3a;
+  --hair-out: inset 0 0 0 1px #33ff66;
+  --band: #33ff66;
+  --link: #aaffaa;
+  --desk-bg: radial-gradient(ellipse at 50% 50%, #002a08, #000 75%);
+  --ui-font: 13px/1.3 "Lucida Console", Menlo, Consolas, monospace;
+  --lcd-on: #33ff66;
+  --lcd-off: #002a0a;
+  --viz-top: #ccffcc;
+  --viz-mid: #33ff66;
+  --viz-bot: #0a8a2a;
+  --viz-peak: #ccffcc;
+  --viz-scope: #33ff66;
+}
+[data-skin=phosphor] .win, [data-skin=phosphor] #taskbar { text-shadow: 0 0 4px rgba(51, 255, 102, .6); }
+[data-skin=phosphor] .tb-btns button, [data-skin=phosphor] .tgl:not(.tgl-skin)::before { background-color: #1a8a3a; }
+[data-skin=phosphor] body::after { content: ''; position: fixed; inset: 0; z-index: 5000; pointer-events: none; background: repeating-linear-gradient(180deg, rgba(0, 0, 0, .28) 0 1px, transparent 1px 3px); }
+
+/* ===================== Linux ===================== */
+
+/* XMMS-style player (1999): dark chassis, light-gray keys, green LCD, the
+   O-A-I-D-V clutter bar, and a dark window-manager desktop */
+[data-skin=xmms] {
+  --face: #3d3d3d;
+  --hi: #6e6e6e;
+  --lt: #535353;
+  --sh: #232323;
+  --dk: #0d0d0d;
+  --text: #e2e2e2;
+  --field: #1c1c1c;
+  --sel: #3f6f33;
+  --sel-text: #fff;
+  --title: linear-gradient(90deg, #2d4a6e, #5f7fa8);
+  --title-dim: linear-gradient(90deg, #333, #555);
+  --title-dim-text: #aaa;
+  --band: linear-gradient(0deg, #2d4a6e, #5f7fa8);
+  --link: #8fd06a;
+  --desk-bg: radial-gradient(ellipse at 30% 30%, #262626, #0b0b0b 70%);
+  --lcd-on: #3cf03c;
+  --lcd-off: #0f2a0f;
+  --lcd-bg: #000;
+  --lcd-dim: #234a23;
+  --viz-top: #ff4a2a;
+  --viz-mid: #e8d040;
+  --viz-bot: #2ad42a;
+  --viz-peak: #cfcfcf;
+  --viz-scope: #3cf03c;
+  --viz-dots: #141414;
+  --m-bg: linear-gradient(180deg, #5c5f5c 0%, #444744 40%, #353835 100%);
+  --m-edge: #0e0e0e;
+  --m-text: #cdd2cd;
+  --m-raised: inset 1px 1px #7d817d, inset -1px -1px #1a1c1a;
+  --m-sunken: inset 1px 1px #0a0a0a, inset -1px -1px #6a6e6a;
+  --m-btn: linear-gradient(180deg, #d6d8d6, #b3b6b3 55%, #a2a5a2);
+  --m-btn-down: linear-gradient(180deg, #9a9d9a, #bfc2bf);
+  --m-btn-sh: inset 1px 1px #eef0ee, inset -1px -1px #6d706d;
+  --m-btn-text: #3d4a3d;
+  --m-btn-radius: 2px;
+  --m-small: linear-gradient(180deg, #2c2e2c, #1c1e1c);
+  --m-small-sh: inset 1px 1px #4a4d4a;
+  --m-small-text: #3cf03c;
+  --rib-dim: transparent;
+  --rib-a: transparent;
+  --rib-b: transparent;
+  --rib-text: #3cf03c;
+  --rib-text-dim: #7a807a;
+  --gold: linear-gradient(180deg, #d6d8d6, #9da09d);
+  --gold-sh: inset 1px 1px #f2f4f2, inset -1px -1px #5e615e;
+  --groove: #1b1d1b;
+  --led-off: #1c3a1c;
+  --led-on: #3cf03c;
+  --pl-text: #3cf03c;
+  --pl-cur: #ffffff;
+  --pl-sel: #2d5a2d;
+  --pl-bad: #6a6a6a;
+}
+[data-skin=xmms] .win:not(.dialog) .tb-title { font-style: italic; }
+[data-skin=xmms] .lcd { padding-left: 16px; }
+[data-skin=xmms] .lcd::before {
+  content: 'OAIDV';
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  color: #8a8f8a;
+  font: 8px/1 Silkscreen, monospace;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+[data-skin=xmms] .transport { padding: 3px; background: #2a2c2a; box-shadow: var(--m-sunken); }
+[data-skin=xmms] .transport button { height: 21px; }

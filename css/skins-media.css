@@ -1,0 +1,1423 @@
+/* Skins built on the Luna, Modern and Mac looks (media.css layout). Each block
+   overrides the look's variables, plus a few skin-specific touches. */
+
+/* ===================== Luna look (XP color schemes) ===================== */
+
+[data-skin=olive] {
+  --frame: #8ba169;
+  --frame-dim: #c0cba3;
+  --title: linear-gradient(180deg, #d6e2b2 0%, #a6bb76 8%, #96ad62 40%, #a9bd78 88%, #8fa65e 95%, #6f8a43 100%);
+  --title-dim: linear-gradient(180deg, #e6ecd2 0%, #cdd8ae 10%, #c3cfa0 50%, #ccd7aa 90%, #b3c18c 100%);
+  --title-shadow: 1px 1px #4c5f2a;
+  --title-dim-text: #f4f7ea;
+  --cap-btn: radial-gradient(circle at 90% 90%, #6f8a3a 0%, #86a14e 55%, #a3b96f 70%, #d8e3bc 90%, #fff 100%);
+  --sel: #93a070;
+  --cur-text: #4c6a1d;
+  --field-border: #a5b48a;
+  --btn-border: #5f7334;
+  --link: #4c6a1d;
+  --body: linear-gradient(180deg, #5b6b3e 0%, #333d22 40%, #1d2414 100%);
+  --body-text: #eef4dc;
+  --artist: #c7dc95;
+  --screen: radial-gradient(120% 100% at 50% 100%, #3b4f1c 0%, #0e1306 72%);
+  --art-bg: radial-gradient(circle at 50% 40%, #8ba169, #2c3818 75%);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #eef4dc 18%, #b3c58b 52%, #6f8a43 82%, #4c5f2a 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #fbfff0 0, #cfe39f 22%, #86a14e 58%, #3f5320 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #d0d4c4 0, #8a917a 50%, #3c4230 100%);
+  --orb-ring: #2c3818;
+  --glow: rgba(190, 230, 110, .7);
+  --fill-a: #8ba169;
+  --fill-b: #d6f08c;
+  --groove: #141a0b;
+  --lcd-on: #e6f7b8;
+  --viz-top: #f3ffc8;
+  --viz-mid: #b8e05a;
+  --viz-bot: #4f7a1c;
+  --viz-peak: #f9ffe8;
+  --viz-scope: #c9f07a;
+  --taskbar: linear-gradient(180deg, #b6c78f 0%, #a3b878 4%, #93aa66 12%, #8ba05c 40%, #8ca15d 80%, #7f9550 95%, #6b8042 100%);
+  --task: linear-gradient(180deg, #c9d6a6, #a8bb7b 30%, #9cb06c);
+  --task-active: #74893f;
+  --tray: linear-gradient(180deg, #e2e9cc 0%, #ccd8aa 20%, #c3d19c 80%, #a8b97e 100%);
+  --tray-edge: #6b8042;
+  --tray-glow: #f2f6e4;
+  --sm-head: linear-gradient(180deg, #a9bd78, #8fa65e 50%, #7a9150);
+  --sm-icon: #5f7334;
+}
+[data-skin=olive] #tray { color: #26310f; }
+
+[data-skin=silver] {
+  --frame: #a7a8bd;
+  --frame-dim: #d0d1dc;
+  --title: linear-gradient(180deg, #ffffff 0%, #eeeef4 8%, #dcdde6 40%, #cfd0dc 88%, #bfc0ce 95%, #a2a3b6 100%);
+  --title-dim: linear-gradient(180deg, #fafafc 0%, #ececf2 40%, #e2e2ea 100%);
+  --title-text: #15151f;
+  --title-shadow: 1px 1px #ffffff;
+  --title-dim-text: #8a8a9a;
+  --cap-btn: radial-gradient(circle at 90% 90%, #8d8fa8 0%, #a9abc0 55%, #c5c6d6 70%, #ecedf3 90%, #fff 100%);
+  --cap-edge: #8e90a5;
+  --cap-glyph: #1f2030;
+  --sel: #7b88ad;
+  --cur-text: #3b4a78;
+  --field-border: #a7a8bd;
+  --btn-border: #6d6f88;
+  --link: #3b4a78;
+  --body: linear-gradient(180deg, #6c7080 0%, #3b3e4a 40%, #20222a 100%);
+  --body-text: #eceef6;
+  --artist: #c3c9de;
+  --screen: radial-gradient(120% 100% at 50% 100%, #3a4256 0%, #0c0e14 72%);
+  --art-bg: radial-gradient(circle at 50% 40%, #9aa0b8, #2a2d38 75%);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #f2f3f8 18%, #b9bccc 52%, #6f7388 82%, #4d5062 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #ffffff 0, #dfe3f0 22%, #8f95ad 58%, #3e4256 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #d4d6de 0, #8c8f9e 50%, #3c3e48 100%);
+  --orb-ring: #2c2e38;
+  --glow: rgba(210, 220, 255, .7);
+  --fill-a: #9aa3c4;
+  --fill-b: #eef2ff;
+  --groove: #12141a;
+  --lcd-on: #eef2ff;
+  --viz-top: #ffffff;
+  --viz-mid: #b8c4e8;
+  --viz-bot: #5d6a96;
+  --viz-peak: #ffffff;
+  --viz-scope: #dfe6ff;
+  --taskbar: linear-gradient(180deg, #ffffff 0%, #e8e8ef 4%, #d8d9e3 12%, #ccccd8 40%, #c4c5d2 80%, #b0b1c2 95%, #9fa0b2 100%);
+  --taskbar-text: #15151f;
+  --task: linear-gradient(180deg, #ffffff, #e6e7ef 30%, #d6d7e2);
+  --task-active: #b3b5c8;
+  --tray: linear-gradient(180deg, #f6f6fa 0%, #e6e6ee 20%, #dcdce6 80%, #c8c9d6 100%);
+  --tray-edge: #9fa0b2;
+  --tray-glow: #ffffff;
+  --sm-head: linear-gradient(180deg, #e7e8f0, #c9cad8 50%, #b3b4c6);
+  --sm-icon: #4d5578;
+}
+[data-skin=silver] .titlebar .tb-icon .ico, [data-skin=silver] .task { color: #15151f; }
+[data-skin=silver] .sm-band span { color: #15151f; }
+
+/* Noir — Media Center-style black glass with orange accents */
+[data-skin=noir] {
+  --desk-bg:
+    radial-gradient(ellipse 70% 22% at 50% 78%, rgba(255, 140, 40, .28), transparent 70%),
+    radial-gradient(ellipse 120% 60% at 50% 120%, #2a2a2a, transparent 70%),
+    linear-gradient(180deg, #050505 0%, #141414 60%, #1e1e1e 100%);
+  --face: #2b2b2b;
+  --text: #ececec;
+  --muted: #9a9a9a;
+  --rule: #444;
+  --frame: #0d0d0d;
+  --frame-dim: #3a3a3a;
+  --title: linear-gradient(180deg, #6a6a6a 0%, #2c2c2c 8%, #161616 46%, #000 54%, #121212 92%, #2a2a2a 100%);
+  --title-dim: linear-gradient(180deg, #555 0%, #3a3a3a 46%, #2a2a2a 54%, #333 100%);
+  --title-shadow: 0 1px 2px #000;
+  --title-dim-text: #9a9a9a;
+  --cap-btn: radial-gradient(circle at 90% 90%, #000 0%, #1c1c1c 55%, #3a3a3a 70%, #8a8a8a 90%, #ccc 100%);
+  --cap-edge: #777;
+  --sel: #f08a24;
+  --sel-text: #000;
+  --cur-text: #ffa64d;
+  --field: #1b1b1b;
+  --field-alt: #222;
+  --field-border: #555;
+  --head: linear-gradient(180deg, #3a3a3a, #262626);
+  --head-border: #4a4a4a;
+  --btn: linear-gradient(180deg, #4a4a4a 0%, #2c2c2c 86%, #1e1e1e 100%);
+  --btn-down: linear-gradient(180deg, #1a1a1a, #2c2c2c);
+  --btn-border: #000;
+  --btn-hover: inset 0 0 0 1px #f08a24;
+  --status: linear-gradient(180deg, #2a2a2a, #1c1c1c);
+  --menu-bg: #222;
+  --menu-border: #555;
+  --link: #ffa64d;
+  --body: linear-gradient(180deg, #2e2e2e 0%, #141414 40%, #050505 100%);
+  --body-text: #eee;
+  --artist: #ffb070;
+  --screen: radial-gradient(120% 100% at 50% 100%, #3a1e05 0%, #050302 72%);
+  --art-bg: radial-gradient(circle at 50% 40%, #5a3a1a, #0d0905 75%);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #e6e6e6 14%, #6a6a6a 52%, #1e1e1e 82%, #000 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #fff3e0 0, #ffb870 22%, #e0730e 58%, #6a2c00 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #8a8a8a 0, #3a3a3a 50%, #0e0e0e 100%);
+  --orb-ring: #000;
+  --glow: rgba(255, 150, 50, .75);
+  --fill-a: #c85a00;
+  --fill-b: #ffb35c;
+  --groove: #0a0a0a;
+  --lcd-on: #ffd2a0;
+  --viz-top: #fff0c0;
+  --viz-mid: #ff9a2e;
+  --viz-bot: #b33a00;
+  --viz-peak: #fff6e0;
+  --viz-scope: #ffb35c;
+  --taskbar: linear-gradient(180deg, #5a5a5a 0%, #262626 6%, #121212 45%, #000 55%, #0e0e0e 92%, #1e1e1e 100%);
+  --task: linear-gradient(180deg, #4a4a4a, #262626 45%, #1a1a1a);
+  --task-active: #000;
+  --tray: linear-gradient(180deg, #3a3a3a, #1a1a1a 50%, #0a0a0a);
+  --tray-edge: #000;
+  --tray-glow: #444;
+  --start: radial-gradient(ellipse 80% 70% at 30% 20%, rgba(255, 255, 255, .35), transparent 60%), linear-gradient(180deg, #ffa64d 0%, #f08a24 15%, #d96f0c 55%, #a84f00 100%);
+  --start-shadow: #4a2000;
+  --sm-head: linear-gradient(180deg, #4a4a4a, #1c1c1c 50%, #000);
+  --sm-accent: #f08a24;
+  --sm-icon: #ffa64d;
+}
+[data-skin=noir] .progress { background: #111; border-color: #555; }
+[data-skin=noir] .listview, [data-skin=noir] .skin-groups { scrollbar-color: #666 #1b1b1b; }
+
+/* ===================== more Luna-look skins ===================== */
+
+/* 2004 — Media Center "Royale": deep blue glass, black taskbar */
+[data-skin=royale] {
+  --desk-bg:
+    radial-gradient(ellipse 80% 40% at 30% 62%, rgba(120, 220, 120, .45), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 70% 40%, rgba(80, 160, 255, .55), transparent 70%),
+    linear-gradient(180deg, #0b1a3a, #123f8a 60%, #0d2a5a);
+  --frame: #0a246a;
+  --frame-dim: #6a7fb3;
+  --title: linear-gradient(180deg, #6f9ae8 0%, #2a5dd4 6%, #1442b8 45%, #0a2f96 55%, #1645b8 90%, #0a246a 100%);
+  --title-dim: linear-gradient(180deg, #a9bfee, #8aa2da 50%, #7590cc);
+  --cap-btn: radial-gradient(circle at 90% 90%, #0a2f96 0%, #1645b8 55%, #3a6ad8 70%, #b5c9f2 90%, #fff 100%);
+  --sel: #2a5dd4;
+  --cur-text: #0a2f96;
+  --taskbar: linear-gradient(180deg, #56637d 0%, #1c2433 8%, #0e131c 50%, #000 52%, #0b0f17 100%);
+  --task: linear-gradient(180deg, #46536c, #1c2433 50%, #0e131c);
+  --task-active: #1442b8;
+  --tray: linear-gradient(180deg, #2a3348, #121824 50%, #05080d);
+  --tray-edge: #000;
+  --tray-glow: #3a4a6a;
+  --start: radial-gradient(ellipse 80% 70% at 30% 20%, rgba(255, 255, 255, .4), transparent 60%), linear-gradient(180deg, #50c050 0%, #2fa22f 45%, #1f8a1f 55%, #156a15 100%);
+  --sm-head: linear-gradient(180deg, #2a5dd4, #0a2f96);
+}
+
+/* 2006 — the brown portable: chocolate gloss with teal accents */
+[data-skin=mocha] {
+  --desk-bg: radial-gradient(ellipse 60% 50% at 70% 35%, rgba(79, 216, 210, .35), transparent 70%), linear-gradient(160deg, #3a2619, #5e4433 50%, #2e1d12);
+  --face: #f3ede6;
+  --frame: #4a3324;
+  --frame-dim: #a08a7a;
+  --title: linear-gradient(180deg, #a07e64 0%, #5e3f2b 8%, #4a3324 45%, #3a2619 55%, #4f3726 92%, #2e1d12 100%);
+  --title-dim: linear-gradient(180deg, #c8b6a6, #ad998a 50%, #9c8778);
+  --title-shadow: 1px 1px #1a0f08;
+  --cap-btn: radial-gradient(circle at 90% 90%, #2e1d12 0%, #4a3324 55%, #6e5240 70%, #d8c4b2 90%, #fff 100%);
+  --sel: #2fa7a3;
+  --cur-text: #1f7f7b;
+  --link: #1f7f7b;
+  --field-border: #b8a596;
+  --btn-border: #4a3324;
+  --body: linear-gradient(180deg, #5e4433 0%, #3a2619 40%, #20140c 100%);
+  --body-text: #f6eee6;
+  --artist: #8fe3df;
+  --screen: radial-gradient(120% 100% at 50% 100%, #134a48 0%, #071615 72%);
+  --art-bg: radial-gradient(circle at 50% 40%, #8a6a52, #2a1a10 75%);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #eae0d6 18%, #a88a74 52%, #5e3f2b 82%, #3a2619 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #f0fffe 0, #9ff0ec 22%, #2fa7a3 58%, #0f5553 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #cbbcb0 0, #8a7464 50%, #3a2a20 100%);
+  --orb-ring: #20140c;
+  --glow: rgba(80, 220, 210, .7);
+  --fill-a: #2fa7a3;
+  --fill-b: #9ff0ec;
+  --groove: #1a100a;
+  --lcd-on: #c8fffb;
+  --viz-top: #e6fffd;
+  --viz-mid: #4fd8d2;
+  --viz-bot: #1f7f7b;
+  --viz-peak: #ffffff;
+  --viz-scope: #9ff0ec;
+  --taskbar: linear-gradient(180deg, #7a5a44 0%, #4a3324 8%, #3a2619 50%, #2e1d12 52%, #3a2619 100%);
+  --task: linear-gradient(180deg, #6e5240, #4a3324 50%, #3a2619);
+  --task-active: #20140c;
+  --tray: linear-gradient(180deg, #5e4433, #3a2619);
+  --tray-edge: #20140c;
+  --tray-glow: #7a5a44;
+  --start: radial-gradient(ellipse 80% 70% at 30% 20%, rgba(255, 255, 255, .35), transparent 60%), linear-gradient(180deg, #4fd8d2, #2fa7a3 50%, #1f7f7b);
+  --start-shadow: #0b3433;
+  --sm-head: linear-gradient(180deg, #5e3f2b, #3a2619);
+  --sm-accent: #2fa7a3;
+  --sm-icon: #4a3324;
+}
+
+/* 2007 Aero Glass + 2009 Seven: see-through frames, black glossy player */
+:is([data-skin=aero], [data-skin=seven]) {
+  --title: linear-gradient(180deg, rgba(255, 255, 255, .4), rgba(255, 255, 255, .08) 50%, rgba(255, 255, 255, 0) 51%, rgba(255, 255, 255, .14));
+  --title-dim: linear-gradient(180deg, rgba(255, 255, 255, .25), rgba(255, 255, 255, .08));
+  --title-text: #000;
+  --title-shadow: 0 0 8px #fff, 0 0 3px #fff;
+  --title-dim-text: #444;
+  --cap-btn: linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, .18) 50%, rgba(0, 0, 0, .1) 51%, rgba(255, 255, 255, .28));
+  --cap-edge: rgba(0, 0, 0, .45);
+  --cap-glyph: #222;
+  --face: #f0f0f0;
+  --sel: #3399ff;
+  --cur-text: #1a5fb4;
+  --field-border: #abadb3;
+  --btn-border: #707070;
+  --btn: linear-gradient(180deg, #f2f2f2 0%, #ebebeb 50%, #dddddd 51%, #cfcfcf 100%);
+  --btn-down: linear-gradient(180deg, #e5f4fc, #c4e5f6 50%, #98d1ef 51%, #68b3db);
+  --btn-hover: inset 0 0 0 1px #3c7fb1;
+  --body: linear-gradient(180deg, #3b3b3b 0%, #121212 45%, #000 55%, #121212 100%);
+  --body-text: #eee;
+  --artist: #9ed3ff;
+  --screen: radial-gradient(120% 100% at 50% 100%, #102a4a 0%, #020509 72%);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #e8e8e8 15%, #8a8a8a 50%, #2a2a2a 85%, #000 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #e8f6ff 0, #7ac8ff 22%, #1a73d9 58%, #062a63 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #9a9a9a 0, #4a4a4a 50%, #111 100%);
+  --orb-ring: #000;
+  --glow: rgba(90, 180, 255, .8);
+  --fill-a: #2b7de0;
+  --fill-b: #9ad6ff;
+  --groove: #0a0a0a;
+  --lcd-on: #cfeeff;
+  --viz-top: #e8f8ff;
+  --viz-mid: #3fa8ff;
+  --viz-bot: #0b4fae;
+  --viz-scope: #9ad6ff;
+  --tray: transparent;
+  --tray-edge: rgba(255, 255, 255, .15);
+  --tray-glow: transparent;
+  --start-r: 50%;
+  --sm-head: linear-gradient(180deg, rgba(40, 40, 40, .95), #000);
+  --sm-accent: #3fa8ff;
+  --sm-icon: #1a5fb4;
+}
+[data-skin=aero] {
+  --desk-bg:
+    radial-gradient(ellipse 90% 40% at 20% 70%, rgba(110, 220, 120, .55), transparent 70%),
+    radial-gradient(ellipse 70% 30% at 70% 55%, rgba(60, 170, 255, .6), transparent 70%),
+    radial-gradient(ellipse 50% 25% at 50% 82%, rgba(170, 255, 200, .5), transparent 70%),
+    linear-gradient(180deg, #021226, #0a3b6e 55%, #06223f);
+  --frame: rgba(40, 70, 110, .55);
+  --frame-dim: rgba(120, 140, 170, .4);
+  --glass: rgba(150, 190, 230, .38);
+  --taskbar: linear-gradient(180deg, rgba(70, 70, 70, .8) 0%, rgba(20, 20, 20, .85) 50%, rgba(0, 0, 0, .9) 51%, rgba(20, 20, 20, .85));
+  --task: linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .05) 50%, rgba(0, 0, 0, .1) 51%, rgba(255, 255, 255, .08));
+  --task-active: linear-gradient(180deg, rgba(120, 180, 255, .5), rgba(60, 120, 220, .35) 50%, rgba(30, 80, 180, .4) 51%, rgba(80, 150, 255, .45));
+  --start: radial-gradient(circle at 50% 30%, #c5ebff 0, #4aa8f0 30%, #0c56b8 65%, #052a66 100%);
+}
+[data-skin=seven] {
+  --tb-h: 40px;
+  --desk-bg:
+    radial-gradient(ellipse 22% 30% at 52% 46%, rgba(255, 255, 255, .55), transparent 70%),
+    radial-gradient(ellipse 60% 55% at 45% 50%, #49a6ff, transparent 70%),
+    linear-gradient(160deg, #06306e, #1667cf 45%, #06306e);
+  --frame: rgba(70, 130, 200, .55);
+  --frame-dim: rgba(150, 170, 200, .45);
+  --glass: rgba(140, 190, 240, .42);
+  --taskbar: linear-gradient(180deg, rgba(130, 180, 235, .5), rgba(40, 90, 160, .6));
+  --task: transparent;
+  --task-active: linear-gradient(180deg, rgba(255, 255, 255, .4), rgba(255, 255, 255, .12));
+  --start: radial-gradient(circle at 50% 30%, #d6f2ff 0, #4ab0f5 30%, #0a5ec4 65%, #04306e 100%);
+}
+:is([data-skin=aero], [data-skin=seven]) .win { background: var(--glass); backdrop-filter: blur(12px) saturate(1.4); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .4), 0 8px 26px rgba(0, 0, 0, .45); }
+:is([data-skin=aero], [data-skin=seven]) :is(.win-body:not(.player-body), .menubar, .statusbar) { background-color: #f0f0f0; }
+:is([data-skin=aero], [data-skin=seven]) .menubar { background: rgba(240, 240, 240, .92); }
+:is([data-skin=aero], [data-skin=seven]) #taskbar { backdrop-filter: blur(10px); }
+:is([data-skin=aero], [data-skin=seven]) #start-btn { width: 40px; height: 40px; margin: 0 4px; padding: 0; justify-content: center; align-self: center; }
+:is([data-skin=aero], [data-skin=seven]) #start-btn span { display: none; }
+:is([data-skin=aero], [data-skin=seven]) #start-btn .ico { width: 24px; height: 24px; }
+[data-skin=aero] #start-btn { width: 36px; height: 36px; margin-top: -6px; }
+[data-skin=seven] .task { width: 56px; flex: none; justify-content: center; }
+[data-skin=seven] .task span { display: none; }
+[data-skin=seven] .task .ico { width: 24px; height: 24px; }
+
+/* 2008 — the first streaming app: graphite gradients, lime green */
+[data-skin=stream] {
+  --desk-bg: radial-gradient(ellipse 70% 50% at 50% 40%, #5a5a5a, #2a2a2a 70%, #161616);
+  --face: #efefef;
+  --frame: #6d6d6d;
+  --frame-dim: #a8a8a8;
+  --title: linear-gradient(180deg, #a6a6a6 0%, #6a6a6a 8%, #575757 50%, #4a4a4a 51%, #5a5a5a 100%);
+  --title-dim: linear-gradient(180deg, #c4c4c4, #a6a6a6);
+  --title-shadow: 0 1px #222;
+  --cap-btn: radial-gradient(circle at 90% 90%, #3a3a3a 0%, #555 55%, #777 70%, #ccc 90%, #fff 100%);
+  --sel: #81b71a;
+  --cur-text: #5a8a0a;
+  --link: #5a8a0a;
+  --btn-border: #555;
+  --field-border: #aaa;
+  --body: linear-gradient(180deg, #5a5a5a 0%, #3c3c3c 45%, #2a2a2a 100%);
+  --body-text: #f2f2f2;
+  --artist: #b6e04a;
+  --screen: linear-gradient(180deg, #2a2a2a, #161616);
+  --orb: radial-gradient(circle at 50% 28%, #fff 0, #eaeaea 18%, #a6a6a6 52%, #5a5a5a 82%, #3a3a3a 100%);
+  --orb-big: radial-gradient(circle at 50% 26%, #f6ffe6 0, #c6f06a 22%, #81b71a 58%, #3f6a00 100%);
+  --orb-off: radial-gradient(circle at 50% 28%, #c4c4c4 0, #7a7a7a 50%, #333 100%);
+  --orb-ring: #222;
+  --glow: rgba(160, 230, 40, .7);
+  --fill-a: #81b71a;
+  --fill-b: #c6f06a;
+  --groove: #1a1a1a;
+  --lcd-on: #e8ffc0;
+  --viz-top: #efffd0;
+  --viz-mid: #9fd42a;
+  --viz-bot: #4f7a00;
+  --viz-scope: #c6f06a;
+  --taskbar: linear-gradient(180deg, #8a8a8a 0%, #5a5a5a 10%, #444 50%, #3a3a3a 52%, #4a4a4a 100%);
+  --task: linear-gradient(180deg, #7a7a7a, #555 50%, #4a4a4a);
+  --task-active: #2a2a2a;
+  --tray: linear-gradient(180deg, #5a5a5a, #3a3a3a);
+  --tray-edge: #222;
+  --tray-glow: #777;
+  --start: radial-gradient(ellipse 80% 70% at 30% 20%, rgba(255, 255, 255, .35), transparent 60%), linear-gradient(180deg, #a6d83a, #81b71a 50%, #5a8a0a);
+  --start-shadow: #2a4a00;
+  --sm-head: linear-gradient(180deg, #6a6a6a, #3a3a3a);
+  --sm-accent: #81b71a;
+  --sm-icon: #5a8a0a;
+}
+
+/* ===================== Modern-look skins (flat era) ===================== */
+
+/* dark modern skins share a base */
+:is([data-skin=metro], [data-skin=sdark], [data-skin=ten], [data-skin=lofi], [data-skin=dots]) {
+  --cap-hover: rgba(255, 255, 255, .1);
+  --hover: rgba(255, 255, 255, .07);
+  --tip-bg: #f2f2f2;
+  --tip-text: #111;
+  --tip-border: #f2f2f2;
+}
+
+/* 2010 — Zune-style Metro: black, magenta, giant lowercase type */
+[data-skin=metro] {
+  --accent: #e6007e;
+  --desk-bg: radial-gradient(ellipse 60% 60% at 80% 20%, rgba(230, 0, 126, .45), transparent 70%), radial-gradient(ellipse 50% 50% at 20% 80%, rgba(255, 120, 0, .3), transparent 70%), #0d0d0d;
+  --face: #111;
+  --text: #f2f2f2;
+  --muted: #8a8a8a;
+  --rule: #2a2a2a;
+  --frame: #2a2a2a;
+  --frame-dim: #222;
+  --title-text: #f2f2f2;
+  --title-dim-text: #666;
+  --title-case: lowercase;
+  --title-font: 300 15px/1 "Segoe UI Light", "Segoe UI", system-ui, sans-serif;
+  --field: #161616;
+  --field-alt: #161616;
+  --field-border: #333;
+  --field-r: 0;
+  --head: #111;
+  --head-border: #222;
+  --head-font: 300 13px/1 "Segoe UI Light", "Segoe UI", system-ui, sans-serif;
+  --btn: #1f1f1f;
+  --btn-down: #333;
+  --btn-border: #444;
+  --btn-r: 0;
+  --btn-text: #f2f2f2;
+  --menu-bg: #1a1a1a;
+  --menu-border: #333;
+  --menu-r: 0;
+  --body: #0d0d0d;
+  --artist: #ff5cb8;
+  --screen: #000;
+  --screen-r: 0;
+  --art-r: 0;
+  --np-font: 300 24px/30px "Segoe UI Light", "Segoe UI", system-ui, sans-serif;
+  --viz-mid: #ff5cb8;
+  --viz-bot: #e6007e;
+  --taskbar: #000;
+  --sm-head: #000;
+  --balloon-bg: #1a1a1a;
+  --balloon-text: #f2f2f2;
+  --balloon-border: #e6007e;
+}
+[data-skin=metro] .marquee { height: 30px; text-transform: lowercase; }
+
+/* 2011 — clean white web player */
+[data-skin=pure] {
+  --accent: #008fd5;
+  --desk-bg: radial-gradient(ellipse 70% 60% at 30% 20%, #ffffff, transparent 70%), linear-gradient(180deg, #e3eaf0, #cfd8e0);
+  --face: #fff;
+  --text: #222;
+  --muted: #888;
+  --rule: #e8e8e8;
+  --frame: #cfd6dc;
+  --win-r: 3px;
+  --win-sh: 0 4px 18px rgba(0, 0, 0, .14);
+  --title: #fff;
+  --title-dim: #fff;
+  --body: linear-gradient(180deg, #ffffff, #f2f5f7);
+  --body-text: #222;
+  --np-text: #222;
+  --artist: #008fd5;
+  --screen: linear-gradient(180deg, #f7f9fa, #e9eef2);
+  --screen-sh: inset 0 0 0 1px #dfe5ea;
+  --art-bg: #e9eef2;
+  --orb-text: #556;
+  --play-text: #fff;
+  --orb-on-sh: inset 0 0 0 2px #008fd5;
+  --groove: #dfe5ea;
+  --lcd-on: #445;
+  --viz-top: #7fd0ff;
+  --viz-mid: #008fd5;
+  --viz-bot: #006aa0;
+  --viz-peak: #004a70;
+  --viz-scope: #008fd5;
+  --taskbar: #f7f9fa;
+  --taskbar-text: #222;
+  --task-hover: rgba(0, 0, 0, .05);
+  --task-active: rgba(0, 143, 213, .12);
+}
+
+/* 2012 — Windows 8 tiles: purple start screen, colored frames, centered titles */
+[data-skin=tiles] {
+  --accent: #00a3a3;
+  --desk-bg: linear-gradient(90deg, rgba(255, 255, 255, .06) 1px, transparent 1px) 0 0 / 132px 132px, linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px) 0 0 / 132px 132px, #3a0b5e;
+  --face: #fff;
+  --frame: #00a3a3;
+  --frame-dim: #b8b8b8;
+  --title: #00a3a3;
+  --title-dim: #d6d6d6;
+  --title-text: #000;
+  --title-dim-text: #555;
+  --cap-hover: rgba(255, 255, 255, .3);
+  --btn-r: 0;
+  --field-r: 0;
+  --menu-r: 0;
+  --mi-r: 0;
+  --body: #1d1d1d;
+  --artist: #3fe0e0;
+  --orb: #2d2d2d;
+  --orb-off: #2d2d2d;
+  --orb-r: 0;
+  --orb-big: #00a3a3;
+  --orb-on-sh: inset 0 0 0 2px #00a3a3;
+  --screen: #00a3a3;
+  --screen-r: 0;
+  --art-r: 0;
+  --lcd-on: #fff;
+  --viz-top: #ffffff;
+  --viz-mid: #ffffff;
+  --viz-bot: #c6ffff;
+  --taskbar: rgba(40, 8, 64, .95);
+  --task-mark: #00a3a3;
+  --sm-head: #3a0b5e;
+}
+[data-skin=tiles] .win { border-width: 0 6px 6px; }
+[data-skin=tiles] .titlebar .tb-title { text-align: center; }
+
+/* 2013 — the great flattening: thin type, translucent bars, pink-red accent */
+[data-skin=flat] {
+  --accent: #ff2d55;
+  --ui-font: 13px/1.4 "Helvetica Neue", -apple-system, system-ui, sans-serif;
+  --desk-bg: radial-gradient(ellipse 70% 60% at 20% 20%, #ffb199, transparent 70%), radial-gradient(ellipse 70% 60% at 80% 80%, #ff6a88, transparent 70%), linear-gradient(160deg, #ff9a8b, #ff99ac 60%, #fcb69f);
+  --face: rgba(255, 255, 255, .94);
+  --muted: #8e8e93;
+  --rule: #e5e5ea;
+  --frame: rgba(0, 0, 0, .1);
+  --win-r: 10px;
+  --win-sh: 0 12px 34px rgba(0, 0, 0, .18);
+  --title: transparent;
+  --title-dim: transparent;
+  --title-font: 600 13px/1 "Helvetica Neue", -apple-system, system-ui, sans-serif;
+  --btn-r: 8px;
+  --field-r: 8px;
+  --menu-r: 12px;
+  --body: #fafafa;
+  --body-text: #000;
+  --np-text: #000;
+  --np-font: 600 16px/20px "Helvetica Neue", -apple-system, system-ui, sans-serif;
+  --artist: #ff2d55;
+  --screen: #f2f2f7;
+  --art-r: 6px;
+  --orb-text: #ff2d55;
+  --play-text: #fff;
+  --groove: #e5e5ea;
+  --lcd-on: #8e8e93;
+  --viz-top: #ffb3c2;
+  --viz-peak: #ff2d55;
+  --viz-scope: #ff2d55;
+  --taskbar: rgba(250, 250, 250, .85);
+  --taskbar-text: #000;
+  --taskbar-blur: blur(20px);
+  --task-hover: rgba(0, 0, 0, .05);
+  --task-active: rgba(255, 45, 85, .12);
+}
+
+/* 2014 — streaming goes dark: near-black with a green accent */
+[data-skin=sdark] {
+  --accent: #1db954;
+  --ui-font: 13px/1.4 "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --desk-bg: radial-gradient(ellipse 80% 60% at 30% 10%, #1e5a37, transparent 70%), #121212;
+  --face: #121212;
+  --text: #fff;
+  --muted: #b3b3b3;
+  --rule: #282828;
+  --frame: #000;
+  --frame-dim: #000;
+  --title: #000;
+  --title-dim: #000;
+  --title-text: #fff;
+  --title-dim-text: #777;
+  --field: #181818;
+  --field-alt: #181818;
+  --field-border: #282828;
+  --head: #181818;
+  --head-border: #282828;
+  --btn: transparent;
+  --btn-down: #282828;
+  --btn-border: #727272;
+  --btn-text: #fff;
+  --btn-r: 500px;
+  --btn-hover: inset 0 0 0 1px #fff;
+  --menu-bg: #282828;
+  --menu-border: #3e3e3e;
+  --sel-text: #000;
+  --body: #181818;
+  --artist: #b3b3b3;
+  --screen: #000;
+  --orb-text: #b3b3b3;
+  --play-text: #fff;
+  --groove: #404040;
+  --taskbar: #000;
+  --balloon-bg: #282828;
+  --balloon-text: #fff;
+  --balloon-border: #1db954;
+}
+[data-skin=sdark] .lv-head > span { text-transform: uppercase; letter-spacing: .08em; }
+
+/* 2015 — Windows 10 dark: accent-colored frame, light beams */
+[data-skin=ten] {
+  --accent: #0078d7;
+  --desk-bg:
+    radial-gradient(ellipse 18% 55% at 56% 48%, rgba(120, 190, 255, .8), transparent 70%),
+    linear-gradient(112deg, transparent 42%, rgba(0, 120, 215, .45) 49%, transparent 56%),
+    linear-gradient(68deg, transparent 44%, rgba(0, 90, 180, .4) 50%, transparent 56%),
+    linear-gradient(180deg, #001a33, #003a70 55%, #001326);
+  --face: #2b2b2b;
+  --text: #fff;
+  --muted: #9a9a9a;
+  --rule: #3a3a3a;
+  --frame: #0078d7;
+  --frame-dim: #3a3a3a;
+  --title: #1f1f1f;
+  --title-dim: #2b2b2b;
+  --title-text: #fff;
+  --field: #1f1f1f;
+  --field-alt: #1f1f1f;
+  --field-border: #555;
+  --field-r: 0;
+  --head: #1f1f1f;
+  --head-border: #333;
+  --btn: #333;
+  --btn-down: #555;
+  --btn-border: #555;
+  --btn-text: #fff;
+  --btn-r: 0;
+  --menu-bg: #2b2b2b;
+  --menu-border: #444;
+  --menu-r: 0;
+  --mi-r: 0;
+  --body: #1f1f1f;
+  --taskbar: #101010;
+  --balloon-bg: #1f1f1f;
+  --balloon-text: #fff;
+  --balloon-border: #0078d7;
+}
+
+/* 2016 — Material: orange app bar, paper cards, floating play button */
+[data-skin=material] {
+  --accent: #ef6c00;
+  --ui-font: 13px/1.4 Roboto, "Segoe UI", system-ui, sans-serif;
+  --desk-bg: linear-gradient(180deg, #ef6c00 0 34%, #eeeeee 34%);
+  --face: #fafafa;
+  --text: rgba(0, 0, 0, .87);
+  --muted: rgba(0, 0, 0, .54);
+  --rule: #e0e0e0;
+  --frame: transparent;
+  --frame-dim: transparent;
+  --win-r: 2px;
+  --win-sh: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 5px 5px -3px rgba(0, 0, 0, .2);
+  --title: #ef6c00;
+  --title-dim: #f39a4d;
+  --title-text: #fff;
+  --title-dim-text: rgba(255, 255, 255, .85);
+  --title-font: 500 14px/1 Roboto, "Segoe UI", system-ui, sans-serif;
+  --cap-hover: rgba(255, 255, 255, .2);
+  --btn: transparent;
+  --btn-border: transparent;
+  --btn-text: #ef6c00;
+  --btn-down: rgba(239, 108, 0, .12);
+  --btn-hover: none;
+  --btn-r: 2px;
+  --field-r: 2px;
+  --head-font: 500 12px/1 Roboto, system-ui, sans-serif;
+  --menu-r: 2px;
+  --menu-border: transparent;
+  --body: #fff;
+  --body-text: rgba(0, 0, 0, .87);
+  --np-text: rgba(0, 0, 0, .87);
+  --np-font: 500 16px/20px Roboto, "Segoe UI", system-ui, sans-serif;
+  --artist: rgba(0, 0, 0, .54);
+  --screen: #ef6c00;
+  --screen-r: 2px;
+  --art-r: 2px;
+  --art-sh: 0 2px 4px rgba(0, 0, 0, .25);
+  --orb-text: rgba(0, 0, 0, .6);
+  --play-text: #fff;
+  --groove: #e0e0e0;
+  --lcd-on: #fff;
+  --viz-top: #ffffff;
+  --viz-mid: #ffd0a8;
+  --viz-bot: #ffb070;
+  --taskbar: #212121;
+}
+[data-skin=material] .btn { text-transform: uppercase; font-weight: 500; }
+[data-skin=material] .transport .t-play { box-shadow: 0 3px 6px rgba(0, 0, 0, .25), 0 3px 6px rgba(0, 0, 0, .2); }
+
+/* 2017 — Fluent acrylic: frosted translucent windows */
+[data-skin=acrylic] {
+  --accent: #0063b1;
+  --desk-bg: radial-gradient(ellipse 60% 70% at 25% 30%, #ff8a5c, transparent 70%), radial-gradient(ellipse 60% 70% at 75% 70%, #3a7bd5, transparent 70%), linear-gradient(135deg, #2b1055, #7597de);
+  --face: rgba(242, 242, 242, .7);
+  --win-blur: blur(30px) saturate(1.6);
+  --frame: rgba(255, 255, 255, .45);
+  --frame-dim: rgba(255, 255, 255, .3);
+  --title: transparent;
+  --title-dim: transparent;
+  --field: rgba(255, 255, 255, .6);
+  --field-alt: rgba(255, 255, 255, .6);
+  --head: rgba(255, 255, 255, .5);
+  --btn: rgba(255, 255, 255, .6);
+  --menu-bg: rgba(242, 242, 242, .82);
+  --body: rgba(25, 25, 25, .6);
+  --screen: rgba(0, 0, 0, .35);
+  --taskbar: rgba(32, 32, 32, .72);
+  --taskbar-blur: blur(20px) saturate(1.4);
+}
+
+/* 2019 — lo-fi beats to study to: night room, warm lamp light */
+[data-skin=lofi] {
+  --accent: #ffb26b;
+  --desk-bg:
+    radial-gradient(circle at 78% 20%, #fff3c4 0 2.4%, rgba(255, 243, 196, .25) 3%, transparent 9%),
+    radial-gradient(circle at 20% 15%, #fff 0 .15%, transparent .3%),
+    radial-gradient(circle at 40% 8%, #fff 0 .12%, transparent .25%),
+    radial-gradient(circle at 62% 28%, #fff 0 .12%, transparent .25%),
+    linear-gradient(180deg, #1d1b3a 0%, #3b2d5c 50%, #6b3f6b 76%, #c7746b 100%);
+  --face: #2a2340;
+  --text: #f3e9dc;
+  --muted: #a99bb8;
+  --rule: #3b3257;
+  --frame: #3b3257;
+  --frame-dim: #2f2848;
+  --win-r: 10px;
+  --title: #241e38;
+  --title-dim: #2a2340;
+  --title-text: #f3e9dc;
+  --title-dim-text: #8a7fa0;
+  --field: #221c35;
+  --field-alt: #221c35;
+  --field-border: #3b3257;
+  --field-r: 8px;
+  --head: #221c35;
+  --head-border: #3b3257;
+  --btn: #3b3257;
+  --btn-down: #4a406a;
+  --btn-border: #4a406a;
+  --btn-text: #f3e9dc;
+  --btn-r: 8px;
+  --menu-bg: #2a2340;
+  --menu-border: #3b3257;
+  --sel-text: #241e38;
+  --body: linear-gradient(180deg, #2f2748, #1f1a33);
+  --artist: #ffb26b;
+  --screen: linear-gradient(180deg, #120f22, #2a1f3a);
+  --screen-r: 8px;
+  --art-r: 8px;
+  --orb-text: #f3e9dc;
+  --play-text: #241e38;
+  --groove: #3b3257;
+  --lcd-on: #ffe3c4;
+  --viz-top: #ffe3c4;
+  --viz-mid: #ffb26b;
+  --viz-bot: #c7746b;
+  --taskbar: rgba(26, 22, 44, .94);
+  --balloon-bg: #2a2340;
+  --balloon-text: #f3e9dc;
+  --balloon-border: #ffb26b;
+}
+
+/* 2020 — soft UI / neumorphism: everything extruded from one gray */
+[data-skin=soft] {
+  --accent: #6c63ff;
+  --desk-bg: #e0e5ec;
+  --face: #e0e5ec;
+  --text: #4a5568;
+  --muted: #8a94a6;
+  --rule: rgba(163, 177, 198, .45);
+  --frame: transparent;
+  --frame-dim: transparent;
+  --win-r: 18px;
+  --win-sh: 9px 9px 18px rgba(163, 177, 198, .65), -9px -9px 18px rgba(255, 255, 255, .7);
+  --title: #e0e5ec;
+  --title-dim: #e0e5ec;
+  --field: #e0e5ec;
+  --field-alt: #e0e5ec;
+  --field-border: transparent;
+  --field-r: 12px;
+  --head: #e0e5ec;
+  --head-border: transparent;
+  --btn: #e0e5ec;
+  --btn-down: #e0e5ec;
+  --btn-border: transparent;
+  --btn-r: 12px;
+  --btn-hover: none;
+  --menu-bg: #e0e5ec;
+  --menu-border: transparent;
+  --menu-r: 14px;
+  --menu-sh: 8px 8px 16px rgba(163, 177, 198, .6), -8px -8px 16px rgba(255, 255, 255, .6);
+  --body: #e0e5ec;
+  --body-text: #4a5568;
+  --np-text: #4a5568;
+  --artist: #6c63ff;
+  --screen: #e0e5ec;
+  --screen-r: 16px;
+  --screen-sh: inset 6px 6px 10px rgba(163, 177, 198, .6), inset -6px -6px 10px rgba(255, 255, 255, .7);
+  --art-r: 16px;
+  --art-sh: 6px 6px 12px rgba(163, 177, 198, .6), -6px -6px 12px rgba(255, 255, 255, .7);
+  --orb: #e0e5ec;
+  --orb-off: #e0e5ec;
+  --orb-big: #e0e5ec;
+  --orb-text: #6b7a90;
+  --play-text: #6c63ff;
+  --orb-sh: 4px 4px 8px rgba(163, 177, 198, .7), -4px -4px 8px rgba(255, 255, 255, .85);
+  --orb-on-sh: inset 3px 3px 6px rgba(163, 177, 198, .7), inset -3px -3px 6px rgba(255, 255, 255, .85);
+  --fill-b: #a39dff;
+  --groove: #cdd4df;
+  --lcd-on: #6b7a90;
+  --viz-top: #a39dff;
+  --viz-mid: #6c63ff;
+  --viz-bot: #4a40d8;
+  --viz-peak: #4a40d8;
+  --viz-scope: #6c63ff;
+  --taskbar: #e0e5ec;
+  --taskbar-text: #4a5568;
+  --task-hover: rgba(0, 0, 0, .04);
+  --task-active: rgba(108, 99, 255, .12);
+}
+[data-skin=soft] .btn { box-shadow: 4px 4px 8px rgba(163, 177, 198, .6), -4px -4px 8px rgba(255, 255, 255, .75); }
+[data-skin=soft] .btn:active { box-shadow: inset 3px 3px 6px rgba(163, 177, 198, .6), inset -3px -3px 6px rgba(255, 255, 255, .75); }
+[data-skin=soft] :is(input[type=text], .listview, .skin-groups) { box-shadow: inset 3px 3px 6px rgba(163, 177, 198, .6), inset -3px -3px 6px rgba(255, 255, 255, .75); }
+
+/* 2021 — Windows 11 Mica: rounded, frosted, centered taskbar */
+[data-skin=mica] {
+  --accent: #005fb8;
+  --tb-h: 48px;
+  --tb-justify: center;
+  --sm-gap: 12px;
+  --desk-bg:
+    radial-gradient(ellipse 20% 32% at 47% 52%, #b8d8ff, transparent 70%),
+    radial-gradient(ellipse 38% 50% at 54% 50%, #2f7bea, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 50% 50%, #8fb8ef, transparent 75%),
+    linear-gradient(180deg, #d4e4f7, #9cbfe9);
+  --face: rgba(243, 243, 243, .9);
+  --win-blur: blur(30px) saturate(1.3);
+  --frame: rgba(0, 0, 0, .12);
+  --frame-dim: rgba(0, 0, 0, .08);
+  --win-r: 8px;
+  --title: transparent;
+  --title-dim: transparent;
+  --menu-r: 8px;
+  --body: rgba(255, 255, 255, .55);
+  --body-text: #1b1b1b;
+  --np-text: #1b1b1b;
+  --artist: #5a5a5a;
+  --orb-text: #1b1b1b;
+  --play-text: #fff;
+  --groove: rgba(0, 0, 0, .15);
+  --taskbar: rgba(243, 243, 243, .85);
+  --taskbar-text: #1b1b1b;
+  --taskbar-blur: blur(30px) saturate(1.5);
+  --task-hover: rgba(0, 0, 0, .05);
+  --task-active: rgba(0, 0, 0, .06);
+}
+[data-skin=mica] #tasks { flex: 0 1 auto; }
+[data-skin=mica] #start-btn { height: 40px; border-radius: 4px; }
+[data-skin=mica] .task { height: 40px; padding: 0 10px; border-radius: 4px; }
+[data-skin=mica] .task span { display: none; }
+[data-skin=mica] .task .ico { width: 22px; height: 22px; }
+[data-skin=mica] .task::after { left: 40%; right: 40%; border-radius: 2px; }
+[data-skin=mica] #tray { position: absolute; top: 0; right: 0; }
+[data-skin=mica] #start-menu { left: 50%; transform: translateX(-50%); }
+
+/* 2024 — dot matrix minimalism: black, white dots, one red light */
+[data-skin=dots] {
+  --accent: #d71921;
+  --desk-bg: radial-gradient(circle, rgba(255, 255, 255, .13) 1px, transparent 1.5px) 0 0 / 12px 12px, #000;
+  --face: #0b0b0b;
+  --text: #e8e8e8;
+  --muted: #7a7a7a;
+  --rule: #222;
+  --frame: #2a2a2a;
+  --frame-dim: #1c1c1c;
+  --win-r: 14px;
+  --title: #0b0b0b;
+  --title-dim: #0b0b0b;
+  --title-text: #e8e8e8;
+  --title-dim-text: #555;
+  --title-case: uppercase;
+  --title-font: 12px/1 "Courier New", Menlo, monospace;
+  --field: #111;
+  --field-alt: #111;
+  --field-border: #2a2a2a;
+  --field-r: 10px;
+  --head: #111;
+  --head-border: #222;
+  --head-font: 11px/1 "Courier New", Menlo, monospace;
+  --btn: #1a1a1a;
+  --btn-down: #2a2a2a;
+  --btn-border: #333;
+  --btn-text: #e8e8e8;
+  --btn-r: 999px;
+  --menu-bg: #111;
+  --menu-border: #2a2a2a;
+  --menu-r: 12px;
+  --body: #0b0b0b;
+  --artist: #7a7a7a;
+  --np-font: 16px/20px "Courier New", Menlo, monospace;
+  --screen: radial-gradient(circle, #1f1f1f 1px, transparent 1.5px) 0 0 / 6px 6px, #000;
+  --screen-r: 12px;
+  --art-r: 12px;
+  --orb: #1a1a1a;
+  --orb-off: #1a1a1a;
+  --orb-text: #e8e8e8;
+  --play-text: #fff;
+  --fill-a: #fff;
+  --fill-b: #fff;
+  --groove: #2a2a2a;
+  --viz-top: #ffffff;
+  --viz-mid: #ffffff;
+  --viz-bot: #ffffff;
+  --viz-peak: #d71921;
+  --viz-scope: #ffffff;
+  --taskbar: #000;
+  --balloon-bg: #111;
+  --balloon-text: #e8e8e8;
+  --balloon-border: #d71921;
+}
+
+/* 2025 — expressive: pastel shapes, pill buttons, chunky play key */
+[data-skin=expressive] {
+  --accent: #6750a4;
+  --ui-font: 13px/1.4 "Google Sans", Roboto, "Segoe UI", system-ui, sans-serif;
+  --desk-bg: radial-gradient(circle at 15% 22%, #ffd8e4 0 16%, transparent 16.5%), radial-gradient(circle at 86% 74%, #d0bcff 0 22%, transparent 22.5%), radial-gradient(ellipse 16% 12% at 62% 26%, #c2f0e8 0 70%, transparent 71%), #fef7ff;
+  --face: #fef7ff;
+  --text: #1d1b20;
+  --muted: #625b71;
+  --rule: #e7e0ec;
+  --frame: #e7e0ec;
+  --frame-dim: #ece6f0;
+  --win-r: 28px;
+  --win-sh: 0 12px 32px rgba(103, 80, 164, .2);
+  --title: #f3edf7;
+  --title-dim: #f7f2fa;
+  --title-text: #1d1b20;
+  --title-font: 600 14px/1 "Google Sans", Roboto, system-ui, sans-serif;
+  --cap-hover: rgba(103, 80, 164, .1);
+  --btn: #6750a4;
+  --btn-down: #4f378b;
+  --btn-border: #6750a4;
+  --btn-text: #fff;
+  --btn-r: 999px;
+  --btn-hover: none;
+  --field-border: #cac4d0;
+  --field-r: 16px;
+  --menu-bg: #f3edf7;
+  --menu-border: transparent;
+  --menu-r: 16px;
+  --mi-r: 12px;
+  --body: #eaddff;
+  --body-m: 8px;
+  --body-r: 24px;
+  --body-text: #21005d;
+  --np-text: #21005d;
+  --np-font: 700 18px/22px "Google Sans", Roboto, system-ui, sans-serif;
+  --artist: #6750a4;
+  --screen: #21005d;
+  --screen-r: 24px;
+  --art-r: 28px;
+  --orb: #d0bcff;
+  --orb-off: #e8def8;
+  --orb-r: 14px;
+  --orb-text: #21005d;
+  --play-text: #fff;
+  --play-size: 52px;
+  --groove: #cac4d0;
+  --viz-top: #ffd8e4;
+  --viz-mid: #d0bcff;
+  --viz-bot: #7d5fff;
+  --taskbar: #f3edf7;
+  --taskbar-text: #1d1b20;
+  --task-hover: rgba(103, 80, 164, .08);
+  --task-active: #e8def8;
+}
+[data-skin=expressive] .transport .t-play { border-radius: 18px; }
+[data-skin=expressive] .seek { --trk-h: 8px; --trk-r: 4px; }
+
+/* 2026 — holo: iridescent glass and neon edges */
+[data-skin=holo] {
+  --accent: #7df9ff;
+  --desk-bg:
+    radial-gradient(ellipse 50% 40% at 30% 30%, rgba(255, 120, 220, .55), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 70% 60%, rgba(90, 200, 255, .55), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 90%, rgba(150, 255, 190, .45), transparent 70%),
+    linear-gradient(135deg, #0b0620, #1b1040 50%, #061a2e);
+  --face: rgba(255, 255, 255, .08);
+  --win-blur: blur(24px) saturate(1.8);
+  --frame: rgba(255, 255, 255, .35);
+  --frame-dim: rgba(255, 255, 255, .18);
+  --win-r: 22px;
+  --win-sh: inset 0 0 0 1px rgba(255, 255, 255, .08), 0 20px 50px rgba(0, 0, 0, .45);
+  --text: #f4f7ff;
+  --muted: rgba(244, 247, 255, .6);
+  --rule: rgba(255, 255, 255, .14);
+  --title: linear-gradient(90deg, rgba(255, 140, 230, .18), rgba(125, 249, 255, .18));
+  --title-dim: transparent;
+  --title-text: #fff;
+  --title-dim-text: rgba(255, 255, 255, .55);
+  --cap-hover: rgba(255, 255, 255, .12);
+  --hover: rgba(255, 255, 255, .08);
+  --sel: #b48cff;
+  --cur-text: #7df9ff;
+  --field: rgba(0, 0, 0, .25);
+  --field-alt: rgba(0, 0, 0, .25);
+  --field-border: rgba(255, 255, 255, .18);
+  --field-r: 12px;
+  --head: rgba(0, 0, 0, .2);
+  --head-border: rgba(255, 255, 255, .1);
+  --btn: rgba(255, 255, 255, .12);
+  --btn-down: rgba(255, 255, 255, .22);
+  --btn-border: rgba(255, 255, 255, .3);
+  --btn-text: #fff;
+  --btn-r: 999px;
+  --menu-bg: rgba(20, 14, 44, .75);
+  --menu-border: rgba(255, 255, 255, .2);
+  --menu-r: 14px;
+  --body: rgba(0, 0, 0, .25);
+  --artist: #7df9ff;
+  --screen: linear-gradient(135deg, rgba(255, 140, 230, .15), rgba(125, 249, 255, .15)), rgba(0, 0, 0, .35);
+  --screen-r: 16px;
+  --art-r: 16px;
+  --orb: rgba(255, 255, 255, .14);
+  --orb-off: rgba(255, 255, 255, .06);
+  --orb-sh: inset 0 0 0 1px rgba(255, 255, 255, .3);
+  --orb-big: conic-gradient(from 180deg, #ff8ce6, #7df9ff, #a6ffcb, #ff8ce6);
+  --play-text: #0b0620;
+  --glow: rgba(125, 249, 255, .6);
+  --fill-a: #ff8ce6;
+  --fill-b: #7df9ff;
+  --groove: rgba(255, 255, 255, .15);
+  --viz-mid: #7df9ff;
+  --viz-bot: #ff8ce6;
+  --viz-scope: #7df9ff;
+  --taskbar: rgba(15, 10, 35, .55);
+  --taskbar-blur: blur(20px) saturate(1.6);
+  --task-mark: #7df9ff;
+  --sm-head: linear-gradient(90deg, #ff8ce6, #7df9ff);
+  --sm-head-text: #0b0620;
+  --tip-bg: rgba(20, 14, 44, .92);
+  --tip-text: #fff;
+  --tip-border: rgba(125, 249, 255, .5);
+  --balloon-bg: rgba(20, 14, 44, .92);
+  --balloon-text: #fff;
+  --balloon-border: rgba(125, 249, 255, .6);
+}
+:is([data-skin=holo], [data-skin=acrylic], [data-skin=mica], [data-skin=bigsur], [data-skin=glass]) .menu { backdrop-filter: blur(24px) saturate(1.6); }
+
+/* ===================== Mac-look skins ===================== */
+
+/* System 7 — one bit per pixel: black, white, dithered gray desktop */
+[data-skin=system7] {
+  --ui-font: 12px/1.3 Geneva, "Lucida Grande", Verdana, sans-serif;
+  --desk-bg: repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0 / 2px 2px;
+  --face: #fff;
+  --text: #000;
+  --muted: #555;
+  --rule: #000;
+  --frame: #000;
+  --frame-dim: #000;
+  --win-r: 0;
+  --win-sh: 1px 1px 0 #000;
+  --title: repeating-linear-gradient(180deg, #000 0 1px, #fff 1px 2px) 0 4px / 100% 11px no-repeat, #fff;
+  --title-dim: #fff;
+  --title-text: #000;
+  --title-dim-text: #777;
+  --title-font: bold 12px/1 Chicago, Charcoal, Geneva, sans-serif;
+  --title-h: 19px;
+  --title-rule: #000;
+  --light-r: 0;
+  --light-size: 11px;
+  --light-close: #fff;
+  --light-min: #fff;
+  --light-zoom: #fff;
+  --light-off: #fff;
+  --light-sh: 0 0 0 1px #000;
+  --sel: #000;
+  --sel-text: #fff;
+  --cur-text: #000;
+  --field: #fff;
+  --field-alt: #fff;
+  --field-border: #000;
+  --head: #fff;
+  --head-border: #000;
+  --btn: #fff;
+  --btn-down: #000;
+  --btn-border: #000;
+  --btn-r: 7px;
+  --status: #fff;
+  --menu-bg: #fff;
+  --menu-border: #000;
+  --menu-r: 0;
+  --menu-sh: 2px 2px 0 #000;
+  --link: #000;
+  --body: #fff;
+  --body-text: #000;
+  --np-text: #000;
+  --np-shadow: none;
+  --np-font: bold 13px/18px Chicago, Charcoal, Geneva, sans-serif;
+  --artist: #000;
+  --screen: #fff;
+  --screen-r: 0;
+  --screen-sh: inset 0 0 0 1px #000;
+  --art-bg: #fff;
+  --art-r: 0;
+  --art-sh: 0 0 0 1px #000;
+  --orb: #fff;
+  --orb-big: #fff;
+  --orb-off: #fff;
+  --orb-ring: #000;
+  --orb-text: #000;
+  --orb-sh: 0 0 0 1px #000;
+  --orb-on-sh: 0 0 0 1px #000, inset 0 0 0 2px #000;
+  --glyph-sh: none;
+  --glow: transparent;
+  --fill-a: #000;
+  --fill-b: #000;
+  --groove: #fff;
+  --lcd-on: #000;
+  --viz-top: #000;
+  --viz-mid: #000;
+  --viz-bot: #000;
+  --viz-peak: #000;
+  --viz-scope: #000;
+  --menubar-bg: #fff;
+  --menubar-text: #000;
+  --menubar-rule: #000;
+  --menubar-font: bold 12px/1 Chicago, Charcoal, Geneva, sans-serif;
+  --dock-display: none;
+  --balloon-bg: #fff;
+  --balloon-border: #000;
+  --tip-bg: #fff;
+  --dicon-text: #000;
+  --dicon-shadow: none;
+}
+[data-skin=system7] :is(.seek, .vol) { --trk-sh: inset 0 0 0 1px #000; --th-bg: #fff; --th-sh: 0 0 0 1px #000; }
+[data-skin=system7] .dicon span { background: #fff; }
+[data-skin=system7] .dicon.sel span { background: #000; color: #fff; }
+
+/* Platinum — Mac OS 8/9: light gray bevels, pinstriped title bars */
+[data-skin=platinum] {
+  --ui-font: 12px/1.3 Charcoal, "Lucida Grande", Geneva, sans-serif;
+  --desk-bg: repeating-linear-gradient(45deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 4px), linear-gradient(180deg, #5c6bb3, #3d4a8f);
+  --face: #dddddd;
+  --text: #000;
+  --muted: #666;
+  --rule: #999;
+  --frame: #555;
+  --frame-dim: #888;
+  --win-r: 0;
+  --win-sh: 1px 1px 0 #555, 2px 2px 6px rgba(0, 0, 0, .25);
+  --title: repeating-linear-gradient(180deg, #fff 0 1px, #b4b4b4 1px 2px) 0 4px / 100% 11px no-repeat, #dddddd;
+  --title-dim: #dddddd;
+  --title-text: #000;
+  --title-dim-text: #888;
+  --title-font: bold 12px/1 Charcoal, Geneva, sans-serif;
+  --title-h: 20px;
+  --title-rule: #888;
+  --light-r: 0;
+  --light-size: 12px;
+  --light-close: linear-gradient(135deg, #fff, #b8b8b8);
+  --light-min: linear-gradient(135deg, #fff, #b8b8b8);
+  --light-zoom: linear-gradient(135deg, #fff, #b8b8b8);
+  --light-off: #dddddd;
+  --light-sh: inset 0 0 0 1px #555, inset 1px 1px #fff;
+  --sel: #6666cc;
+  --cur-text: #3333aa;
+  --field: #fff;
+  --field-alt: #f0f0f0;
+  --field-border: #777;
+  --head: linear-gradient(#f2f2f2, #cfcfcf);
+  --head-border: #999;
+  --btn: linear-gradient(180deg, #f6f6f6, #d0d0d0);
+  --btn-down: linear-gradient(180deg, #888, #aaa);
+  --btn-border: #555;
+  --btn-r: 4px;
+  --status: #dddddd;
+  --menu-bg: #dddddd;
+  --menu-border: #555;
+  --menu-r: 0;
+  --menu-sh: 2px 2px 3px rgba(0, 0, 0, .4);
+  --link: #3333aa;
+  --body: #cccccc;
+  --body-m: 6px;
+  --body-r: 0;
+  --body-sh: inset 1px 1px #fff, inset -1px -1px #888;
+  --body-text: #000;
+  --np-text: #000;
+  --np-shadow: 0 1px #eee;
+  --np-font: bold 13px/18px Charcoal, Geneva, sans-serif;
+  --artist: #333;
+  --screen: #142214;
+  --screen-r: 0;
+  --screen-sh: inset 1px 1px #555, inset -1px -1px #fff;
+  --art-r: 0;
+  --art-sh: inset 0 0 0 1px #555;
+  --orb: linear-gradient(180deg, #f6f6f6, #c8c8c8);
+  --orb-big: linear-gradient(180deg, #f6f6f6, #c8c8c8);
+  --orb-off: linear-gradient(180deg, #e6e6e6, #bdbdbd);
+  --orb-r: 4px;
+  --orb-ring: #555;
+  --orb-text: #000;
+  --orb-sh: inset 0 0 0 1px #555, inset 1px 1px #fff;
+  --orb-on-sh: inset 0 0 0 1px #555, inset 1px 1px #888;
+  --glyph-sh: none;
+  --glow: transparent;
+  --fill-a: #6666cc;
+  --fill-b: #9999ee;
+  --groove: #fff;
+  --lcd-on: #9cff6a;
+  --viz-top: #e0ffd0;
+  --viz-mid: #9cff6a;
+  --viz-bot: #3a9a2a;
+  --viz-peak: #e0ffd0;
+  --viz-scope: #9cff6a;
+  --menubar-bg: #dddddd;
+  --menubar-text: #000;
+  --menubar-rule: #888;
+  --menubar-font: 12px/1 Charcoal, Geneva, sans-serif;
+  --dock-display: none;
+}
+
+/* Aqua — the look.css defaults, plus the original blue swoosh desktop */
+[data-skin=aqua] {
+  --desk-bg: radial-gradient(ellipse 70% 30% at 30% 60%, rgba(255, 255, 255, .35), transparent 70%), radial-gradient(ellipse 90% 70% at 50% 40%, #6fb3ef, #2d6fc2 55%, #123d82);
+}
+
+/* Leopard — unified gray windows, translucent menu bar, glass shelf Dock */
+[data-skin=leopard] {
+  --desk-bg: radial-gradient(ellipse 60% 40% at 40% 55%, rgba(255, 120, 220, .6), transparent 70%), radial-gradient(ellipse 50% 40% at 65% 45%, rgba(120, 140, 255, .6), transparent 70%), linear-gradient(180deg, #0b0a24, #2a1a5a 55%, #0b0a24);
+  --face: #e8e8e8;
+  --frame: #7a7a7a;
+  --win-r: 6px 6px 0 0;
+  --title: linear-gradient(180deg, #e2e2e2, #b4b4b4);
+  --title-dim: linear-gradient(180deg, #f2f2f2, #dcdcdc);
+  --title-rule: #555;
+  --body: linear-gradient(180deg, #d8d8d8, #bcbcbc);
+  --screen: linear-gradient(180deg, #f7fbff, #d6e4f2);
+  --screen-sh: inset 0 1px 3px rgba(0, 0, 0, .35);
+  --lcd-on: #1a2a3a;
+  --viz-top: #1a3a6a;
+  --viz-mid: #4a6a9a;
+  --viz-bot: #8aa6cc;
+  --viz-peak: #0a1a3a;
+  --viz-scope: #1a3a6a;
+  --orb: radial-gradient(circle at 50% 25%, #fff 0, #f2f2f2 20%, #bdbdbd 60%, #8a8a8a 100%);
+  --orb-big: radial-gradient(circle at 50% 25%, #fff 0, #f2f2f2 20%, #bdbdbd 60%, #8a8a8a 100%);
+  --orb-text: #333;
+  --orb-ring: #666;
+  --fill-a: #6a8fbf;
+  --fill-b: #9ab8e0;
+  --groove: #aaa;
+  --menubar-bg: rgba(255, 255, 255, .72);
+  --menubar-blur: blur(10px);
+  --dock: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(200, 210, 230, .45));
+  --dock-tile: linear-gradient(180deg, #fefefe, #cfd6e2);
+}
+
+/* Big Sur — translucent everything, flat traffic lights, music-app red */
+[data-skin=bigsur] {
+  --ui-font: 13px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --desk-bg: radial-gradient(ellipse 120% 50% at 30% 100%, #2a6b9c 0 45%, transparent 46%), radial-gradient(ellipse 100% 45% at 85% 105%, #1d4d7a 0 50%, transparent 51%), linear-gradient(180deg, #f4a77a 0%, #e57b8e 30%, #8a6fc4 60%, #3a6fb0 100%);
+  --face: rgba(246, 246, 246, .9);
+  --win-blur: blur(30px) saturate(1.6);
+  --text: #1d1d1f;
+  --muted: #86868b;
+  --rule: rgba(0, 0, 0, .1);
+  --frame: rgba(0, 0, 0, .15);
+  --frame-dim: rgba(0, 0, 0, .1);
+  --win-r: 11px;
+  --win-sh: 0 20px 50px rgba(0, 0, 0, .3);
+  --title: transparent;
+  --title-dim: transparent;
+  --title-rule: transparent;
+  --title-text: #1d1d1f;
+  --title-dim-text: #a0a0a5;
+  --title-font: 600 13px/1 -apple-system, system-ui, sans-serif;
+  --title-h: 28px;
+  --light-size: 12px;
+  --light-close: #ff5f57;
+  --light-min: #febc2e;
+  --light-zoom: #28c840;
+  --light-off: #d0d0d0;
+  --light-sh: inset 0 0 0 .5px rgba(0, 0, 0, .2);
+  --sel: #0a84ff;
+  --cur-text: #fa2d48;
+  --field: rgba(255, 255, 255, .8);
+  --field-alt: rgba(0, 0, 0, .025);
+  --field-border: rgba(0, 0, 0, .12);
+  --field-r: 6px;
+  --head: transparent;
+  --head-border: rgba(0, 0, 0, .08);
+  --row-h: 24px;
+  --btn: #fff;
+  --btn-down: #e5e5e5;
+  --btn-border: rgba(0, 0, 0, .15);
+  --btn-r: 6px;
+  --status: transparent;
+  --menu-bg: rgba(246, 246, 246, .85);
+  --menu-border: rgba(0, 0, 0, .12);
+  --menu-r: 8px;
+  --menu-pad: 5px;
+  --mi-h: 22px;
+  --mi-r: 4px;
+  --link: #0a84ff;
+  --body: transparent;
+  --body-text: #1d1d1f;
+  --np-text: #1d1d1f;
+  --np-shadow: none;
+  --np-font: 600 15px/20px -apple-system, system-ui, sans-serif;
+  --artist: #fa2d48;
+  --artist-font: 12px/16px -apple-system, system-ui, sans-serif;
+  --small-font: 11px -apple-system, system-ui, sans-serif;
+  --screen: linear-gradient(135deg, #2b2b30, #1c1c1e);
+  --screen-r: 10px;
+  --screen-sh: none;
+  --art-r: 8px;
+  --art-sh: 0 6px 16px rgba(0, 0, 0, .25);
+  --orb: transparent;
+  --orb-off: transparent;
+  --orb-big: transparent;
+  --orb-text: #1d1d1f;
+  --orb-sh: none;
+  --orb-on-sh: inset 0 0 0 1.5px #fa2d48;
+  --glyph-sh: none;
+  --glow: transparent;
+  --play-size: 40px;
+  --fill-a: #8e8e93;
+  --fill-b: #8e8e93;
+  --groove: rgba(0, 0, 0, .12);
+  --lcd-on: #fff;
+  --viz-top: #ffd1d8;
+  --viz-mid: #fa2d48;
+  --viz-bot: #c2185b;
+  --viz-peak: #ffffff;
+  --viz-scope: #fa2d48;
+  --menubar-bg: rgba(255, 255, 255, .4);
+  --menubar-blur: blur(20px) saturate(1.8);
+  --menubar-rule: transparent;
+  --menubar-font: 13px/1 -apple-system, system-ui, sans-serif;
+  --dock: rgba(255, 255, 255, .3);
+  --dock-edge: rgba(255, 255, 255, .4);
+  --dock-tile: linear-gradient(180deg, #fff, #e8e8ed);
+  --dock-glyph: #fa2d48;
+  --balloon-bg: rgba(246, 246, 246, .96);
+  --balloon-border: rgba(0, 0, 0, .15);
+  --tip-bg: #f6f6f6;
+  --tip-border: rgba(0, 0, 0, .15);
+}
+[data-skin=bigsur] .transport .t-play .ico { width: 24px; height: 24px; }
+
+/* Liquid Glass — 2025: everything is a lens */
+[data-skin=glass] {
+  --ui-font: 13px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --desk-bg: radial-gradient(ellipse 50% 50% at 25% 30%, #ff6b9d, transparent 70%), radial-gradient(ellipse 50% 50% at 75% 35%, #5b8cff, transparent 70%), radial-gradient(ellipse 60% 50% at 50% 85%, #34d3a6, transparent 70%), linear-gradient(135deg, #1a1440, #2b1a5e);
+  --face: rgba(255, 255, 255, .14);
+  --win-blur: blur(22px) saturate(1.8) brightness(1.05);
+  --text: #fff;
+  --muted: rgba(255, 255, 255, .65);
+  --rule: rgba(255, 255, 255, .18);
+  --frame: rgba(255, 255, 255, .45);
+  --frame-dim: rgba(255, 255, 255, .25);
+  --win-r: 22px;
+  --win-sh: inset 0 1px rgba(255, 255, 255, .6), inset 0 -1px rgba(255, 255, 255, .15), 0 20px 50px rgba(0, 0, 0, .35);
+  --title: transparent;
+  --title-dim: transparent;
+  --title-rule: transparent;
+  --title-text: #fff;
+  --title-dim-text: rgba(255, 255, 255, .6);
+  --title-font: 600 13px/1 -apple-system, system-ui, sans-serif;
+  --title-h: 30px;
+  --light-size: 12px;
+  --light-close: #ff5f57;
+  --light-min: #febc2e;
+  --light-zoom: #28c840;
+  --light-off: rgba(255, 255, 255, .35);
+  --light-sh: inset 0 0 0 .5px rgba(0, 0, 0, .2);
+  --sel: #5b8cff;
+  --cur-text: #ffffff;
+  --field: rgba(0, 0, 0, .18);
+  --field-alt: rgba(0, 0, 0, .18);
+  --field-border: rgba(255, 255, 255, .25);
+  --field-r: 12px;
+  --head: transparent;
+  --head-border: rgba(255, 255, 255, .15);
+  --row-h: 24px;
+  --btn: rgba(255, 255, 255, .18);
+  --btn-down: rgba(255, 255, 255, .3);
+  --btn-border: rgba(255, 255, 255, .45);
+  --btn-text: #fff;
+  --btn-r: 999px;
+  --btn-hover: none;
+  --status: transparent;
+  --menu-bg: rgba(40, 30, 80, .45);
+  --menu-border: rgba(255, 255, 255, .35);
+  --menu-r: 14px;
+  --menu-pad: 6px;
+  --mi-r: 8px;
+  --mi-h: 24px;
+  --link: #b8d0ff;
+  --body: transparent;
+  --body-text: #fff;
+  --np-text: #fff;
+  --np-shadow: 0 1px 6px rgba(0, 0, 0, .3);
+  --np-font: 600 16px/20px -apple-system, system-ui, sans-serif;
+  --artist: rgba(255, 255, 255, .75);
+  --artist-font: 12px/16px -apple-system, system-ui, sans-serif;
+  --small-font: 11px -apple-system, system-ui, sans-serif;
+  --screen: rgba(0, 0, 0, .25);
+  --screen-r: 18px;
+  --screen-sh: inset 0 1px rgba(255, 255, 255, .35);
+  --art-r: 18px;
+  --art-sh: 0 8px 20px rgba(0, 0, 0, .3);
+  --orb: rgba(255, 255, 255, .18);
+  --orb-off: rgba(255, 255, 255, .08);
+  --orb-big: rgba(255, 255, 255, .28);
+  --orb-text: #fff;
+  --orb-ring: rgba(255, 255, 255, .4);
+  --orb-sh: inset 0 1px rgba(255, 255, 255, .7), inset 0 -1px rgba(255, 255, 255, .2), 0 4px 12px rgba(0, 0, 0, .2);
+  --orb-on-sh: inset 0 1px rgba(255, 255, 255, .7), 0 0 10px rgba(255, 255, 255, .5);
+  --glyph-sh: none;
+  --glow: rgba(255, 255, 255, .4);
+  --fill-a: #ffffff;
+  --fill-b: #ffffff;
+  --groove: rgba(255, 255, 255, .25);
+  --lcd-on: #fff;
+  --viz-top: #ffffff;
+  --viz-mid: #b8d0ff;
+  --viz-bot: #5b8cff;
+  --viz-peak: #ffffff;
+  --viz-scope: #ffffff;
+  --menubar-bg: rgba(255, 255, 255, .08);
+  --menubar-text: #fff;
+  --menubar-blur: blur(20px) saturate(1.6);
+  --menubar-rule: transparent;
+  --menubar-font: 13px/1 -apple-system, system-ui, sans-serif;
+  --dock: rgba(255, 255, 255, .14);
+  --dock-edge: rgba(255, 255, 255, .45);
+  --dock-tile: rgba(255, 255, 255, .25);
+  --dock-glyph: #fff;
+  --dock-dot: #fff;
+  --balloon-bg: rgba(40, 30, 80, .88);
+  --balloon-text: #fff;
+  --balloon-border: rgba(255, 255, 255, .4);
+  --tip-bg: rgba(40, 30, 80, .92);
+  --tip-text: #fff;
+  --tip-border: rgba(255, 255, 255, .3);
+}
+[data-skin=glass] #start-menu { backdrop-filter: blur(24px) saturate(1.8); }

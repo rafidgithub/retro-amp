@@ -1,0 +1,4 @@
+# local-only files; Vercel serves the static site + api/ on its own
+server.js
+start.sh
+CLAUDE.md

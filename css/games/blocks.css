@@ -1,0 +1,19 @@
+/* Blocks: a gray handheld around a four-shade green screen. */
+.blk-gb {
+  max-width: calc(100% - 20px);
+  margin: 8px 10px 4px;
+  padding: 12px 14px 10px;
+  border-radius: 8px 8px 36px 8px;
+  background: linear-gradient(160deg, #e2ded6, #c9c5bc);
+  box-shadow: inset 0 1px #fff, inset 0 -3px 4px rgba(0, 0, 0, .18), 0 2px 5px rgba(0, 0, 0, .35);
+}
+.blk-screen {
+  position: relative;
+  padding: 14px 22px 12px;
+  border-radius: 6px 6px 24px 6px;
+  background: #63657a;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .5);
+}
+.blk-led { position: absolute; left: 8px; top: 40%; width: 6px; height: 6px; border-radius: 50%; background: #e3242b; box-shadow: 0 0 4px #ff4b4b; }
+.blk-screen canvas { box-shadow: 0 0 0 2px #2a2c3a; }
+.blk-name { margin: 8px 0 0 4px; color: #2c3a8c; font: italic bold 14px/1 "Trebuchet MS", Arial, sans-serif; letter-spacing: .5px; }

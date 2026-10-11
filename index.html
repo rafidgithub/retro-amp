@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en" data-family="classic" data-look="amp" data-skin="amp" data-state="empty">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; img-src 'self' data: blob: https://i.ytimg.com; style-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="description" content="New music, old pixels: a Windows 95–XP era audio player for YouTube. No accounts, no API keys.">
+<title>RetroAmp</title>
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/silkscreen-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/classic.css">
+<link rel="stylesheet" href="css/amp.css">
+<link rel="stylesheet" href="css/media.css">
+<link rel="stylesheet" href="css/luna.css">
+<link rel="stylesheet" href="css/modern.css">
+<link rel="stylesheet" href="css/mac.css">
+<link rel="stylesheet" href="css/skins-classic.css">
+<link rel="stylesheet" href="css/skins-media.css">
+<link rel="stylesheet" href="css/games.css">
+<link rel="stylesheet" href="css/camera.css">
+<script src="js/boot.js"></script>
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/games.js"></script>
+<script type="module" src="js/camera.js"></script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 16 16"><path d="M3 3h10v10H3z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 16 16"><path d="M2 3h2v10H2zM14 3v10L5 8z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 16 16"><path d="M12 3h2v10h-2zM2 3v10l9-5z"/></symbol>
+  <symbol id="i-rew" viewBox="0 0 16 16"><path d="M8 3v10L1 8zM15 3v10L8 8z"/></symbol>
+  <symbol id="i-ff" viewBox="0 0 16 16"><path d="M1 3v10l7-5zM8 3v10l7-5z"/></symbol>
+  <symbol id="i-eject" viewBox="0 0 16 16"><path d="M8 2l6 7H2zM2 11h12v3H2z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 16 16"><path d="M1 4.5h3l6 7h2.5M1 11.5h3l6-7h2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 1.5l4 3-4 3zM12 8.5l4 3-4 3z"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 16 16"><path d="M2 9V6.5A2.5 2.5 0 0 1 4.5 4H12M14 7v2.5A2.5 2.5 0 0 1 11.5 12H4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11 1l4 3-4 3zM5 9l-4 3 4 3z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 16 16"><path d="M1 3h2v2H1zM5 3h10v2H5zM1 7h2v2H1zM5 7h10v2H5zM1 11h2v2H1zM5 11h10v2H5z"/></symbol>
+  <symbol id="i-video" viewBox="0 0 16 16"><path d="M1 3h10v10H1zM12 6.5l3-2v7l-3-2z"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 16 16"><path d="M1 6h3l4-4v12l-4-4H1z"/><path class="waves" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-note" viewBox="0 0 16 16"><path d="M5 3.2l9-2.2v9.6a2.4 2 0 1 1-1.8-1.9V4.4L6.8 5.7v7a2.4 2 0 1 1-1.8-1.9z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><path d="M6.5 1a5.5 5.5 0 0 1 4.4 8.8l4.1 4.1-1.4 1.4-4.1-4.1A5.5 5.5 0 1 1 6.5 1zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm-1 6v5h2V7zm0-3v2h2V4z"/></symbol>
+  <symbol id="i-power" viewBox="0 0 16 16"><path d="M4.6 3.8a6 6 0 1 0 6.8 0" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.1 1h1.8v7H7.1z"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 16 16"><path d="M8 1C4.1 1 1 3.9 1 7.5S4.1 14.5 7.6 14.5c1 0 1.5-.6 1.5-1.3 0-.8-.7-1.1-.7-1.9 0-.6.5-1.1 1.2-1.1h1.5c2.2 0 3.9-1.6 3.9-3.6C15 3.7 11.9 1 8 1z"/><circle cx="4.4" cy="7.4" r="1.25" fill="#ff5a5a"/><circle cx="6.3" cy="4.3" r="1.25" fill="#ffd23c"/><circle cx="9.7" cy="4" r="1.25" fill="#3cc76a"/><circle cx="12" cy="6.6" r="1.25" fill="#3c8cff"/></symbol>
+  <symbol id="d-add" viewBox="0 0 32 32"><path d="M10 7l14-4v17.5a4.5 3.8 0 1 1-3-3.6V9.4l-8 2.3v12.8a4.5 3.8 0 1 1-3-3.6z" fill="#2f6fe0" stroke="#0c2f75" stroke-width="1.2"/><circle cx="25" cy="25" r="6.5" fill="#2fb84a" stroke="#0e5a1e"/><path d="M25 21v8M21 25h8" stroke="#fff" stroke-width="2.4"/></symbol>
+  <symbol id="d-list" viewBox="0 0 32 32"><path d="M6 2h14l6 6v22H6z" fill="#fff" stroke="#333"/><path d="M20 2v6h6" fill="#d8d8d8" stroke="#333"/><path d="M10 13h12M10 17h12M10 21h12M10 25h8" stroke="#2a5bd7" stroke-width="2"/></symbol>
+  <symbol id="d-video" viewBox="0 0 32 32"><rect x="3" y="5" width="26" height="19" rx="2" fill="#6a6a72" stroke="#222"/><rect x="6" y="8" width="20" height="13" fill="#3a8be0"/><path d="M6 8l20 13" stroke="#8ec6ff" stroke-width="1" opacity=".5"/><path d="M10 29h12M16 24v5" stroke="#333" stroke-width="2.4"/></symbol>
+  <symbol id="d-skins" viewBox="0 0 32 32"><path d="M16 3C8.3 3 2 8.6 2 15.5S8.3 29 15.4 29c1.9 0 2.8-1.1 2.8-2.5 0-1.5-1.3-2-1.3-3.5 0-1.2 1-2.1 2.3-2.1H22c4.4 0 8-3.2 8-7.3C30 8.1 23.7 3 16 3z" fill="#e9c58c" stroke="#7a4f1c" stroke-width="1.4"/><circle cx="8.5" cy="15" r="2.6" fill="#e8322d"/><circle cx="11.5" cy="8.6" r="2.6" fill="#ffcc1f"/><circle cx="18.5" cy="7.6" r="2.6" fill="#29a84a"/><circle cx="24" cy="12.5" r="2.6" fill="#2a6fe0"/><circle cx="10" cy="22" r="2.6" fill="#9b3fd0"/></symbol>
+  <symbol id="i-eq" viewBox="0 0 16 16"><path d="M3 1h2v5H3zM3 10h2v5H3zM2 6h4v3H2zM7 1h2v8H7zM7 13h2v2H7zM6 9h4v3H6zM11 1h2v2h-2zM11 7h2v8h-2zM10 3h4v3h-4z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 16 16"><path d="M1 3h5l2 2h7v9H1z"/></symbol>
+  <symbol id="i-disc" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#d4d4e0" stroke="#404050"/><path d="M8 1.5A6.5 6.5 0 0 1 14.5 8H8z" fill="#7fb6ff"/><path d="M8 14.5A6.5 6.5 0 0 1 1.5 8H8z" fill="#ff9fc0"/><circle cx="8" cy="8" r="2.2" fill="#fff" stroke="#404050"/></symbol>
+</svg>
+
+<main id="desktop">
+  <div id="icons" aria-label="Desktop">
+    <button class="dicon" data-open="player"><svg><use href="#i-disc"/></svg><span>RetroAmp</span></button>
+    <button class="dicon" data-open="search"><svg><use href="#d-add"/></svg><span>Add Music</span></button>
+    <button class="dicon" data-open="skins"><svg><use href="#d-skins"/></svg><span>Skins</span></button>
+    <button class="dicon" data-open="playlist"><svg><use href="#d-list"/></svg><span>Playlist</span></button>
+    <button class="dicon" data-open="video"><svg><use href="#d-video"/></svg><span>Video</span></button>
+  </div>
+
+  <!-- ===================== Player ===================== -->
+  <section class="win" id="w-player" aria-label="RetroAmp player">
+    <header class="titlebar">
+      <button class="tb-icon" data-act="main-menu" aria-label="Main menu"><svg class="ico"><use href="#i-note"/></svg></button>
+      <span class="tb-title">RetroAmp</span>
+      <span class="tb-mini"></span>
+      <span class="tb-btns">
+        <button data-wm="min" aria-label="Minimize"></button>
+        <button data-wm="shade" aria-label="Window shade"></button>
+        <button data-wm="close" aria-label="Close"></button>
+      </span>
+    </header>
+    <nav class="menubar" aria-label="Menu">
+      <button data-menu="file"><u>F</u>ile</button>
+      <button data-menu="view"><u>V</u>iew</button>
+      <button data-menu="play"><u>P</u>lay</button>
+      <button data-menu="help"><u>H</u>elp</button>
+    </nav>
+    <div class="win-body player-body">
+      <div class="art"><img alt="" hidden></div>
+      <div class="lcd">
+        <span class="state-icon" aria-hidden="true"></span>
+        <canvas class="lcd-time" title="Click: elapsed / remaining"></canvas>
+        <canvas class="lcd-viz" title="Click: change visualization"></canvas>
+      </div>
+      <div class="field f-title"><span class="f-label">Title:</span><div class="marquee"><span class="marquee-text"></span></div></div>
+      <div class="field f-artist"><span class="f-label">Artist:</span><div class="artist"><span class="artist-text"></span></div></div>
+      <div class="meta">
+        <span class="meta-box">128</span><span class="meta-lbl">kbps</span>
+        <span class="meta-box">44</span><span class="meta-lbl">khz</span>
+        <span class="ch mono">mono</span><span class="ch stereo">stereo</span>
+      </div>
+      <div class="vol-row">
+        <button class="vol-icon" data-act="mute" aria-label="Mute" title="Mute"><svg class="ico"><use href="#i-speaker"/></svg></button>
+        <span class="f-label">Volume:</span>
+        <input class="vol" type="range" min="0" max="100" value="80" aria-label="Volume">
+      </div>
+      <div class="seek-row"><input class="seek" type="range" min="0" max="1000" value="0" aria-label="Seek" disabled></div>
+      <div class="transport">
+        <button class="t-prev" data-act="prev" title="Previous (Z)" aria-label="Previous"><svg class="ico"><use href="#i-prev"/></svg></button>
+        <button class="t-rew" data-act="rew" title="Back 10 seconds" aria-label="Back 10 seconds"><svg class="ico"><use href="#i-rew"/></svg></button>
+        <button class="t-play" data-act="play" title="Play (X)" aria-label="Play"><svg class="ico i-play"><use href="#i-play"/></svg><svg class="ico i-pause"><use href="#i-pause"/></svg></button>
+        <button class="t-pause" data-act="pause" title="Pause (C)" aria-label="Pause"><svg class="ico"><use href="#i-pause"/></svg></button>
+        <button class="t-stop" data-act="stop" title="Stop (V)" aria-label="Stop"><svg class="ico"><use href="#i-stop"/></svg></button>
+        <button class="t-ff" data-act="ff" title="Forward 10 seconds" aria-label="Forward 10 seconds"><svg class="ico"><use href="#i-ff"/></svg></button>
+        <button class="t-next" data-act="next" title="Next (B)" aria-label="Next"><svg class="ico"><use href="#i-next"/></svg></button>
+        <button class="t-eject" data-act="eject" title="Add from YouTube (L)" aria-label="Add from YouTube"><svg class="ico"><use href="#i-eject"/></svg></button>
+      </div>
+      <div class="toggles">
+        <button class="tgl" data-act="shuffle" aria-pressed="false" title="Shuffle (S)"><svg class="ico"><use href="#i-shuffle"/></svg><span class="lbl-s">Shuf</span><span class="lbl-l">Shuffle</span></button>
+        <button class="tgl" data-act="repeat" aria-pressed="false" title="Repeat (R)"><svg class="ico"><use href="#i-repeat"/></svg><span class="lbl-s">Rep</span><span class="lbl-l">Repeat</span></button>
+        <button class="tgl" data-act="toggle-playlist" aria-pressed="true" title="Playlist editor"><svg class="ico"><use href="#i-list"/></svg><span class="lbl-s">PL</span><span class="lbl-l">Playlist</span></button>
+        <button class="tgl" data-act="toggle-eq" aria-pressed="false" title="Equalizer"><svg class="ico"><use href="#i-eq"/></svg><span class="lbl-s">EQ</span><span class="lbl-l">EQ</span></button>
+        <button class="tgl" data-act="toggle-video" aria-pressed="true" title="Video window"><svg class="ico"><use href="#i-video"/></svg><span class="lbl-s">Vid</span><span class="lbl-l">Video</span></button>
+        <button class="tgl tgl-skin" data-act="skins" title="Change skin (K flips through them)"><svg class="ico"><use href="#i-palette"/></svg><span class="lbl-s">Skin</span><span class="lbl-l">Skins…</span></button>
+      </div>
+    </div>
+    <footer class="statusbar"><span class="sb sb-state">Ready</span><span class="sb sb-track"></span><span class="sb sb-time"></span></footer>
+  </section>
+
+  <!-- ===================== Playlist ===================== -->
+  <section class="win" id="w-playlist" aria-label="Playlist editor">
+    <header class="titlebar">
+      <span class="tb-icon"><svg class="ico"><use href="#i-list"/></svg></span>
+      <span class="tb-title">Playlist Editor</span>
+      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+    </header>
+    <div class="win-body pl-body">
+      <div class="listview" id="playlist" tabindex="0" role="listbox" aria-label="Playlist" aria-multiselectable="true"></div>
+      <div class="pl-foot">
+        <button class="btn" data-act="eject">+ Add</button>
+        <button class="btn" data-act="remove">− Rem</button>
+        <button class="btn" data-act="clear">Clear</button>
+        <button class="btn" data-act="open-files" title="Play audio files from this computer">Files…</button>
+        <span class="pl-total"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Equalizer ===================== -->
+  <section class="win is-min" id="w-eq" aria-label="Equalizer">
+    <header class="titlebar">
+      <span class="tb-icon"><svg class="ico"><use href="#i-eq"/></svg></span>
+      <span class="tb-title">Equalizer</span>
+      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+    </header>
+    <div class="win-body eq-body">
+      <div class="eq-top">
+        <button class="eq-tgl" data-act="eq-on" aria-pressed="true" title="Turn the equalizer on or off">On</button>
+        <button class="eq-tgl" data-act="eq-auto" aria-pressed="false" title="Lower the preamp automatically so boosted bands don't clip">Auto</button>
+        <canvas class="eq-graph" aria-hidden="true"></canvas>
+        <button class="btn eq-presets" data-act="eq-presets">Presets</button>
+      </div>
+      <div class="eq-bands"></div>
+      <p class="eq-note"></p>
+    </div>
+  </section>
+
+  <!-- ===================== Video ===================== -->
+  <section class="win" id="w-video" aria-label="Video">
+    <header class="titlebar">
+      <span class="tb-icon"><svg class="ico"><use href="#i-video"/></svg></span>
+      <span class="tb-title">Video</span>
+      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+    </header>
+    <div class="win-body video-body">
+      <div class="screen">
+        <div id="yt"></div>
+        <canvas class="static"></canvas>
+        <p class="no-signal">No signal</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Add from YouTube ===================== -->
+  <section class="win dialog is-min" id="w-search" aria-label="Add from YouTube">
+    <header class="titlebar">
+      <span class="tb-icon"><svg class="ico"><use href="#i-search"/></svg></span>
+      <span class="tb-title">Add from YouTube</span>
+      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+    </header>
+    <div class="win-body search-body">
+      <form class="search-form" autocomplete="off">
+        <label for="q">Search YouTube, or paste a video / playlist link:</label>
+        <div class="search-row">
+          <input id="q" name="q" type="text" maxlength="300" placeholder="e.g. daft punk get lucky" spellcheck="false">
+          <button class="btn" type="submit">Search</button>
+        </div>
+        <div class="chips"></div>
+      </form>
+      <div class="progress" hidden><div class="progress-fill"></div></div>
+      <div class="listview" id="results" tabindex="0" role="listbox" aria-label="Search results" aria-multiselectable="true"></div>
+      <div class="dlg-foot">
+        <span class="search-status">Double-click a result to play it now.</span>
+        <button class="btn" data-act="res-play">Play</button>
+        <button class="btn" data-act="res-add">Add</button>
+        <button class="btn" data-act="res-all">Add all</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Skins ===================== -->
+  <section class="win dialog is-min" id="w-skins" aria-label="Skins">
+    <header class="titlebar">
+      <span class="tb-icon"><svg class="ico"><use href="#i-palette"/></svg></span>
+      <span class="tb-title">Skins</span>
+      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+    </header>
+    <div class="win-body skins-body">
+      <label class="timeline">
+        <span>Time machine</span>
+        <input id="year" type="range" min="1990" max="2026" step="1" value="1998" aria-label="Year">
+        <output id="year-out">1998</output>
+        <small id="year-skin">Drag through the years — one player per year, 1990 to 2026.</small>
+      </label>
+      <div class="skin-groups"></div>
+      <div class="dlg-foot">
+        <span class="search-status">Click a skin to try it. Press K anytime to flip through them.</span>
+        <button class="btn" data-act="skins-ok">OK</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== About ===================== -->
+  <section class="win dialog is-min" id="w-about" aria-label="About RetroAmp">
+    <header class="titlebar">
+      <span class="tb-icon"><svg class="ico"><use href="#i-info"/></svg></span>
+      <span class="tb-title">About RetroAmp</span>
+      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+    </header>
+    <div class="win-body about-body">
+      <div class="about-head">
+        <svg class="about-logo"><use href="#i-disc"/></svg>
+        <div><b>RetroAmp</b> version 1.0<br>New music. Old pixels.<br>Made by <a class="credit" href="https://rafidkhan.github.io/" target="_blank" rel="noopener noreferrer">Rafid Khan</a></div>
+      </div>
+      <p>Streams YouTube through the official embedded player. No accounts, no API keys, no tracking. Your playlist and recent searches stay in this browser. Searches pass through this site’s server to YouTube; once a video plays, YouTube may store its own cookies. Your own audio files play right here in the browser and are never uploaded.</p>
+      <div class="keys">
+        <kbd>X</kbd><span>Play</span><kbd>C</kbd><span>Pause</span>
+        <kbd>V</kbd><span>Stop</span><kbd>Z / B</kbd><span>Previous / Next</span>
+        <kbd>L</kbd><span>Add from YouTube</span><kbd>S / R</kbd><span>Shuffle / Repeat</span>
+        <kbd>← →</kbd><span>Seek 5 s</span><kbd>↑ ↓</kbd><span>Volume</span>
+        <kbd>K</kbd><span>Next skin</span><kbd>Wheel</kbd><span>Volume (over player)</span>
+        <kbd>Del</kbd><span>Remove selected</span><kbd>Drag</kbd><span>Reorder playlist</span>
+        <kbd>Dbl-click</kbd><span>Title bar: shade</span><kbd>?</kbd><span>This window</span>
+      </div>
+      <div class="dlg-foot"><span></span><button class="btn" data-act="about-ok">OK</button></div>
+    </div>
+  </section>
+</main>
+
+<nav id="start-menu" hidden aria-label="Start menu">
+  <div class="sm-band"><span>Retro<b>Amp</b></span></div>
+  <div class="sm-items">
+    <button data-act="show-player"><svg class="ico"><use href="#i-note"/></svg>RetroAmp Player</button>
+    <button data-act="show-playlist"><svg class="ico"><use href="#i-list"/></svg>Playlist Editor</button>
+    <button data-act="show-video"><svg class="ico"><use href="#i-video"/></svg>Video</button>
+    <button data-act="eject"><svg class="ico"><use href="#i-search"/></svg>Add from YouTube…</button>
+    <button data-act="open-files"><svg class="ico"><use href="#i-folder"/></svg>Open Local Files…</button>
+    <button data-act="show-eq"><svg class="ico"><use href="#i-eq"/></svg>Equalizer</button>
+    <hr>
+    <button data-act="skins"><svg class="ico"><use href="#i-palette"/></svg>Change Skin…</button>
+    <hr>
+    <button data-act="about"><svg class="ico"><use href="#i-info"/></svg>About RetroAmp</button>
+    <button data-act="shutdown"><svg class="ico"><use href="#i-power"/></svg>Shut Down…</button>
+  </div>
+</nav>
+
+<footer id="taskbar">
+  <button id="start-btn" aria-expanded="false" aria-controls="start-menu"><svg class="ico"><use href="#i-disc"/></svg><span>Start</span></button>
+  <nav class="mac-menus" aria-label="Menu"><b>RetroAmp</b><button data-menu="file">File</button><button data-menu="view">View</button><button data-menu="play">Play</button><button data-menu="help">Help</button></nav>
+  <div id="tasks"></div>
+  <div id="tray">
+    <button id="tray-skin" data-act="skins" title="Change skin"><svg class="ico"><use href="#i-palette"/></svg><span id="tray-skin-name">Amp</span></button>
+    <button id="tray-vol" data-act="mute" aria-label="Mute" title="Mute"><svg class="ico"><use href="#i-speaker"/></svg></button>
+    <span id="sleep-left" title="Sleep timer" hidden></span>
+    <span id="clock"></span>
+  </div>
+</footer>
+
+<input type="file" id="files" accept="audio/*,.mp3,.m4a,.aac,.ogg,.oga,.opus,.flac,.wav,.weba" multiple hidden>
+<div id="tip" class="tooltip" hidden role="tooltip"></div>
+<div id="balloon" class="balloon" hidden role="status">
+  <button class="balloon-x" aria-label="Dismiss">×</button>
+  <b><svg class="ico"><use href="#i-palette"/></svg>10 skins to try</b>
+  <p>One player for every year from 1990 to 2026, plus Mac and Linux. Click here, or the palette button on the player, to time-travel.</p>
+</div>
+<div id="night" hidden><div class="moon"></div><p>Sleep timer finished.<br>Sweet dreams.</p><small>Click anywhere to wake up</small></div>
+<div id="shutdown" hidden><p>It’s now safe to turn off<br>your computer.</p><small>Click anywhere to start again</small></div>
+</body>
+</html>
