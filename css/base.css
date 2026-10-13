@@ -378,6 +378,22 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
 #w-video.vid-fill > :not(.win-body) { display: none; }
 #w-video.vid-fill .video-body { padding: 0; }
 
+/* "Are you sure?" (js/core/confirm.js): a .win dialog, styled by the look, on a dimmed desktop */
+.cf-back { position: fixed; inset: 0; z-index: 5500; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, .35); }
+.cf-back .win { position: relative; left: auto; top: auto; width: min(440px, 100%); }
+.cf-body { display: flex; flex-direction: column; gap: 12px; padding: 14px 14px 10px; }
+.cf-msg { display: flex; align-items: flex-start; gap: 14px; }
+.cf-glyph svg { width: 32px; height: 32px; }
+.cf-glyph.danger { color: #c62828; }
+.cf-text p { margin: 0 0 6px; -webkit-user-select: text; user-select: text; }
+.cf-detail { opacity: .8; }
+.cf-foot { gap: 6px; }
+.cf-foot > span { flex: 1; }
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  .cf-back .win.dialog { position: relative !important; inset: auto !important; max-height: none; }
+  .cf-foot .btn { flex: 1; min-height: 40px; }
+}
+
 /* phones held sideways: a readable column, and a video that fits the screen height */
 @media (pointer: coarse) and (max-height: 520px) and (min-width: 721px) {
   #w-player, #w-playlist, #w-eq { width: min(100%, 620px) !important; }

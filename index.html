@@ -7,6 +7,10 @@
 <meta name="description" content="New music, old pixels: a Windows 95–XP era audio player for YouTube. No accounts, no API keys.">
 <title>RetroAmp</title>
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#000080">
+<meta name="apple-mobile-web-app-title" content="RetroAmp">
 <link rel="preload" href="assets/fonts/silkscreen-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/looks/classic.css">
@@ -19,6 +23,9 @@
 <link rel="stylesheet" href="css/skins/media.css">
 <link rel="stylesheet" href="css/games/index.css">
 <link rel="stylesheet" href="css/camera/index.css">
+<link rel="stylesheet" href="css/notes/index.css">
+<link rel="stylesheet" href="css/trash/index.css">
+<link rel="stylesheet" href="css/snap/index.css">
 <link rel="stylesheet" href="css/browser/index.css">
 <link rel="stylesheet" href="css/consent.css">
 <script src="js/boot.js"></script>
@@ -259,7 +266,7 @@
         <kbd>O</kbd><span>Open your files</span><kbd>G</kbd><span>Equalizer</span>
         <kbd>K</kbd><span>Next skin</span><kbd>Wheel</kbd><span>Volume (over player)</span>
         <kbd>Del</kbd><span>Remove selected</span><kbd>Drag</kbd><span>Reorder playlist</span>
-        <kbd>Dbl-click</kbd><span>Title bar: shade</span><kbd>?</kbd><span>This window</span>
+        <kbd>Dbl-click</kbd><span>Title bar: shade</span><kbd>?</kbd><span>This window</span><kbd>P</kbd><span>Screenshot</span>
       </div>
       <div class="dlg-foot"><button class="btn" data-act="privacy">Privacy…</button><button class="btn" data-act="clear-data">Clear All Data…</button><span></span><button class="btn" data-act="about-ok">OK</button></div>
     </div>
@@ -280,6 +287,7 @@
     <button data-act="skins"><svg class="ico"><use href="#i-palette"/></svg>Change Skin…</button>
     <hr>
     <button data-act="about"><svg class="ico"><use href="#i-info"/></svg>About RetroAmp</button>
+    <button id="sm-install" hidden><svg class="ico"><use href="#i-disc"/></svg>Install RetroAmp…</button>
     <button data-act="clear-data"><svg class="ico"><use href="#i-erase"/></svg>Clear All Data…</button>
     <button data-act="shutdown"><svg class="ico"><use href="#i-power"/></svg>Shut Down…</button>
   </div>

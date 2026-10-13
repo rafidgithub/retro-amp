@@ -19,3 +19,11 @@ try {
   touch.addEventListener?.('change', sync);
   if (/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) root.classList.add('ios');
 }
+
+// Chrome offers installing RetroAmp as an app as soon as the page loads, before
+// consent; hold the offer for the Start menu's Install RetroAmp (core/pwa.js).
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  window.retroampInstall = e;
+  window.dispatchEvent(new Event('retroamp-install'));
+});

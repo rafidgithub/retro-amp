@@ -1998,29 +1998,42 @@
   --desk-bg: radial-gradient(ellipse 70% 30% at 30% 60%, rgba(255, 255, 255, .35), transparent 70%), radial-gradient(ellipse 90% 70% at 50% 40%, #6fb3ef, #2d6fc2 55%, #123d82);
 }
 
-/* 2001 — the first pocket music player: white plastic, a gray reflective LCD
+/* 2001 — the first pocket music player: plastic body, a gray reflective LCD
    and a wheel ringed by menu / back / forward / play-pause. The player window
-   becomes the device; lists read like its menus. */
-[data-skin=pod] {
+   becomes the device; lists read like its menus. It comes in three colors:
+   pod (light grey), pod-pink and pod-blue. [data-skin|=pod] matches all three;
+   each color only sets the --pod-* plastic below. */
+[data-skin|=pod] {
+  /* the plastic: highlight, body, shade, edge and seam lines, wheel face, wheel labels */
+  --pod-hi: #f7f7f8;
+  --pod: #e6e7e9;
+  --pod-lo: #d6d7da;
+  --pod-edge: #b3b5b9;
+  --pod-seam: #c9cbce;
+  --pod-wheel: #f3f3f4;
+  --pod-label: #919398;
+  --pod-label-hover: #66686d;
+  --pod-desk: #c9cbcf;
+
   --ui-font: 12px/1.35 Chicago, Charcoal, Geneva, "Lucida Grande", sans-serif;
-  --desk-bg: radial-gradient(ellipse 70% 60% at 50% 35%, #fff, #e4e4e4 70%, #d2d2d2);
-  --face: #fbfbfb;
+  --desk-bg: radial-gradient(ellipse 70% 60% at 50% 35%, var(--pod-hi), var(--pod) 70%, var(--pod-desk));
+  --face: var(--pod);
   --text: #2b2b2b;
   --muted: #8a8a8a;
-  --rule: #d6d6d6;
-  --frame: #b9b9b9;
-  --frame-dim: #d2d2d2;
+  --rule: var(--pod-seam);
+  --frame: var(--pod-edge);
+  --frame-dim: var(--pod-seam);
   --win-r: 14px;
-  --win-sh: 0 1px 0 #fff inset, 0 0 0 1px #e2e2e2, 0 14px 30px rgba(0, 0, 0, .18);
-  --title: linear-gradient(180deg, #fff, #f1f1f1);
-  --title-dim: #fafafa;
-  --title-rule: #e3e3e3;
+  --win-sh: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 0 0 1px var(--pod-seam), 0 14px 30px rgba(0, 0, 0, .18);
+  --title: linear-gradient(180deg, var(--pod-hi), var(--pod));
+  --title-dim: var(--pod);
+  --title-rule: var(--pod-seam);
   --title-text: #6b6b6b;
   --title-dim-text: #b3b3b3;
-  --light-close: radial-gradient(circle at 50% 30%, #fff, #e3e3e3 60%, #c9c9c9);
-  --light-min: radial-gradient(circle at 50% 30%, #fff, #e3e3e3 60%, #c9c9c9);
-  --light-zoom: radial-gradient(circle at 50% 30%, #fff, #e3e3e3 60%, #c9c9c9);
-  --light-off: radial-gradient(circle at 50% 30%, #fff, #efefef 60%, #dcdcdc);
+  --light-close: radial-gradient(circle at 50% 30%, #fff, var(--pod-lo) 60%, var(--pod-edge));
+  --light-min: var(--light-close);
+  --light-zoom: var(--light-close);
+  --light-off: radial-gradient(circle at 50% 30%, #fff, var(--pod) 60%, var(--pod-lo));
   --light-sh: inset 0 0 0 1px rgba(0, 0, 0, .18);
   --sel: #3a3a3a;
   --sel-text: #e2e3dd;
@@ -2033,19 +2046,19 @@
   --head-border: #3a3a3a;
   --head-font: bold 12px/1 Chicago, Charcoal, Geneva, sans-serif;
   --row-h: 22px;
-  --btn: linear-gradient(180deg, #fff, #ededed);
-  --btn-down: #e0e0e0;
-  --btn-border: #c4c4c4;
+  --btn: linear-gradient(180deg, var(--pod-hi), var(--pod-lo));
+  --btn-down: var(--pod-lo);
+  --btn-border: var(--pod-edge);
   --btn-text: #6b6b6b;
   --btn-r: 12px;
-  --status: #fafafa;
+  --status: var(--pod);
   --menu-bg: rgba(255, 255, 255, .97);
-  --menu-border: #cfcfcf;
+  --menu-border: var(--pod-seam);
   --menu-r: 8px;
   --link: #3a3a3a;
 
-  /* the device: white body, LCD, wheel */
-  --body: linear-gradient(180deg, #fff, #f2f2f2);
+  /* the device: plastic body, LCD, wheel */
+  --body: linear-gradient(180deg, var(--pod-hi), var(--pod));
   --body-text: #2b2b2b;
   --body-pad: 14px 18px 12px;
   --screen: linear-gradient(180deg, #dcddd7, #cbccc6);
@@ -2061,7 +2074,7 @@
   --orb-big: transparent;
   --orb-off: transparent;
   --orb-ring: transparent;
-  --orb-text: #b2b2b2;
+  --orb-text: var(--pod-label);
   --orb-sh: none;
   --orb-on-sh: none;
   --glyph-sh: none;
@@ -2077,41 +2090,41 @@
   --viz-scope: #2b2b2b;
   --menubar-bg: rgba(255, 255, 255, .85);
   --menubar-blur: blur(10px);
-  --menubar-rule: #d6d6d6;
+  --menubar-rule: var(--pod-seam);
   --dock: rgba(255, 255, 255, .55);
   --dock-edge: rgba(255, 255, 255, .9);
-  --dock-tile: radial-gradient(circle at 50% 35%, #fff, #f1f1f1 60%, #dcdcdc);
+  --dock-tile: radial-gradient(circle at 50% 35%, #fff, var(--pod) 60%, var(--pod-lo));
   --dock-glyph: #8a8a8a;
   --dock-dot: #8a8a8a;
   --balloon-bg: #fff;
 }
-[data-skin=pod] #w-player { width: 300px; }
-[data-skin=pod] #w-player .statusbar { display: none; }
-[data-skin=pod] .player-body {
+[data-skin|=pod] #w-player { width: 300px; }
+[data-skin|=pod] #w-player .statusbar { display: none; }
+[data-skin|=pod] .player-body {
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: 30px auto auto 14px 24px 12px auto auto;
   grid-template-areas: ". ." "title title" "artist artist" "seek seek" ". ." ". ." "transport transport" "toggles vol";
   gap: 2px 8px;
 }
-[data-skin=pod] .art { display: none; }
+[data-skin|=pod] .art { display: none; }
 /* the LCD spans the screen rows; title, artist and progress sit on it */
-[data-skin=pod] .lcd { grid-area: 1 / 1 / 6 / -1; align-self: stretch; height: auto; }
-[data-skin=pod] .lcd::before { content: 'Stopped'; position: absolute; inset: 0 0 auto; height: 24px; border-bottom: 1px solid #2b2b2b; color: #2b2b2b; font: bold 12px/24px Chicago, Charcoal, Geneva, sans-serif; text-align: center; }
-[data-skin=pod] .lcd::after { content: ''; position: absolute; top: 7px; right: 10px; width: 20px; height: 9px; border: 1px solid #2b2b2b; background: repeating-linear-gradient(90deg, #2b2b2b 0 3px, transparent 3px 4px) 2px 2px / 14px 5px no-repeat; }
-[data-skin=pod] .lcd-viz { display: none; }
-[data-skin=pod] .state-icon { top: 6px; bottom: auto; left: 10px; color: #2b2b2b; text-shadow: none; }
-[data-skin=pod] .state-icon::after,
-[data-skin=pod][data-state=stopped] .state-icon::after { content: '■'; }
-[data-skin=pod][data-state=playing] .state-icon::after { content: '▶'; }
-[data-skin=pod][data-state=paused] .state-icon::after { content: '❚❚'; }
-[data-skin=pod][data-state=buffering] .state-icon::after { content: '…'; }
-[data-skin=pod][data-state=playing] .lcd::before { content: 'Now Playing'; }
-[data-skin=pod][data-state=paused] .lcd::before { content: 'Paused'; }
-[data-skin=pod][data-state=buffering] .lcd::before { content: 'Loading…'; }
-[data-skin=pod] :is(.f-title, .f-artist, .seek-row) { position: relative; z-index: 1; margin: 0 12px; }
-[data-skin=pod] .marquee, [data-skin=pod] .artist { text-align: center; }
-[data-skin=pod] .player-body .f-artist { margin-top: 0; }
-[data-skin=pod] .seek {
+[data-skin|=pod] .lcd { grid-area: 1 / 1 / 6 / -1; align-self: stretch; height: auto; }
+[data-skin|=pod] .lcd::before { content: 'Stopped'; position: absolute; inset: 0 0 auto; height: 24px; border-bottom: 1px solid #2b2b2b; color: #2b2b2b; font: bold 12px/24px Chicago, Charcoal, Geneva, sans-serif; text-align: center; }
+[data-skin|=pod] .lcd::after { content: ''; position: absolute; top: 7px; right: 10px; width: 20px; height: 9px; border: 1px solid #2b2b2b; background: repeating-linear-gradient(90deg, #2b2b2b 0 3px, transparent 3px 4px) 2px 2px / 14px 5px no-repeat; }
+[data-skin|=pod] .lcd-viz { display: none; }
+[data-skin|=pod] .state-icon { top: 6px; bottom: auto; left: 10px; color: #2b2b2b; text-shadow: none; }
+[data-skin|=pod] .state-icon::after,
+[data-skin|=pod][data-state=stopped] .state-icon::after { content: '■'; }
+[data-skin|=pod][data-state=playing] .state-icon::after { content: '▶'; }
+[data-skin|=pod][data-state=paused] .state-icon::after { content: '❚❚'; }
+[data-skin|=pod][data-state=buffering] .state-icon::after { content: '…'; }
+[data-skin|=pod][data-state=playing] .lcd::before { content: 'Now Playing'; }
+[data-skin|=pod][data-state=paused] .lcd::before { content: 'Paused'; }
+[data-skin|=pod][data-state=buffering] .lcd::before { content: 'Loading…'; }
+[data-skin|=pod] :is(.f-title, .f-artist, .seek-row) { position: relative; z-index: 1; margin: 0 12px; }
+[data-skin|=pod] .marquee, [data-skin|=pod] .artist { text-align: center; }
+[data-skin|=pod] .player-body .f-artist { margin-top: 0; }
+[data-skin|=pod] .seek {
   --trk-h: 9px;
   --trk-r: 0;
   --trk-sh: inset 0 0 0 1px #2b2b2b;
@@ -2121,10 +2134,32 @@
   --th-bg: #2b2b2b;
   --th-sh: none;
 }
-[data-skin=pod] .lcd-time { right: 12px; bottom: 6px; }
+[data-skin|=pod] .lcd-time { right: 12px; bottom: 6px; }
+/* turning the volume swaps the progress bar for a volume bar, quiet speaker to loud */
+[data-skin|=pod] #w-player[data-vol-bar] :is(.seek, .lcd-time) { visibility: hidden; }
+[data-skin|=pod] #w-player[data-vol-bar] .seek-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9'%3E%3Cpath d='M0 3h2l3-3v9L2 6H0z' fill='%232b2b2b'/%3E%3C/svg%3E") left center no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M0 3h2l3-3v9L2 6H0z' fill='%232b2b2b'/%3E%3Cpath d='M7 2.5q1.5 2 0 4M9.5 1q2.8 3.5 0 7' fill='none' stroke='%232b2b2b' stroke-width='1.2'/%3E%3C/svg%3E") right center no-repeat;
+}
+[data-skin|=pod] #w-player[data-vol-bar] .seek-row::after {
+  content: '';
+  position: absolute;
+  inset: 50% 20px auto 15px;
+  height: 9px;
+  margin-top: -5px;
+  background: linear-gradient(90deg, #2b2b2b calc(var(--vol, .8) * 100%), transparent 0);
+  box-shadow: inset 0 0 0 1px #2b2b2b;
+}
 /* the wheel: menu (add music) on top, back / forward at the sides, play-pause below;
-   the center button plays and pauses too. Stop stays on V and in the Play menu. */
-[data-skin=pod] .transport {
+   the center button plays and pauses too. Stop stays on V and in the Play menu.
+   Spin it for volume, hold back / forward to scrub (main.js). Rings, from the
+   middle: center button, groove, scroll wheel, then the four buttons split by
+   diagonal seams. closest-side makes the stops fractions of the wheel's radius. */
+[data-skin|=pod] .transport {
   position: relative;
   display: block;
   justify-self: center;
@@ -2133,31 +2168,58 @@
   margin: 6px 0 4px;
   border-radius: 50%;
   background:
-    radial-gradient(circle, transparent 0 31%, #d4d4d4 31.5% 32.5%, #f8f8f8 33% 62%, #d0d0d0 62.5% 63.5%, transparent 64%),
-    repeating-conic-gradient(from 44.5deg, #cdcdcd 0 1deg, transparent 1deg 90deg),
-    radial-gradient(circle, #f6f6f6 0 95%, #c9c9c9 96.5% 98.5%, transparent 99.5%);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+    radial-gradient(circle closest-side, var(--pod-wheel) 0 31%, var(--pod-seam) 31.5% 32.5%, var(--pod-wheel) 33% 62%, var(--pod-seam) 62.5% 63.5%, transparent 64%),
+    repeating-conic-gradient(from 44.5deg, var(--pod-seam) 0 1deg, transparent 1deg 90deg),
+    var(--pod-wheel);
+  box-shadow: inset 0 0 0 1.5px var(--pod-edge), 0 1px 2px rgba(0, 0, 0, .12);
+  touch-action: none; /* a finger on the wheel spins it instead of scrolling the page */
+  -webkit-user-select: none;
+  user-select: none;
 }
-[data-skin=pod] .transport button { position: absolute; width: 56px; height: 40px; border-radius: 8px; color: #b2b2b2; }
-[data-skin=pod] .transport button:active { transform: translate(var(--tx, 0), var(--ty, 0)) scale(.96); }
-[data-skin=pod] .transport .t-eject { top: 4px; left: 50%; --tx: -50%; transform: translateX(-50%); }
-[data-skin=pod] .transport .t-eject .ico { display: none; }
-[data-skin=pod] .transport .t-eject::before { content: 'menu'; color: #a6a6a6; font: bold 13px/1 Chicago, Charcoal, Geneva, sans-serif; letter-spacing: .04em; }
-[data-skin=pod] .transport .t-prev { left: 2px; top: 50%; --ty: -50%; transform: translateY(-50%); width: 44px; height: 56px; }
-[data-skin=pod] .transport .t-next { right: 2px; top: 50%; --ty: -50%; transform: translateY(-50%); width: 44px; height: 56px; }
-[data-skin=pod] .transport .t-play { bottom: 4px; left: 50%; --tx: -50%; transform: translateX(-50%); width: 56px; height: 40px; display: flex; justify-content: center; gap: 1px; background: none; animation: none; }
-[data-skin=pod] .transport .t-play .ico { display: block; width: 11px; height: 11px; }
-[data-skin=pod] .transport .t-stop { display: none; }
-[data-skin=pod] .transport .t-center { display: block; top: 50%; left: 50%; --tx: -50%; --ty: -50%; transform: translate(-50%, -50%); width: 58px; height: 58px; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #fff, #f1f1f1 60%, #e1e1e1); box-shadow: 0 0 0 1px #cfcfcf, 0 1px 2px rgba(0, 0, 0, .12); }
-[data-skin=pod] .transport .t-center:hover { filter: brightness(.98); }
-[data-skin=pod] .transport .ico { width: 13px; height: 13px; }
-[data-skin=pod] .transport button:hover { filter: none; color: #8a8a8a; }
-[data-skin=pod] .transport .t-eject:hover::before { color: #7a7a7a; }
-[data-skin=pod] .tgl[aria-pressed=true] { color: #2b2b2b; }
+/* labels sit mid-ring; each button is at least 34px for a finger */
+[data-skin|=pod] .transport button { position: absolute; width: 56px; height: 34px; border-radius: 8px; color: var(--pod-label); }
+[data-skin|=pod] .transport button:active { transform: translate(var(--tx, 0), var(--ty, 0)) scale(.96); }
+[data-skin|=pod] .transport .t-eject { top: 2px; left: 50%; --tx: -50%; transform: translateX(-50%); }
+[data-skin|=pod] .transport .t-eject .ico { display: none; }
+[data-skin|=pod] .transport .t-eject::before { content: 'menu'; color: var(--pod-label); font: bold 13px/1 Chicago, Charcoal, Geneva, sans-serif; letter-spacing: .04em; }
+[data-skin|=pod] .transport .t-prev { left: 2px; top: 50%; --ty: -50%; transform: translateY(-50%); width: 34px; height: 56px; }
+[data-skin|=pod] .transport .t-next { right: 2px; top: 50%; --ty: -50%; transform: translateY(-50%); width: 34px; height: 56px; }
+[data-skin|=pod] .transport .t-play { bottom: 2px; left: 50%; --tx: -50%; transform: translateX(-50%); width: 56px; height: 34px; display: flex; justify-content: center; gap: 1px; background: none; animation: none; }
+[data-skin|=pod] .transport .t-play .ico { display: block; width: 11px; height: 11px; }
+[data-skin|=pod] .transport .t-stop { display: none; }
+[data-skin|=pod] .transport .t-center { display: block; top: 50%; left: 50%; --tx: -50%; --ty: -50%; transform: translate(-50%, -50%); width: 58px; height: 58px; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #fff, var(--pod-wheel) 60%, var(--pod-lo)); box-shadow: 0 0 0 1px var(--pod-seam), 0 1px 2px rgba(0, 0, 0, .12); }
+[data-skin|=pod] .transport .t-center:hover { filter: brightness(.98); }
+[data-skin|=pod] .transport .ico { width: 13px; height: 13px; }
+[data-skin|=pod] .transport button:hover { filter: none; color: var(--pod-label-hover); }
+[data-skin|=pod] .transport .t-eject:hover::before { color: var(--pod-label-hover); }
+[data-skin|=pod] .tgl[aria-pressed=true] { color: #2b2b2b; }
 /* lists read like the player's menus: gray LCD, dark selection bar */
-[data-skin=pod] .lv-row { font-weight: bold; }
-[data-skin=pod] .lv-head > span { border-right: 0; }
-[data-skin=pod] .lv-row.current .c-num::before { content: '▶ '; }
+[data-skin|=pod] .lv-row { font-weight: bold; }
+[data-skin|=pod] .lv-head > span { border-right: 0; }
+[data-skin|=pod] .lv-row.current .c-num::before { content: '▶ '; }
+/* the other two colors */
+[data-skin=pod-pink] {
+  --pod-hi: #fff1f5;
+  --pod: #f7d4df;
+  --pod-lo: #efc1d0;
+  --pod-edge: #d9a0b3;
+  --pod-seam: #e9b9c9;
+  --pod-wheel: #fdeef3;
+  --pod-label: #c47f97;
+  --pod-label-hover: #a35c76;
+  --pod-desk: #eab3c5;
+}
+[data-skin=pod-blue] {
+  --pod-hi: #f1f8fe;
+  --pod: #d2e7f7;
+  --pod-lo: #bfdaf0;
+  --pod-edge: #93bad8;
+  --pod-seam: #b0cfe7;
+  --pod-wheel: #ecf5fd;
+  --pod-label: #6e9bbf;
+  --pod-label-hover: #4d7aa0;
+  --pod-desk: #a9cbe6;
+}
 
 /* Leopard — unified gray windows, translucent menu bar, glass shelf Dock */
 [data-skin=leopard] {

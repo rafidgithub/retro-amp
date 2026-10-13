@@ -6,6 +6,7 @@ import * as wm from '../core/wm.js';
 import { Static } from '../player/viz.js';
 import { FILTERS, filterById, render, capture } from './filters.js';
 import * as store from './store.js';
+import { moveToBin, binName } from '../core/trash.js';
 
 const coarse = matchMedia('(pointer: coarse)');
 const devLog = err => {
@@ -536,16 +537,11 @@ nextBtn.setAttribute('aria-label', 'Next photo');
 const info = h('span', 'search-status gal-info');
 const openBtn = button('btn', 'Open');
 const saveBtn = button('btn', 'Save', 'Save a copy to this device');
-const delBtn = button('btn', 'Delete', 'Delete (Del)');
+const delBtn = button('btn', 'Delete', 'Move to the Recycle Bin (Del)');
 const backBtn = button('btn', 'All photos', 'Back to all photos (Esc)');
 foot.append(prevBtn, nextBtn, info, openBtn, saveBtn, delBtn, backBtn);
 
-const ask = h('div', 'dlg-foot gal-ask');
-ask.hidden = true;
-const askYes = button('btn', 'Delete');
-const askNo = button('btn', 'Cancel');
-ask.append(h('span', 'search-status', 'Delete this photo? This can’t be undone.'), askYes, askNo);
-G.body.append(grid, empty, viewer, foot, ask);
+G.body.append(grid, empty, viewer, foot);
 
 const current = () => photos.find(p => p.id === gal.sel) || null;
 
@@ -618,31 +614,35 @@ function step(d) {
   if (i >= 0 && i < photos.length) (gal.viewing ? showPhoto : select)(photos[i].id);
 }
 
-function askDelete() {
-  if (!current()) return;
-  foot.hidden = true;
-  ask.hidden = false;
-  askNo.focus();
-}
-function closeAsk() {
-  ask.hidden = true;
-  foot.hidden = false;
-}
-async function deletePhoto() {
+// Delete asks, then moves the photo to the Recycle Bin (core/trash.js): it stays
+// in IndexedDB, marked trashed, until it's restored or deleted for good.
+async function askDelete() {
   const p = current();
-  closeAsk();
   if (!p) return;
+  delBtn.title = `Move to the ${binName()} (Del)`;
+  await moveToBin('photo', [{ name: `Photo, ${longDate(p.at)}`, data: { id: p.id } }], async () => {
+    try {
+      await store.trash(p.id);
+    } catch (err) {
+      devLog(err);
+      info.textContent = 'Couldn’t delete the photo.';
+      throw err;
+    }
+    const i = photos.indexOf(p);
+    photos.splice(i, 1);
+    forget(p.id);
+    gal.sel = photos[Math.min(i, photos.length - 1)]?.id ?? null;
+    photosChanged();
+  }).catch(() => {}); // the message above already says it failed
+}
+
+// After a restore from the Recycle Bin.
+export async function reloadPhotos() {
   try {
-    await store.remove(p.id);
+    photos = await store.list();
   } catch (err) {
     devLog(err);
-    info.textContent = 'Couldn’t delete the photo.';
-    return;
   }
-  const i = photos.indexOf(p);
-  photos.splice(i, 1);
-  forget(p.id);
-  gal.sel = photos[Math.min(i, photos.length - 1)]?.id ?? null;
   photosChanged();
 }
 
@@ -688,8 +688,6 @@ delBtn.addEventListener('click', askDelete);
 backBtn.addEventListener('click', back);
 prevBtn.addEventListener('click', () => step(-1));
 nextBtn.addEventListener('click', () => step(1));
-askYes.addEventListener('click', deletePhoto);
-askNo.addEventListener('click', closeAsk);
 emptyCam.addEventListener('click', openCamera);
 
 // Thumbnails per row, for ↑ ↓ in the grid.
@@ -718,10 +716,7 @@ window.addEventListener(
       else handled = false;
     } else if (isActive(G.win)) {
       const onButton = e.target.matches?.('button:not(.gal-item)');
-      if (!ask.hidden) {
-        if (e.key === 'Escape') closeAsk();
-        else handled = false;
-      } else if (e.key === 'Escape') gal.viewing ? back() : wm.hide(G.win);
+      if (e.key === 'Escape') gal.viewing ? back() : wm.hide(G.win);
       else if (e.key === 'Delete' || e.key === 'Backspace') askDelete();
       else if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'ArrowRight') step(1);

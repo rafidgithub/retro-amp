@@ -2,7 +2,8 @@
 // If IndexedDB is blocked (some private modes), photos live in memory until
 // the tab closes and `persistent` is false.
 //
-// Photo: { id, at, filter, w, h, type, blob, thumb }
+// Photo: { id, at, filter, w, h, type, blob, thumb, trashed? }
+// A photo in the Recycle Bin keeps its record with trashed: <ms>; list() skips it.
 
 const DB = 'retroamp-camera';
 const STORE = 'photos';
@@ -40,12 +41,26 @@ function tx(mode, fn) {
   });
 }
 
-// Newest first.
+// Newest first, without the ones in the Recycle Bin.
 export async function list() {
   await opened;
   const all = memory ? memory.slice() : await tx('readonly', s => s.getAll());
-  return all.sort((a, b) => b.at - a.at || b.id - a.id);
+  return all.filter(p => !p.trashed).sort((a, b) => b.at - a.at || b.id - a.id);
 }
+
+async function setTrashed(id, trashed) {
+  await opened;
+  if (memory) {
+    const p = memory.find(x => x.id === id);
+    if (p) p.trashed = trashed;
+    return;
+  }
+  const p = await tx('readonly', s => s.get(id));
+  if (!p) throw new Error('photo not found');
+  await tx('readwrite', s => s.put({ ...p, trashed }));
+}
+export const trash = id => setTrashed(id, Date.now());
+export const untrash = id => setTrashed(id, 0);
 
 export async function add(photo) {
   await opened;

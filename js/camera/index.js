@@ -2,6 +2,7 @@
 // windows (js/camera/app.js) load the first time one opens, so nothing asks
 // for the camera, or even lists cameras, before someone opens it.
 import { $, h } from '../core/util.js';
+import { registerKind } from '../core/trash.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const sprite = document.createElementNS(NS, 'svg');
@@ -38,6 +39,18 @@ async function open(which) {
     document.documentElement.classList.remove('cam-wait');
   }
 }
+
+// Photos in the Recycle Bin stay in IndexedDB, marked trashed, until restored or
+// deleted for good. store.js loads only when the bin needs it.
+registerKind('photo', {
+  noun: 'photo',
+  plural: 'photos',
+  async restore({ data }) {
+    await (await import('./store.js')).untrash(data.id);
+    if (app) (await app).reloadPhotos();
+  },
+  purge: async ({ data }) => (await import('./store.js')).remove(data.id),
+});
 
 const ENTRIES = [
   ['camera', 'Camera', 'c-camera'],

@@ -4,9 +4,13 @@
 // MODULES, not in index.html.
 import { requireConsent } from './core/consent.js';
 
-const MODULES = ['./games/index.js', './camera/index.js', './browser/index.js'];
+// The Internet window ('./browser/index.js') is switched off for now: its code
+// stays in js/browser/, but nothing loads it, so it has no icon, menu or window.
+// The Recycle Bin goes last: every kind of thing it holds has registered by then.
+const MODULES = ['./games/index.js', './camera/index.js', './notes/index.js', './snap/index.js', './trash/index.js'];
 
 await requireConsent();
+const pwa = await import('./core/pwa.js'); // installable app + offline copy
 await import('./main.js');
 for (const mod of MODULES) {
   try {
@@ -15,3 +19,4 @@ for (const mod of MODULES) {
     console.error(`RetroAmp: ${mod} failed to load`, err); // one broken module shouldn't take the rest down
   }
 }
+pwa.cacheLoadedFiles();

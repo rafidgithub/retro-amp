@@ -6,7 +6,7 @@
 import { h, freezeStorage } from './util.js';
 
 const KEY = 'retroamp:consent';
-const VERSION = 1; // bump when the privacy text below changes, so everyone is asked again
+const VERSION = 2; // bump when the privacy text below changes, so everyone is asked again
 const PHOTOS_DB = 'retroamp-camera';
 const WIPE = 'retroamp:wipe'; // sessionStorage: finish deleting photos after the reload
 
@@ -34,7 +34,7 @@ const hasSavedData = () => {
 
 const ABOUT = [
   ['What this is', [
-    'RetroAmp is a music player dressed up as the computers and gadgets we grew up with: a player skin for every year from 1990 to 2026, Macs, a Walkman, a Discman, a turntable and more. It plays music from YouTube and your own audio files, and comes with classic games, a retro camera and a period web browser.',
+    'RetroAmp is a music player dressed up as the computers and gadgets we grew up with: a player skin for every year from 1990 to 2026, Macs, a Walkman, a Discman, a turntable and more. It plays music from YouTube and your own audio files, and comes with classic games, notes with reminders and a retro camera.',
   ]],
   ['Why it was made', [
     'Rafid Khan built it for fun and nostalgia: today’s music deserves the players we loved, with spinning reels, 7-segment clocks and a new skin every week.',
@@ -43,12 +43,15 @@ const ABOUT = [
 const PRIVACY = [
   ['Your privacy', [
     'No account, no ads, no analytics and no cookies of our own.',
-    'Saved only in this browser: your playlist, settings and skin, recent searches, game scores and camera photos. None of it is sent to us.',
+    'Saved only in this browser: your playlist, settings and skin, recent searches, notes and reminders, game scores and camera photos. None of it is sent to us.',
+    'Deleting a song, note or photo asks first and moves it to the Recycle Bin, where you can restore it for 7 days. After that it’s deleted for good.',
+    'Reminders from Notes pop up inside RetroAmp, and as system notifications if you allow them. There’s no server behind them, so they only go off while RetroAmp is open in a tab.',
     'Music comes from YouTube (Google), so Google sees your IP address and what plays. Its player can set cookies once a video starts, and more if you turn on Play › Use my YouTube sign-in.',
     'YouTube searches pass through this site’s server on the way to YouTube. The server doesn’t store them, but its hosting logs can briefly include them.',
     'Your own audio files play inside your browser and are never uploaded.',
+    'RetroAmp keeps a copy of its own program files (not your data) so it opens offline and can be installed as an app.',
     'The camera runs only while the Camera window is open, and photos stay on this device.',
-    'The Internet window connects you directly to the sites you open.',
+    'Screenshots capture only when you ask (your browser confirms each one) and stay on this device until you share, copy or save them.',
   ]],
   ['Your choice', [
     'RetroAmp starts only if you accept. You can read this again from Help › Privacy, and erase everything RetroAmp saved at any time with Start › Clear All Data.',
@@ -187,6 +190,13 @@ function goodbye(resolve) {
   layer.querySelector('.cs-btn:last-child').focus();
 }
 
+// A plain message in the same Setup style (e.g. how to install on iPhone).
+export function showNotice(title, heading, paragraphs) {
+  const layer = screen({ title, heading, body: paragraphs.map(p => h('p', '', p)), buttons: [button('OK', () => layer.remove())] });
+  layer.addEventListener('keydown', e => e.key === 'Escape' && layer.remove());
+  layer.querySelector('.cs-btn').focus();
+}
+
 // Help › Privacy: the same text, to read again.
 export function showPrivacy() {
   const layer = screen({
@@ -210,7 +220,7 @@ export function confirmClear(back = null) {
         h('p', '', 'This deletes, from this browser:'),
         (() => {
           const ul = h('ul');
-          for (const t of ['your playlist and recent searches', 'your skin, volume, equalizer and window layout', 'game scores', 'camera photos and camera settings', 'your privacy consent']) ul.append(h('li', '', t));
+          for (const t of ['your playlist and recent searches', 'your skin, volume, equalizer and window layout', 'notes and reminders', 'game scores', 'camera photos and camera settings', 'everything in the Recycle Bin', 'the offline copy of RetroAmp', 'your privacy consent']) ul.append(h('li', '', t));
           return ul;
         })(),
         h('p', '', 'RetroAmp then starts over from the welcome screen. This can’t be undone.'),
@@ -236,7 +246,7 @@ function wipe() {
   } catch {
     // no session storage: the photo delete below has to finish on its own
   }
-  deletePhotos().then(() => location.reload());
+  Promise.all([deletePhotos(), dropNotifications()]).then(() => location.reload());
 }
 
 function deletePhotos() {
@@ -257,6 +267,18 @@ function deletePhotos() {
       resolve();
     }
   });
+}
+
+// The app's service worker, its offline copy and any reminder notifications still on screen.
+function dropNotifications() {
+  const work = (async () => {
+    for (const r of (await navigator.serviceWorker?.getRegistrations?.()) || []) {
+      for (const n of await r.getNotifications()) n.close();
+      await r.unregister();
+    }
+    if ('caches' in window) for (const k of await caches.keys()) if (k.startsWith('retroamp-')) await caches.delete(k);
+  })().catch(() => {});
+  return Promise.race([work, new Promise(done => setTimeout(done, 1500))]);
 }
 
 function finishWipe() {

@@ -50,11 +50,22 @@ export const LOOKS = {
   },
 };
 
+// The iPod skin comes in three colors: same layout and wheel, different plastic
+// (css/skins/media.css sets each color's --pod-* variables).
+const podSkin = (color, plastic, preview) => ({
+  name: `Scroll Wheel ${color}`, look: 'mac', inspo: 'iPod (2001)', os: 'other', mac: 2001, era: `${plastic} plastic, gray LCD, a wheel to spin`,
+  wheel: true,
+  viz: { hidden: true },
+  lcd: { ...text('bold 12px Chicago, Charcoal, Geneva, sans-serif'), glow: false },
+  preview: { ...preview, lcd: '#2b2b2b', 'lcd-bg': '#cfd0ca', radius: '10px' },
+});
+
 // year: timeline slot (one skin per year, 1990–2026). era: subtitle.
 // inspo: what the skin is a tribute to, shown with its name so people can place it.
 // os: key of OSES, for the Skins window filter.
 // preview: colors for the little picture in the Skins window.
 // viz / lcd: per-skin tweaks merged over the look's settings (viz.hidden: the layout has no visualizer).
+// wheel: the transport is a scroll wheel (spin for volume, hold back / forward to scrub).
 export const SKINS = {
   // ---------- 1990s ----------
   progman: { name: 'Program Manager', look: 'chicago', inspo: 'Windows 3.0', os: 'windows', year: 1990, era: 'checkered desktop, navy title bars',
@@ -154,10 +165,9 @@ export const SKINS = {
     preview: { desk: 'linear-gradient(#5c6bb3, #3d4a8f)', title: 'repeating-linear-gradient(#fff 0 1px, #b4b4b4 1px 2px)', face: '#dddddd', lcd: '#9cff6a', 'lcd-bg': '#142214' } },
   aqua: { name: 'Aqua', look: 'mac', inspo: 'Mac OS X 10.0', os: 'mac', mac: 2001, era: 'pinstripes and gel buttons',
     preview: { desk: 'radial-gradient(#6fb3ef, #123d82)', title: 'linear-gradient(#f2f2f2, #d4d4d4)', face: 'repeating-linear-gradient(#ececec 0 2px, #f7f7f7 2px 4px)', lcd: '#4a5a2a', 'lcd-bg': '#e9eed6', radius: '6px 6px 3px 3px' } },
-  pod: { name: 'Scroll Wheel', look: 'mac', inspo: 'iPod (2001)', os: 'other', mac: 2001, era: 'white plastic, gray LCD, a wheel to spin',
-    viz: { hidden: true },
-    lcd: { ...text('bold 12px Chicago, Charcoal, Geneva, sans-serif'), glow: false },
-    preview: { desk: 'radial-gradient(#fff, #d9d9d9)', title: '#fdfdfd', face: 'linear-gradient(#fff, #e9e9e9)', lcd: '#2b2b2b', 'lcd-bg': '#cfd0ca', radius: '10px' } },
+  pod: podSkin('Grey', 'light grey', { desk: 'radial-gradient(#f7f7f8, #c9cbcf)', title: '#f1f1f2', face: 'linear-gradient(#f7f7f8, #e6e7e9)' }),
+  'pod-pink': podSkin('Pink', 'baby pink', { desk: 'radial-gradient(#fff1f5, #eab3c5)', title: '#fbe3eb', face: 'linear-gradient(#fff1f5, #f7d4df)' }),
+  'pod-blue': podSkin('Blue', 'light blue', { desk: 'radial-gradient(#f1f8fe, #a9cbe6)', title: '#e2effa', face: 'linear-gradient(#f1f8fe, #d2e7f7)' }),
   leopard: { name: 'Leopard', look: 'mac', inspo: 'Mac OS X Leopard', os: 'mac', mac: 2007, era: 'unified gray, glass Dock',
     preview: { desk: 'linear-gradient(#0b0a24, #2a1a5a)', title: 'linear-gradient(#e2e2e2, #b4b4b4)', face: '#e8e8e8', lcd: '#4a6a9a', 'lcd-bg': '#e6eef7', radius: '5px 5px 0 0' } },
   library: { name: 'Library', look: 'mac', inspo: 'iTunes 8', os: 'mac', mac: 2008, era: 'gray chrome, LCD up top',
@@ -251,5 +261,5 @@ export const skinOrder = unlocked => skinGroups(unlocked).flatMap(([, list]) => 
 export function skinConfig(id) {
   const skin = SKINS[id];
   const look = LOOKS[skin.look];
-  return { ...look, viz: { ...look.viz, ...skin.viz }, lcd: { ...look.lcd, ...skin.lcd } };
+  return { ...look, wheel: !!skin.wheel, viz: { ...look.viz, ...skin.viz }, lcd: { ...look.lcd, ...skin.lcd } };
 }

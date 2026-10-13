@@ -42,6 +42,7 @@ let frozen = false;
 export const freezeStorage = () => {
   frozen = true;
 };
+export const storageFrozen = () => frozen;
 export function saveState(state) {
   if (frozen) return;
   try {

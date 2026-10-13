@@ -1,0 +1,19 @@
+{
+  "name": "RetroAmp",
+  "short_name": "RetroAmp",
+  "description": "A music player dressed up as 37 years of computers and gadgets, with classic games, notes and a retro camera.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#008080",
+  "theme_color": "#000080",
+  "orientation": "any",
+  "categories": ["music", "entertainment"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

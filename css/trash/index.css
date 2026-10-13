@@ -1,0 +1,30 @@
+/* Recycle Bin window (js/trash/index.js). Its frame, title bar and buttons come
+   from the look; this file lays out the list. */
+
+#w-trash { width: 560px; height: 380px; max-width: calc(100vw - 16px); }
+.rb-body { display: flex; flex-direction: column; gap: 8px; min-height: 0; padding: 8px; }
+.rb-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; flex: none; }
+.rb-gap { flex: 1; }
+.rb-list { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: auto; }
+[data-family=media] .rb-list { border: 1px solid var(--field-border); border-radius: var(--field-r); background: var(--field); color: var(--text); }
+[data-family=classic] .rb-list { background: var(--field); box-shadow: var(--sunken); color: var(--text); }
+.rb-item { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 4px 8px; text-align: left; }
+.rb-item + .rb-item { border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent); }
+.rb-item[aria-selected=true] { background: var(--sel, #000080); color: var(--sel-text, #fff); }
+.rb-check { flex: none; width: 14px; height: 14px; border: 1px solid currentColor; border-radius: 2px; opacity: .7; }
+.rb-item[aria-selected=true] .rb-check { opacity: 1; background: linear-gradient(currentColor, currentColor) center / 8px 8px no-repeat; }
+.rb-kind { flex: none; width: 24px; height: 24px; }
+svg.rb-kind { fill: currentColor; }
+.rb-text { display: flex; flex-direction: column; min-width: 0; }
+.rb-text b, .rb-text small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.rb-text small { opacity: .75; font-size: 11px; }
+.rb-none { margin: auto; padding: 24px; opacity: .7; text-align: center; }
+.rb-status { flex: none; opacity: .75; font-size: 11px; }
+
+/* phones: same query as wm.isMobile() */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  #w-trash { height: calc(var(--vh) - var(--tb-h) - 16px); }
+  .rb-tools .btn { flex: 1 1 40%; min-height: 34px; }
+  .rb-gap { display: none; }
+  .rb-item { min-height: 48px; }
+}

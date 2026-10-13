@@ -6,6 +6,7 @@ import { createLocal, EQ_BANDS, EQ_RANGE } from './player/local.js';
 import { Visualizer, Lcd, Static } from './player/viz.js';
 import { createPip, pipSupported } from './player/pip.js';
 import { showPrivacy, confirmClear } from './core/consent.js';
+import { registerKind, moveToBin } from './core/trash.js';
 import { ListView } from './core/listview.js';
 import { openMenu, closeMenus, isMenuOpen } from './core/menu.js';
 import * as wm from './core/wm.js';
@@ -343,17 +344,17 @@ function randomIndex() {
   return i;
 }
 
-function seekTo(sec) {
+function seekTo(sec, announce = true) {
   const e = engine();
   const dur = e.duration();
   const t = clamp(sec, 0, Math.max(0, dur - 1));
   e.seek(t);
   clock = t;
-  flash(`Seek to: ${fmtTime(t)} / ${fmtTime(dur)}`);
+  if (announce) flash(`Seek to: ${fmtTime(t)} / ${fmtTime(dur)}`);
 }
-function seekBy(sec) {
+function seekBy(sec, announce) {
   if (S.index < 0 || S.state === 'stopped') return;
-  seekTo(engine().time() + sec);
+  seekTo(engine().time() + sec, announce);
 }
 
 // iPhone and iPad let only the hardware buttons change a YouTube video's
@@ -363,7 +364,7 @@ const hardwareVolume = () => root.classList.contains('ios') && !!cur() && !isLoc
 function setVolume(v, announce = true) {
   S.volume = clamp(Math.round(v), 0, 100);
   setRange(ui.vol, S.volume, 100);
-  ui.vol.style.setProperty('--vol', S.volume / 100);
+  P.style.setProperty('--vol', S.volume / 100);
   withPlayer(p => p.setVolume(S.volume));
   local.setVolume(S.volume);
   if (announce) {
@@ -388,6 +389,19 @@ function watchStart() {
     VID.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
     flash('Tap the video to start playback', 5000);
   }, 6000);
+}
+
+// Up/down from the mouse wheel, arrow keys or the Scroll Wheel skin's wheel. That
+// skin does what the 2001 player's Now Playing screen did: the progress bar turns
+// into a volume bar for a moment instead of a message.
+let volBar = 0;
+function volumeBy(d) {
+  if (!look().wheel || hardwareVolume()) return setVolume(S.volume + d);
+  if (S.muted) toggleMute(false);
+  setVolume(S.volume + d, false);
+  P.toggleAttribute('data-vol-bar', true);
+  clearTimeout(volBar);
+  volBar = setTimeout(() => P.removeAttribute('data-vol-bar'), 1500);
 }
 
 function toggleMute(force) {
@@ -451,10 +465,19 @@ function addTracks(items, playNow = false) {
   ui.status.textContent = `Added ${fresh.length} track${fresh.length === 1 ? '' : 's'} to the playlist.`;
 }
 
+// Removing songs asks first and moves them to the Recycle Bin (core/trash.js).
 function removeTracks(indices) {
+  const songs = [...new Set(indices)].sort((a, b) => a - b).map(i => ({ i, t: S.list[i] })).filter(s => s.t);
+  return moveToBin(
+    'song',
+    songs.map(({ i, t }) => ({ name: t.title, session: isLocal(t), data: { track: { ...t }, index: i } })),
+    () => dropTracks(songs.map(s => s.i)),
+  );
+}
+
+function dropTracks(indices) {
   if (!indices.length) return;
   const gone = new Set(indices);
-  const dropped = indices.map(i => S.list[i]);
   const wasCurrent = gone.has(S.index);
   const before = indices.filter(i => i < S.index).length;
   S.list = S.list.filter((_, i) => !gone.has(i));
@@ -467,7 +490,6 @@ function removeTracks(indices) {
     if (cur()) engine().load(cur(), false);
     setState('stopped');
   } else S.index -= before;
-  for (const t of dropped) if (isLocal(t)) URL.revokeObjectURL(t.src);
   renderPlaylist();
   trackChanged();
 }
@@ -490,9 +512,16 @@ function moveTracks(indices, to) {
 }
 
 function clearPlaylist() {
+  return moveToBin(
+    'song',
+    S.list.map((t, i) => ({ name: t.title, session: isLocal(t), data: { track: { ...t }, index: i } })),
+    emptyPlaylist,
+  );
+}
+
+function emptyPlaylist() {
   youtube.unload();
   local.unload();
-  for (const t of S.list) if (isLocal(t)) URL.revokeObjectURL(t.src);
   S.list = [];
   S.index = -1;
   S.history = [];
@@ -500,6 +529,23 @@ function clearPlaylist() {
   renderPlaylist();
   trackChanged();
 }
+
+// Songs in the Recycle Bin: restore puts one back where it was; deleting it for
+// good frees your own file's memory (its blob: URL) at last.
+registerKind('song', {
+  noun: 'song',
+  plural: 'songs',
+  restore({ data }) {
+    const at = Math.min(Math.max(0, data.index | 0), S.list.length);
+    S.list.splice(at, 0, data.track);
+    if (S.index >= at) S.index++;
+    renderPlaylist();
+    trackChanged();
+  },
+  purge({ data }) {
+    if (data.track.local) URL.revokeObjectURL(data.track.src);
+  },
+});
 
 // ---------------------------------------------------------------------------
 // Display: marquee, clock, status
@@ -1290,8 +1336,8 @@ document.addEventListener('keydown', e => {
   if (KEYS[k]) KEYS[k]();
   else if (e.key === 'ArrowLeft') seekBy(-5);
   else if (e.key === 'ArrowRight') seekBy(5);
-  else if (e.key === 'ArrowUp') setVolume(S.volume + 5);
-  else if (e.key === 'ArrowDown') setVolume(S.volume - 5);
+  else if (e.key === 'ArrowUp') volumeBy(5);
+  else if (e.key === 'ArrowDown') volumeBy(-5);
   else if (e.key === ' ' && tag !== 'BUTTON') S.state === 'playing' ? pause() : play();
   else return;
   e.preventDefault();
@@ -1306,11 +1352,77 @@ P.addEventListener(
     e.preventDefault();
     wheel += e.deltaY;
     if (Math.abs(wheel) < 40) return;
-    setVolume(S.volume - Math.sign(wheel) * 4);
+    volumeBy(-Math.sign(wheel) * 4);
     wheel = 0;
   },
   { passive: false },
 );
+
+// Scroll Wheel skin: spin the wheel with a mouse or a finger for volume
+// (clockwise is louder), and hold back / forward to rewind or fast-forward
+// through the song, as on the 2001 player. A tap still presses the button.
+const wheelEl = $('.transport', P);
+let press = null;
+let swallow = false; // the click that ends a spin or a hold isn't a press
+function wheelAngle(e) {
+  const r = wheelEl.getBoundingClientRect();
+  const x = e.clientX - r.left - r.width / 2;
+  const y = e.clientY - r.top - r.height / 2;
+  return Math.hypot(x, y) < 16 ? null : (Math.atan2(y, x) * 180) / Math.PI; // too near the middle to tell
+}
+wheelEl.addEventListener('pointerdown', e => {
+  swallow = false;
+  if (!look().wheel || !e.isPrimary || e.button !== 0 || e.ctrlKey || e.target.closest('.t-center')) return; // Ctrl-click is a Mac right-click
+  const p = (press = { id: e.pointerId, a: wheelAngle(e), turn: 0, spinning: false, used: false, timer: 0 });
+  const skip = e.target.closest('.t-prev, .t-next');
+  if (!skip) return;
+  const sec = skip.classList.contains('t-next') ? 5 : -5;
+  p.timer = setTimeout(function scrub() {
+    p.used = true;
+    seekBy(sec, false); // the title stays; the progress bar shows where you are
+    p.timer = setTimeout(scrub, 250);
+  }, 500);
+});
+wheelEl.addEventListener('pointermove', e => {
+  const p = press;
+  if (!p || e.pointerId !== p.id) return;
+  const a = wheelAngle(e);
+  if (a !== null && p.a !== null) p.turn += ((a - p.a + 540) % 360) - 180;
+  p.a = a;
+  if (!p.spinning) {
+    if (Math.abs(p.turn) < 12) return; // a wobbly tap is still a tap
+    p.spinning = p.used = true;
+    clearTimeout(p.timer);
+    wheelEl.setPointerCapture(e.pointerId); // keep spinning when the pointer strays off the wheel
+  }
+  const steps = Math.trunc(p.turn / 7.2); // 2% a step: one full turn sweeps the whole range
+  if (!steps) return;
+  p.turn -= steps * 7.2;
+  volumeBy(steps * 2);
+});
+const endPress = e => {
+  if (!press || e.pointerId !== press.id) return;
+  clearTimeout(press.timer);
+  swallow = press.used;
+  press = null;
+};
+// on window: a mouse can let go anywhere, and a held button must stop scrubbing
+window.addEventListener('pointerup', endPress);
+window.addEventListener('pointercancel', endPress);
+wheelEl.addEventListener(
+  'click',
+  e => {
+    if (swallow) e.stopPropagation();
+    swallow = false;
+  },
+  true,
+);
+// a long touch on the wheel is a hold or a spin, not the player's menu
+wheelEl.addEventListener('contextmenu', e => {
+  if (!press && !swallow) return;
+  e.preventDefault();
+  e.stopPropagation();
+});
 
 // Desktop icons: click selects, double-click (or tap / Enter) opens.
 const ICONS = { player: () => wm.show(P), playlist: () => wm.show(PL), video: () => wm.show(VID), search: openSearch, skins: openSkins };

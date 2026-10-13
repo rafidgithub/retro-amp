@@ -17,8 +17,9 @@ const TYPES = {
   '.png': 'image/png',
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
+  '.webmanifest': 'application/manifest+json',
 };
-const PUBLIC = ['index.html', `css${sep}`, `js${sep}`, `assets${sep}`];
+const PUBLIC = ['index.html', 'manifest.webmanifest', 'sw.js', `css${sep}`, `js${sep}`, `assets${sep}`];
 
 http
   .createServer(async (req, res) => {
