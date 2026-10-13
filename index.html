@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.google.com; img-src 'self' data: blob: https://i.ytimg.com; style-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https:; img-src 'self' data: blob: https://i.ytimg.com; style-src 'self'; font-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="description" content="New music, old pixels: a Windows 95–XP era audio player for YouTube. No accounts, no API keys.">
 <title>RetroAmp</title>
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -20,11 +20,9 @@
 <link rel="stylesheet" href="css/games/index.css">
 <link rel="stylesheet" href="css/camera/index.css">
 <link rel="stylesheet" href="css/browser/index.css">
+<link rel="stylesheet" href="css/consent.css">
 <script src="js/boot.js"></script>
-<script type="module" src="js/main.js"></script>
-<script type="module" src="js/games/index.js"></script>
-<script type="module" src="js/camera/index.js"></script>
-<script type="module" src="js/browser/index.js"></script>
+<script type="module" src="js/start.js"></script>
 </head>
 <body>
 <svg class="sprite" aria-hidden="true">
@@ -45,6 +43,8 @@
   <symbol id="i-search" viewBox="0 0 16 16"><path d="M6.5 1a5.5 5.5 0 0 1 4.4 8.8l4.1 4.1-1.4 1.4-4.1-4.1A5.5 5.5 0 1 1 6.5 1zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></symbol>
   <symbol id="i-info" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm-1 6v5h2V7zm0-3v2h2V4z"/></symbol>
   <symbol id="i-power" viewBox="0 0 16 16"><path d="M4.6 3.8a6 6 0 1 0 6.8 0" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7.1 1h1.8v7H7.1z"/></symbol>
+  <symbol id="i-pip" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 2h14v12H1zM2 3v10h12V3z"/><path d="M8 8h5v4H8z"/></symbol>
+  <symbol id="i-erase" viewBox="0 0 16 16"><path d="M5.5 1h5v2H15v2H1V3h4.5zM2.5 6h11l-1 9h-9z"/></symbol>
   <symbol id="i-palette" viewBox="0 0 16 16"><path d="M8 1C4.1 1 1 3.9 1 7.5S4.1 14.5 7.6 14.5c1 0 1.5-.6 1.5-1.3 0-.8-.7-1.1-.7-1.9 0-.6.5-1.1 1.2-1.1h1.5c2.2 0 3.9-1.6 3.9-3.6C15 3.7 11.9 1 8 1z"/><circle cx="4.4" cy="7.4" r="1.25" fill="#ff5a5a"/><circle cx="6.3" cy="4.3" r="1.25" fill="#ffd23c"/><circle cx="9.7" cy="4" r="1.25" fill="#3cc76a"/><circle cx="12" cy="6.6" r="1.25" fill="#3c8cff"/></symbol>
   <symbol id="d-add" viewBox="0 0 32 32"><path d="M10 7l14-4v17.5a4.5 3.8 0 1 1-3-3.6V9.4l-8 2.3v12.8a4.5 3.8 0 1 1-3-3.6z" fill="#2f6fe0" stroke="#0c2f75" stroke-width="1.2"/><circle cx="25" cy="25" r="6.5" fill="#2fb84a" stroke="#0e5a1e"/><path d="M25 21v8M21 25h8" stroke="#fff" stroke-width="2.4"/></symbol>
   <symbol id="d-list" viewBox="0 0 32 32"><path d="M6 2h14l6 6v22H6z" fill="#fff" stroke="#333"/><path d="M20 2v6h6" fill="#d8d8d8" stroke="#333"/><path d="M10 13h12M10 17h12M10 21h12M10 25h8" stroke="#2a5bd7" stroke-width="2"/></symbol>
@@ -108,6 +108,7 @@
         <button class="t-play" data-act="play" title="Play (X)" aria-label="Play"><svg class="ico i-play"><use href="#i-play"/></svg><svg class="ico i-pause"><use href="#i-pause"/></svg></button>
         <button class="t-pause" data-act="pause" title="Pause (C)" aria-label="Pause"><svg class="ico"><use href="#i-pause"/></svg></button>
         <button class="t-stop" data-act="stop" title="Stop (V)" aria-label="Stop"><svg class="ico"><use href="#i-stop"/></svg></button>
+        <button class="t-center" data-act="play" title="Play / Pause (X)" aria-label="Play or pause"></button>
         <button class="t-ff" data-act="ff" title="Forward 10 seconds" aria-label="Forward 10 seconds"><svg class="ico"><use href="#i-ff"/></svg></button>
         <button class="t-next" data-act="next" title="Next (B)" aria-label="Next"><svg class="ico"><use href="#i-next"/></svg></button>
         <button class="t-eject" data-act="eject" title="Add from YouTube (L)" aria-label="Add from YouTube"><svg class="ico"><use href="#i-eject"/></svg></button>
@@ -167,13 +168,14 @@
     <header class="titlebar">
       <span class="tb-icon"><svg class="ico"><use href="#i-video"/></svg></span>
       <span class="tb-title">Video</span>
-      <span class="tb-btns"><button data-wm="close" aria-label="Close"></button></span>
+      <span class="tb-btns"><button data-full data-act="video-full" aria-label="Full screen" title="Full screen"></button><button data-wm="close" aria-label="Close"></button></span>
     </header>
     <div class="win-body video-body">
       <div class="screen">
         <div id="yt"></div>
         <canvas class="static"></canvas>
         <p class="no-signal">No signal</p>
+        <button class="screen-exit" data-act="video-full" aria-label="Exit full screen">✕</button>
       </div>
     </div>
   </section>
@@ -219,6 +221,10 @@
         <output id="year-out">1998</output>
         <small id="year-skin">Drag through the years — one player per year, 1990 to 2026.</small>
       </label>
+      <div class="search-row skin-find">
+        <input id="skin-q" type="text" maxlength="60" placeholder="Search: name, year, iTunes, Windows XP…" spellcheck="false" aria-label="Search skins">
+        <button class="btn" id="skin-os" data-act="skin-os" aria-haspopup="menu" aria-label="Filter by operating system">All systems</button>
+      </div>
       <div class="skin-groups"></div>
       <div class="dlg-foot">
         <span class="search-status"><span class="mouse-only">Click a skin to try it. Press K anytime to flip through them.</span><span class="touch-only">Tap a skin to try it.</span></span>
@@ -255,7 +261,7 @@
         <kbd>Del</kbd><span>Remove selected</span><kbd>Drag</kbd><span>Reorder playlist</span>
         <kbd>Dbl-click</kbd><span>Title bar: shade</span><kbd>?</kbd><span>This window</span>
       </div>
-      <div class="dlg-foot"><span></span><button class="btn" data-act="about-ok">OK</button></div>
+      <div class="dlg-foot"><button class="btn" data-act="privacy">Privacy…</button><button class="btn" data-act="clear-data">Clear All Data…</button><span></span><button class="btn" data-act="about-ok">OK</button></div>
     </div>
   </section>
 </main>
@@ -269,10 +275,12 @@
     <button data-act="eject"><svg class="ico"><use href="#i-search"/></svg>Add from YouTube…</button>
     <button data-act="open-files"><svg class="ico"><use href="#i-folder"/></svg>Open Local Files…</button>
     <button data-act="show-eq"><svg class="ico"><use href="#i-eq"/></svg>Equalizer</button>
+    <button data-act="pip" hidden><svg class="ico"><use href="#i-pip"/></svg>Mini Player (pop out)</button>
     <hr>
     <button data-act="skins"><svg class="ico"><use href="#i-palette"/></svg>Change Skin…</button>
     <hr>
     <button data-act="about"><svg class="ico"><use href="#i-info"/></svg>About RetroAmp</button>
+    <button data-act="clear-data"><svg class="ico"><use href="#i-erase"/></svg>Clear All Data…</button>
     <button data-act="shutdown"><svg class="ico"><use href="#i-power"/></svg>Shut Down…</button>
   </div>
 </nav>
@@ -283,6 +291,7 @@
   <div id="tasks"></div>
   <div id="tray">
     <button id="tray-skin" data-act="skins" title="Change skin"><svg class="ico"><use href="#i-palette"/></svg><span id="tray-skin-name">Amp</span></button>
+    <button id="tray-pip" data-act="pip" aria-pressed="false" aria-label="Pop-out mini player" title="Pop-out mini player" hidden><svg class="ico"><use href="#i-pip"/></svg></button>
     <button id="tray-vol" data-act="mute" aria-label="Mute" title="Mute"><svg class="ico"><use href="#i-speaker"/></svg></button>
     <span id="sleep-left" title="Sleep timer" hidden></span>
     <span id="clock"></span>

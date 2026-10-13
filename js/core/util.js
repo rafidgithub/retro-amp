@@ -36,7 +36,14 @@ export function loadState() {
     return {};
   }
 }
+// Clear All Data stops every save before it erases, so the player's pagehide
+// save can't write the playlist back on the way out.
+let frozen = false;
+export const freezeStorage = () => {
+  frozen = true;
+};
 export function saveState(state) {
+  if (frozen) return;
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
   } catch {

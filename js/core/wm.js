@@ -1,6 +1,7 @@
 // Tiny window manager: z-order and focus, dragging with Winamp-style edge
 // snapping and docking, minimize/restore with a caption-zoom animation, taskbar.
 import { $, clamp } from './util.js';
+import { openMenu } from './menu.js';
 
 const SNAP = 10;
 const TOUCH = 3;
@@ -10,7 +11,7 @@ const tasks = $('#tasks');
 // stylesheet's phone block uses this same media query.
 const mobile = matchMedia('(max-width: 720px), (pointer: coarse) and (max-height: 520px)');
 const calm = matchMedia('(prefers-reduced-motion: reduce)');
-const wins = new Map(); // el -> { task, dialog, main }
+const wins = new Map(); // el -> { task, dialog, main, closed, onClose }
 let z = 10;
 let changed = () => {};
 
@@ -23,25 +24,43 @@ export const onChange = fn => {
 export const isOpen = el => !el.classList.contains('is-min');
 const openWins = () => [...wins.keys()].filter(isOpen);
 
-export function register(el, { title, icon, dialog = false, main = false }) {
+// onClose: runs when the window's close button (not minimize) is used.
+export function register(el, { title, icon, dialog = false, main = false, onClose = null }) {
   const task = document.createElement('button');
   task.className = 'task';
   task.append(svgIcon(icon), document.createElement('span'));
   task.lastChild.textContent = title;
   task.addEventListener('click', () => toggle(el));
   tasks.append(task);
-  wins.set(el, { task, dialog, main });
+  wins.set(el, { task, dialog, main, closed: false, onClose });
 
   const bar = el.querySelector('.titlebar');
   el.addEventListener('pointerdown', () => focus(el));
   bar.addEventListener('pointerdown', e => drag(e, el));
+  // The title-bar icon is the window menu, and double-clicking it closes, like Windows.
+  // (The player's icon is a button with its own main menu.)
+  const sysIcon = bar.querySelector('span.tb-icon');
+  sysIcon?.addEventListener('click', () => {
+    const r = sysIcon.getBoundingClientRect();
+    openMenu(windowMenu(el), r.left, r.bottom);
+  });
+  sysIcon?.addEventListener('dblclick', () => close(el));
   bar.addEventListener('dblclick', e => {
     if (!e.target.closest('button') && !mobile.matches && el.querySelector('[data-wm=shade]')) toggleShade(el);
   });
   for (const b of el.querySelectorAll('[data-wm]')) {
-    b.addEventListener('click', () => (b.dataset.wm === 'shade' ? toggleShade(el) : hide(el)));
+    b.addEventListener('click', () => ({ shade: toggleShade, close, min: hide })[b.dataset.wm]?.(el));
   }
   sync();
+}
+
+function windowMenu(el) {
+  const items = [];
+  if (!wins.get(el).dialog) items.push({ label: 'Minimize', act: () => hide(el) });
+  if (el.querySelector('[data-wm=shade]') && !mobile.matches) items.push({ label: 'Window shade', checked: el.classList.contains('shaded'), act: () => toggleShade(el) });
+  if (items.length) items.push({ sep: true });
+  items.push({ label: 'Close', act: () => close(el) });
+  return items;
 }
 
 export function setTitle(el, text) {
@@ -56,6 +75,7 @@ export function focus(el) {
 }
 
 export function show(el, { center = false } = {}) {
+  wins.get(el).closed = false;
   if (!isOpen(el)) {
     el.classList.remove('is-min');
     // windows that were minimized along with the main window come back with it
@@ -70,13 +90,14 @@ export function show(el, { center = false } = {}) {
   changed();
 }
 
-export function hide(el) {
+// Minimize: the window drops into its taskbar button.
+export function hide(el, { closing = false } = {}) {
   if (!isOpen(el)) return;
   const w = wins.get(el);
-  zoom(el.querySelector('.titlebar'), w.task);
+  if (!closing) zoom(el.querySelector('.titlebar'), w.task);
   // Minimizing the main window takes its docked windows along, like Winamp,
   // so no stray playlist or video window is left behind on the desktop.
-  w.followers = w.main ? docked(el).map(r => r.el) : null;
+  w.followers = w.main && !closing ? docked(el).map(r => r.el) : null;
   for (const f of [el, ...(w.followers || [])]) {
     f.classList.add('is-min');
     f.classList.remove('active');
@@ -85,6 +106,19 @@ export function hide(el) {
   if (next) focus(next);
   sync();
   changed();
+}
+
+// Close: the window goes away, taskbar button and all. It comes back from the
+// Start menu, a desktop icon or a menu.
+export function close(el) {
+  const w = wins.get(el);
+  w.closed = true;
+  if (isOpen(el)) hide(el, { closing: true });
+  else {
+    sync();
+    changed();
+  }
+  w.onClose?.();
 }
 
 export const toggle = el => (isOpen(el) && el.classList.contains('active') ? hide(el) : show(el));
@@ -100,7 +134,7 @@ export function toggleShade(el) {
 function sync() {
   for (const [el, w] of wins) {
     const on = isOpen(el) && el.classList.contains('active');
-    w.task.hidden = w.dialog && !isOpen(el);
+    w.task.hidden = (w.dialog || w.closed) && !isOpen(el);
     w.task.classList.toggle('active', on);
     w.task.setAttribute('aria-pressed', on);
   }
@@ -206,7 +240,7 @@ function snap(el, x, y, others) {
 }
 
 function drag(e, el) {
-  if (e.button !== 0 || mobile.matches || e.target.closest('button, input')) return;
+  if (e.button !== 0 || mobile.matches || e.target.closest('button, input, .tb-icon')) return;
   e.preventDefault();
   const bar = e.currentTarget;
   bar.setPointerCapture(e.pointerId);
@@ -247,7 +281,8 @@ export function layout() {
     out[el.id] = {
       x: el.offsetLeft,
       y: el.offsetTop,
-      open: isOpen(el),
+      open: isOpen(el) || (w.main && w.closed), // a closed player opens again next visit, like launching the app
+      closed: !w.main && w.closed && !isOpen(el),
       shaded: el.classList.contains('shaded'),
       h: el.style.height || undefined,
     };
@@ -261,6 +296,7 @@ export function restore(saved) {
     if (!s || w.dialog) continue;
     if (s.h) el.style.height = s.h;
     el.classList.toggle('is-min', s.open === false);
+    w.closed = s.open === false && !!s.closed;
     el.classList.toggle('shaded', !!s.shaded);
     place(el, s.x, s.y);
   }

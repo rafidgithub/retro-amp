@@ -1,13 +1,15 @@
 // RetroAmp — a Windows 95/98/XP-era audio player that streams YouTube through
 // the official embedded player. No accounts, no API keys; state lives in localStorage.
 import { $, $$, h, clamp, fmtTime, debounce, cleanArtist, parseYouTube, loadState, saveState, VIDEO_ID } from './core/util.js';
-import { createPlayer } from './player/yt.js';
+import { createPlayer, NOCOOKIE_HOST, SIGNED_IN_HOST } from './player/yt.js';
 import { createLocal, EQ_BANDS, EQ_RANGE } from './player/local.js';
 import { Visualizer, Lcd, Static } from './player/viz.js';
+import { createPip, pipSupported } from './player/pip.js';
+import { showPrivacy, confirmClear } from './core/consent.js';
 import { ListView } from './core/listview.js';
 import { openMenu, closeMenus, isMenuOpen } from './core/menu.js';
 import * as wm from './core/wm.js';
-import { LOOKS, SKINS, TIMELINE, YEARS, skinGroups, skinOrder, skinConfig } from './core/skins.js';
+import { LOOKS, SKINS, OSES, TIMELINE, YEARS, skinGroups, skinOrder, skinConfig, skinSearchText, skinYear } from './core/skins.js';
 
 const VIZ_MODES = [
   ['spectrum', 'Spectrum analyzer'],
@@ -50,6 +52,7 @@ const S = {
   remaining: !!saved.remaining,
   tipSeen: !!saved.tipSeen,
   unlocked: !!saved.unlocked,
+  ytSignIn: !!saved.ytSignIn,
   eq: {
     on: saved.eq?.on ?? true,
     auto: !!saved.eq?.auto,
@@ -88,6 +91,7 @@ const saveNow = () => {
     remaining: S.remaining,
     tipSeen: S.tipSeen,
     unlocked: S.unlocked,
+    ytSignIn: S.ytSignIn,
     recent: S.recent,
     layout: wm.isMobile() ? deskLayout : (deskLayout = wm.layout()),
   });
@@ -144,23 +148,58 @@ const resView = new ListView($('#results'), {
 // YouTube player
 
 let yt = null;
-const ready = createPlayer($('#yt'), {
-  onState: code => !isLocal(cur()) && onState(code),
-  onError: code => !isLocal(cur()) && onError(code),
-}).then(
-  p => {
-    yt = p;
-    p.setVolume(S.volume);
-    if (S.muted) p.mute();
-    if (cur() && !isLocal(cur())) p.cueVideoById(cur().id);
-    return p;
-  },
-  () => {
-    flash('Could not load the YouTube player. Check your connection and reload.', 10000);
-    return null;
-  },
-);
+let ready;
+function buildPlayer() {
+  ready = createPlayer($('#yt'), {
+    host: S.ytSignIn ? SIGNED_IN_HOST : NOCOOKIE_HOST,
+    onState: code => !isLocal(cur()) && onState(code),
+    onError: code => !isLocal(cur()) && onError(code),
+  }).then(
+    p => {
+      yt = p;
+      p.setVolume(S.volume);
+      if (S.muted) p.mute();
+      if (cur() && !isLocal(cur())) p.cueVideoById(cur().id);
+      return p;
+    },
+    () => {
+      flash('Could not load the YouTube player. Check your connection and reload.', 10000);
+      return null;
+    },
+  );
+}
+buildPlayer();
 const withPlayer = fn => ready.then(p => p && fn(p));
+
+// YouTube sign-in mode (Play menu, off by default). The youtube-nocookie.com
+// player carries no YouTube cookies, so a network that Google has flagged for
+// "unusual traffic" gets "An error occurred. Please try again later" there even
+// while youtube.com works in another tab. Playing through youtube.com sends the
+// browser's own YouTube cookies (and sign-in) along, which gets past that block.
+// RetroAmp never sees them; the cost is that YouTube can set cookies.
+async function toggleYtSignIn() {
+  S.ytSignIn = !S.ytSignIn;
+  persist();
+  const t = cur();
+  const onYouTube = t && !isLocal(t);
+  const at = onYouTube ? youtube.time() : 0;
+  const resume = onYouTube && (S.state === 'playing' || S.state === 'buffering');
+  const old = await ready;
+  yt = null;
+  try {
+    old?.destroy();
+  } catch {
+    // already gone
+  }
+  if (!$('#yt')) {
+    const slot = h('div');
+    slot.id = 'yt';
+    $('.screen', VID).prepend(slot);
+  }
+  buildPlayer();
+  if (onYouTube) withPlayer(p => (resume ? p.loadVideoById(t.id, at) : p.cueVideoById(t.id, at)));
+  flash(S.ytSignIn ? 'YouTube now plays through youtube.com with your sign-in' : 'YouTube back on the no-cookie player', 3000);
+}
 
 // Local files play through Web Audio (EQ + real visualizer).
 const local = createLocal({
@@ -214,7 +253,9 @@ function onError(code) {
   if (t) t.bad = true;
   plView.paint();
   setState('stopped');
-  flash(`*** ${YT_ERRORS[code] || 'Can’t play this one'} — skipping ***`, 2500);
+  // several YouTube videos failing in a row usually means the network, not the videos
+  const hint = errorRun >= 1 && code !== 'local' && !S.ytSignIn ? ' (try Play › Use my YouTube sign-in)' : '';
+  flash(`*** ${YT_ERRORS[code] || 'Can’t play this one'} — skipping${hint} ***`, hint ? 6000 : 2500);
   const at = S.index;
   if (++errorRun < Math.min(S.list.length, 8)) {
     setTimeout(() => S.index === at && S.state === 'stopped' && next(true), 1500);
@@ -302,14 +343,17 @@ function randomIndex() {
   return i;
 }
 
-function seekBy(sec) {
-  if (S.index < 0 || S.state === 'stopped') return;
+function seekTo(sec) {
   const e = engine();
   const dur = e.duration();
-  const t = clamp(e.time() + sec, 0, Math.max(0, dur - 1));
+  const t = clamp(sec, 0, Math.max(0, dur - 1));
   e.seek(t);
   clock = t;
   flash(`Seek to: ${fmtTime(t)} / ${fmtTime(dur)}`);
+}
+function seekBy(sec) {
+  if (S.index < 0 || S.state === 'stopped') return;
+  seekTo(engine().time() + sec);
 }
 
 // iPhone and iPad let only the hardware buttons change a YouTube video's
@@ -591,6 +635,7 @@ function updateProgress(t, dur) {
   const live = S.index >= 0 && S.state !== 'stopped' && dur > 0;
   ui.seek.disabled = !live;
   if (!seeking) setRange(ui.seek, live ? Math.round((t / dur) * 1000) : 0, 1000);
+  P.style.setProperty('--progress', live ? Math.min(1, t / dur).toFixed(4) : 0); // tape reels, tonearm
   ui.sbTime.textContent = S.index >= 0 ? `${fmtTime(t)} / ${fmtTime(dur)}` : '';
 }
 
@@ -613,7 +658,7 @@ function loop(now) {
     } else clock = real;
   }
   const dur = (S.index >= 0 && engine().duration()) || cur()?.seconds || 0;
-  viz.frame(clock, playing, dt, isLocal(cur()) ? local : null);
+  viz.frame(clock, playing, dt, isLocal(cur()) ? local : null, S.index >= 0 && dur > 0 ? Math.min(1, clock / dur) : null);
   drawClock(clock, dur, now);
   if (now - lastUi > 250) {
     lastUi = now;
@@ -634,6 +679,7 @@ function applySkin() {
   root.dataset.skin = S.skin;
   viz.configure(lk.viz);
   viz.setMode(S.viz);
+  ui.viz.title = lk.viz.wave ? 'Click to jump to that point' : 'Click: change visualization';
   lcd.configure(lk.lcd);
   drawClock(clock, cur()?.seconds || 0, 0);
   trackChanged();
@@ -698,8 +744,8 @@ yearInput.addEventListener('input', () => setSkin(TIMELINE[yearInput.value]));
 function syncTimeMachine() {
   const skin = SKINS[pickedSkin()];
   if (skin.year) yearInput.value = skin.year;
-  $('#year-out').textContent = skin.year || skin.mac || skin.linux || '—';
-  $('#year-skin').textContent = `${skin.name} — ${skin.era}`;
+  $('#year-out').textContent = skinYear(pickedSkin()) || '—';
+  $('#year-skin').textContent = `${skin.name} (${skin.inspo}) — ${skin.era}`;
 }
 
 function openSkins() {
@@ -721,30 +767,122 @@ function renderSkinCards() {
       card.setAttribute('role', 'radio');
       const preview = h('span', 'sc-preview');
       for (const [k, v] of Object.entries(skin.preview)) preview.style.setProperty(`--p-${k}`, v);
-      const badge = skin.year || skin.mac || skin.linux;
+      const badge = skinYear(id);
       if (badge) preview.append(h('span', 'sc-year', String(badge)));
       const lcdBars = h('span', 'sc-lcd');
       for (let i = 0; i < 9; i++) lcdBars.append(document.createElement('i'));
       const win = h('span', 'sc-win');
       win.append(h('span', 'sc-title'), lcdBars);
       preview.append(win);
-      card.append(preview, h('span', 'sc-name', skin.name), h('span', 'sc-era', skin.era));
+      card.append(preview, h('span', 'sc-name', skin.name), h('span', 'sc-inspo', `inspired by ${skin.inspo}`), h('span', 'sc-era', skin.era));
       grid.append(card);
     }
     const section = h('section');
     section.append(h('h3', '', label), grid);
     return section;
   });
-  $('.skin-groups').replaceChildren(...groups);
+  $('.skin-groups').replaceChildren(...groups, h('p', 'skin-none', 'No skins match. Try another word or All systems.'));
+  filterSkinCards();
 }
 $('.skin-groups').addEventListener('click', e => {
   const card = e.target.closest('.skin-card');
   if (card) setSkin(card.dataset.skin);
 });
 
+// Search box + OS filter: hide the cards that don't match, and any group left empty.
+const skinFind = { q: '', os: '' };
+function filterSkinCards() {
+  const terms = skinFind.q.toLowerCase().split(/\s+/).filter(Boolean);
+  let shown = 0;
+  for (const section of $$('.skin-groups section')) {
+    let any = false;
+    for (const card of $$('.skin-card', section)) {
+      const id = card.dataset.skin;
+      const hit = (!skinFind.os || SKINS[id].os === skinFind.os) && terms.every(t => skinSearchText(id).includes(t));
+      card.hidden = !hit;
+      if (hit) any = true, shown++;
+    }
+    section.hidden = !any;
+  }
+  $('.skin-none').hidden = shown > 0;
+}
+function setSkinOs(os) {
+  skinFind.os = os;
+  $('#skin-os').textContent = os ? OSES[os] : 'All systems';
+  filterSkinCards();
+}
+const skinQ = $('#skin-q');
+skinQ.addEventListener('input', () => {
+  skinFind.q = skinQ.value;
+  filterSkinCards();
+});
+skinQ.addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || !skinQ.value) return; // an empty box lets Esc close the window
+  e.preventDefault();
+  skinQ.value = skinFind.q = '';
+  filterSkinCards();
+});
+
 new ResizeObserver(() => {
   if (viz.cfg && !viz.cfg.pixel) viz.resize();
 }).observe(ui.viz);
+
+// ---------------------------------------------------------------------------
+// Full-screen video: the Fullscreen API where the browser has it. iPhones have no
+// element full screen, so there the Video window is stretched over the viewport.
+
+const vidScreen = $('.screen', VID);
+const fullEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+function toggleVideoFull() {
+  if (VID.classList.contains('vid-fill')) return VID.classList.remove('vid-fill');
+  if (fullEl()) return (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  wm.show(VID);
+  const req = vidScreen.requestFullscreen || vidScreen.webkitRequestFullscreen;
+  if (!req || !(document.fullscreenEnabled || document.webkitFullscreenEnabled)) return VID.classList.add('vid-fill');
+  Promise.resolve(req.call(vidScreen))
+    .then(() => wm.isTouch() && window.screen.orientation?.lock?.('landscape').catch(() => {})) // phones turn sideways
+    .catch(() => VID.classList.add('vid-fill'));
+}
+for (const type of ['fullscreenchange', 'webkitfullscreenchange']) {
+  document.addEventListener(type, () => {
+    if (fullEl()) return;
+    try {
+      window.screen.orientation?.unlock?.();
+    } catch {
+      // no orientation lock on this device
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Pop-out mini player (Picture-in-Picture), drawn in the current skin
+
+const pip = createPip({
+  info: () => {
+    const t = cur();
+    const time = S.index >= 0 ? engine().time() : 0; // not the rAF clock: it stops in hidden tabs
+    const dur = (S.index >= 0 && engine().duration()) || t?.seconds || 0;
+    return {
+      title: t ? t.title : 'Nothing playing',
+      artist: t ? cleanArtist(t.channel) || (isLocal(t) ? 'Local file' : 'YouTube') : 'Add music to start',
+      state: S.state,
+      progress: dur ? clamp(time / dur, 0, 1) : 0,
+      art: t && !isLocal(t) ? `https://i.ytimg.com/vi/${t.id}/mqdefault.jpg` : null,
+    };
+  },
+  viz: ui.viz,
+  clock: ui.time,
+  toggle: () => (S.state === 'playing' ? pause() : play()),
+  onChange: on => $('#tray-pip').setAttribute('aria-pressed', on),
+});
+async function togglePip() {
+  try {
+    await pip.toggle();
+  } catch {
+    flash('The mini player can\'t open here.', 2500);
+  }
+}
+for (const b of $$('[data-act=pip]')) b.hidden = !pipSupported();
 
 // ---------------------------------------------------------------------------
 // Add from YouTube dialog
@@ -880,7 +1018,7 @@ const skinItems = () => [
       checked: ids.includes(S.skin),
       radio: true,
       sub: ids.map(id => ({
-        label: `${SKINS[id].year || SKINS[id].mac || SKINS[id].linux || ''}  ${SKINS[id].name}`.trim(),
+        label: `${skinYear(id)}  ${SKINS[id].name} (${SKINS[id].inspo})`.trim(),
         radio: true,
         checked: S.skin === id,
         act: () => setSkin(id),
@@ -890,7 +1028,8 @@ const skinItems = () => [
   { label: 'Skins window…', act: openSkins },
   { label: 'Next skin', key: 'K', act: cycleSkin },
 ];
-const vizItems = () => VIZ_MODES.map(([k, label]) => ({ label, radio: true, checked: S.viz === k, act: () => setViz(k) }));
+// skins whose player has no visualizer grey these out instead of switching nothing
+const vizItems = () => VIZ_MODES.map(([k, label]) => ({ label, radio: true, checked: S.viz === k, disabled: !!look().viz.hidden, act: () => setViz(k) }));
 const playItems = () => [
   { label: 'Play', key: 'X', act: play },
   { label: 'Pause', key: 'C', act: pause },
@@ -901,6 +1040,7 @@ const playItems = () => [
   { label: 'Shuffle', key: 'S', checked: S.shuffle, act: toggleShuffle },
   { label: 'Repeat', key: 'R', checked: S.repeat, act: toggleRepeat },
   { sep: true },
+  { label: 'Use my YouTube sign-in', checked: S.ytSignIn, act: toggleYtSignIn },
   {
     label: 'Sleep timer',
     checked: !!(sleep.at || sleep.endOfTrack),
@@ -914,6 +1054,8 @@ const playItems = () => [
 const windowItems = () => [
   { label: 'Playlist editor', checked: wm.isOpen(PL), act: () => wm.toggle(PL) },
   { label: 'Video window', checked: wm.isOpen(VID), act: () => wm.toggle(VID) },
+  { label: 'Full-screen video', act: toggleVideoFull },
+  ...(pipSupported() ? [{ label: 'Mini player (pop out)', checked: pip.isOpen(), act: togglePip }] : []),
   { label: 'Equalizer', key: 'G', checked: wm.isOpen(EQW), act: toggleEq },
   ...(wm.isMobile() ? [] : [{ label: 'Window shade', checked: P.classList.contains('shaded'), act: () => wm.toggleShade(P) }]),
 ];
@@ -937,6 +1079,9 @@ const MENUS = {
   play: playItems,
   help: () => [
     ...(wm.isTouch() ? [] : [{ label: 'Keyboard shortcuts', act: openAbout }, { sep: true }]),
+    { label: 'Privacy…', act: showPrivacy },
+    { label: 'Clear all data…', act: () => confirmClear() },
+    { sep: true },
     { label: 'About RetroAmp…', act: openAbout },
   ],
 };
@@ -1042,6 +1187,10 @@ const ACTIONS = {
   mute: () => toggleMute(),
   'toggle-playlist': () => wm.toggle(PL),
   'toggle-video': () => wm.toggle(VID),
+  'video-full': toggleVideoFull,
+  privacy: showPrivacy,
+  'clear-data': () => confirmClear(),
+  pip: togglePip,
   'toggle-eq': toggleEq,
   'show-eq': showEq,
   'eq-on': () => {
@@ -1051,6 +1200,18 @@ const ACTIONS = {
   'eq-auto': () => {
     S.eq.auto = !S.eq.auto;
     syncEq();
+  },
+  'skin-os': b => {
+    const r = b.getBoundingClientRect();
+    const order = skinOrder(S.unlocked);
+    openMenu([
+      { label: 'All systems', radio: true, checked: !skinFind.os, act: () => setSkinOs('') },
+      { sep: true },
+      ...Object.entries(OSES).map(([os, label]) => {
+        const n = order.filter(id => SKINS[id].os === os).length;
+        return { label: `${label} (${n})`, radio: true, checked: skinFind.os === os, disabled: !n, act: () => setSkinOs(os) };
+      }),
+    ], r.left, r.bottom);
   },
   'eq-presets': b => {
     const r = b.getBoundingClientRect();
@@ -1086,7 +1247,13 @@ document.addEventListener('click', e => {
   if (b && ACTIONS[b.dataset.act]) ACTIONS[b.dataset.act](b, e);
 });
 
-ui.viz.addEventListener('click', () => {
+ui.viz.addEventListener('click', e => {
+  // Waveform skin: the waveform is the whole track, so a click jumps to that point
+  if (look().viz.wave && S.viz === 'spectrum') {
+    if (S.index < 0 || S.state === 'stopped') return play();
+    const r = ui.viz.getBoundingClientRect();
+    return seekTo(((e.clientX - r.left) / r.width) * engine().duration());
+  }
   const i = VIZ_MODES.findIndex(([k]) => k === S.viz);
   setViz(VIZ_MODES[(i + 1) % VIZ_MODES.length][0]);
 });
@@ -1112,6 +1279,7 @@ const KEYS = { z: prev, x: play, c: pause, v: stop, b: () => next(), l: openSear
 document.addEventListener('keydown', e => {
   if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.key === 'Escape') {
+    if (VID.classList.contains('vid-fill')) return toggleVideoFull();
     if (!startMenu.hidden) return toggleStart(false);
     for (const w of [ABOUT, SKINWIN, SEARCH]) if (wm.isOpen(w)) return wm.hide(w);
     return;
@@ -1516,7 +1684,8 @@ window.addEventListener('pagehide', saveNow);
 // ---------------------------------------------------------------------------
 // Boot
 
-wm.register(P, { title: 'RetroAmp', icon: 'i-note', main: true });
+// Closing the player stops the music with it (pause, so play picks up where it was).
+wm.register(P, { title: 'RetroAmp', icon: 'i-note', main: true, onClose: () => (S.state === 'playing' || S.state === 'buffering') && pause() });
 wm.register(PL, { title: 'Playlist Editor', icon: 'i-list' });
 wm.register(VID, { title: 'Video', icon: 'i-video' });
 wm.register(SEARCH, { title: 'Add from YouTube', icon: 'i-search', dialog: true });

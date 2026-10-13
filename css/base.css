@@ -75,6 +75,7 @@ kbd { font: inherit; }
 .seek-row { grid-area: seek; }
 .transport { grid-area: transport; display: flex; align-items: center; }
 .transport button { display: grid; place-items: center; }
+.player-body .transport .t-center { display: none; } /* the Scroll Wheel skin's center button */
 .toggles { grid-area: toggles; display: flex; align-items: center; }
 .tgl { display: flex; align-items: center; white-space: nowrap; }
 .f-label, .lbl-s, .lbl-l, .tgl .ico, .vol-icon, .transport :is(.t-rew, .t-ff) { display: none; }
@@ -135,6 +136,8 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
 .pl-body, .search-body, .about-body { display: flex; flex-direction: column; }
 .pl-body .listview, .search-body .listview { flex: 1; min-height: 0; }
 .pl-foot, .dlg-foot { display: flex; align-items: center; flex: none; }
+.about-body .dlg-foot { gap: 6px; }
+.about-body .dlg-foot > span { flex: 1; }
 .pl-total, .search-status { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .search-form { display: flex; flex-direction: column; gap: 4px; }
 .search-row { display: flex; gap: 6px; }
@@ -204,7 +207,10 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
 .task { flex: 0 1 170px; min-width: 36px; display: flex; align-items: center; gap: 5px; overflow: hidden; text-align: left; white-space: nowrap; }
 .task span { overflow: hidden; text-overflow: ellipsis; }
 #tray { display: flex; align-items: center; gap: 6px; flex: none; }
-#tray-vol { display: grid; place-items: center; }
+#tray-vol, #tray-pip { display: grid; place-items: center; }
+#tray-pip[aria-pressed=true] .ico { opacity: .55; }
+/* the hidden video that carries the pop-out mini player (js/player/pip.js) */
+.pip-source { position: fixed; left: 0; top: 0; width: 2px; height: 2px; opacity: 0; pointer-events: none; }
 [data-muted] #tray-vol .ico, [data-muted] .vol-icon .ico { opacity: .45; }
 
 #start-menu { position: fixed; left: 2px; bottom: var(--tb-h); z-index: 950; display: flex; }
@@ -243,6 +249,9 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
 .timeline input { --trk-h: 4px; --trk-bg: var(--sel, #000080); --th-w: 12px; --th-h: 18px; --th-bg: var(--face, #c0c0c0); --th-sh: 0 0 0 1px var(--text, #000); --th-r: 3px; }
 .timeline small { grid-column: 1 / -1; opacity: .75; }
 .sc-era { opacity: .7; }
+.sc-inspo { font-style: italic; }
+.skin-find { flex: none; }
+.skin-none { margin: 0; padding: 20px 0; text-align: center; opacity: .7; }
 /* skin change: the whole page cross-fades; it stays clickable meanwhile */
 ::view-transition { pointer-events: none; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .45s; animation-timing-function: ease-in-out; }
@@ -346,6 +355,28 @@ input[type=range]:disabled { --th-bg: transparent; --th-sh: none; }
   .dlg-foot { flex-wrap: wrap; justify-content: flex-end; row-gap: 6px; }
   .dlg-foot > .search-status { flex: 1 0 100%; white-space: normal; }
 }
+
+/* full-screen video: the Fullscreen API on .screen, or (iPhone) the window over the viewport */
+.screen-exit { display: none; }
+:is(#w-video .screen:fullscreen, #w-video .screen:-webkit-full-screen, #w-video.vid-fill .screen) { width: 100%; height: 100%; aspect-ratio: auto; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
+:is(.screen:fullscreen, .screen:-webkit-full-screen, .vid-fill .screen) .screen-exit {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .55);
+  color: #fff;
+  font: 18px/1 system-ui, sans-serif;
+}
+#desktop:has(.vid-fill) { z-index: 5000; } /* fixed #desktop is its own stacking context: lift it over the taskbar */
+#w-video.vid-fill { position: fixed !important; inset: 0 !important; z-index: 5000; width: auto !important; height: auto !important; max-width: none; border: 0; border-radius: 0; background: #000; backdrop-filter: none; box-shadow: none; }
+#w-video.vid-fill > :not(.win-body) { display: none; }
+#w-video.vid-fill .video-body { padding: 0; }
 
 /* phones held sideways: a readable column, and a video that fits the screen height */
 @media (pointer: coarse) and (max-height: 520px) and (min-width: 721px) {

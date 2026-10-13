@@ -1,0 +1,106 @@
+/* Welcome, privacy consent and Clear All Data (js/core/consent.js). These show
+   before any skin is applied, so they carry their own look: the Windows 9x Setup
+   screen, a gray dialog on a blue gradient. Declining gets the black "safe to
+   turn off" screen. */
+
+.cs-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 56px 16px 16px;
+  background: linear-gradient(180deg, #0000b0, #00003a);
+  color: #000;
+  font: 13px/1.45 Tahoma, "MS Sans Serif", Geneva, Verdana, sans-serif;
+}
+.cs-screen::before {
+  content: 'RetroAmp Setup';
+  position: absolute;
+  top: 12px;
+  left: 22px;
+  color: #fff;
+  font: italic bold 30px/1 "Times New Roman", Times, serif;
+  text-shadow: 3px 3px #000;
+}
+.cs-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(660px, 100%);
+  max-height: calc(100dvh - 72px);
+  padding: 3px;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf, 6px 6px 0 rgba(0, 0, 0, .35);
+}
+.cs-title { display: flex; align-items: center; flex: none; height: 22px; padding: 0 6px; background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font-weight: bold; }
+.cs-main { display: flex; gap: 14px; min-height: 0; padding: 14px 14px 10px; }
+.cs-banner {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 118px;
+  background: linear-gradient(180deg, #009090, #003c3c);
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+  color: #fff;
+}
+.cs-banner svg { width: 64px; height: 64px; fill: currentColor; filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, .5)); }
+.cs-content { display: flex; flex-direction: column; flex: 1; gap: 10px; min-width: 0; min-height: 0; }
+.cs-content h1 { margin: 0; font-size: 17px; }
+.cs-content > p { margin: 0; }
+.cs-text {
+  flex: 1;
+  min-height: 140px;
+  max-height: 46vh;
+  overflow: auto;
+  padding: 8px 12px;
+  background: #fff;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #0a0a0a, inset -2px -2px #dfdfdf;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.cs-text:focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+.cs-text h2 { margin: 14px 0 4px; font-size: 13px; }
+.cs-text h2:first-child { margin-top: 2px; }
+.cs-text p { margin: 4px 0; }
+.cs-text ul { margin: 4px 0; padding-left: 18px; }
+.cs-text li { margin: 3px 0; }
+.cs-choices { display: flex; flex-direction: column; gap: 4px; }
+.cs-choices label { display: flex; align-items: flex-start; gap: 8px; min-height: 22px; cursor: pointer; }
+.cs-choices input { flex: none; width: 14px; height: 14px; margin: 3px 0 0; accent-color: #000080; }
+.cs-choices input:focus-visible { outline: 1px dotted #000; outline-offset: 2px; }
+.cs-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 14px 11px; border-top: 1px solid #808080; box-shadow: inset 0 1px #fff; }
+.cs-btn {
+  min-width: 92px;
+  height: 26px;
+  padding: 0 12px;
+  background: #c0c0c0;
+  color: #000;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+}
+.cs-btn:active:not(:disabled) { box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; }
+.cs-btn:disabled { color: #808080; text-shadow: 1px 1px #fff; }
+.cs-btn:focus-visible { outline: 1px dotted #000; outline-offset: -5px; }
+
+/* declined: the black screen, in orange */
+.cs-closed { background: #000; }
+.cs-closed::before { content: none; }
+.cs-closed .cs-dialog { background: none; box-shadow: none; text-align: center; }
+.cs-closed .cs-title, .cs-closed .cs-foot { background: none; border: 0; box-shadow: none; color: transparent; }
+.cs-closed .cs-content h1 { color: #ff9b1a; font: 28px/1.4 "Courier New", Courier, monospace; }
+.cs-closed .cs-content p { color: #c8c8c8; }
+.cs-closed .cs-foot { justify-content: center; }
+
+/* phones: same query as wm.isMobile() */
+@media (max-width: 720px), (pointer: coarse) and (max-height: 520px) {
+  .cs-screen { padding: 12px 8px; }
+  .cs-screen::before, .cs-banner { display: none; }
+  .cs-dialog { max-height: calc(100dvh - 24px); }
+  .cs-main { padding: 12px 10px 8px; }
+  .cs-text { max-height: none; }
+  .cs-foot { flex-wrap: wrap; }
+  .cs-btn { flex: 1 1 auto; height: 40px; }
+  .cs-choices label { min-height: 34px; align-items: center; }
+  .cs-choices input { width: 20px; height: 20px; margin: 0; }
+  .cs-closed .cs-content h1 { font-size: 22px; }
+}

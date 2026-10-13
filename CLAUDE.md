@@ -171,7 +171,7 @@ messages             (id, conversation_id, sender_id, kind text,  -- 'text' | 'n
   default-src 'self'; script-src 'self' https://www.youtube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; img-src 'self' data: blob: https://i.ytimg.com; connect-src 'self' https://[PROJECT_REF].supabase.co wss://[PROJECT_REF].supabase.co; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
   ```
   Add `https://challenges.cloudflare.com` to `script-src` and `frame-src` when Turnstile goes in.
-  Keep `blob:` in `img-src` (Gallery thumbnails), `https://www.google.com` in `frame-src` (Internet window) and `camera=(self)` in `Permissions-Policy` (Camera window).
+  Keep `blob:` in `img-src` (Gallery thumbnails), `https:` in `frame-src` (Internet window opens any HTTPS site) and `camera=(self)` in `Permissions-Policy` (Camera window).
 
 ## Privacy
 

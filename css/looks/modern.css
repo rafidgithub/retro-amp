@@ -139,6 +139,7 @@
 [data-look=modern] .tb-btns [data-wm=close]::before { content: '✕'; }
 [data-look=modern] .tb-btns [data-wm=close]:hover { background: #e81123; color: #fff; }
 [data-look=modern] .tb-btns [data-wm=shade] { display: none; }
+[data-look=modern] .tb-btns [data-full]::before { content: '\25A1'; font-size: 15px; }
 
 [data-look=modern] .menubar { border-bottom: 0; padding: 0 4px 2px; }
 [data-look=modern] .menubar button { padding: 4px 9px; }

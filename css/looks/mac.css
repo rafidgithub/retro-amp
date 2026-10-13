@@ -145,11 +145,12 @@
 [data-look=mac] .tb-btns [data-wm=close] { order: 1; --light: var(--light-close); }
 [data-look=mac] .tb-btns [data-wm=min] { order: 2; --light: var(--light-min); }
 [data-look=mac] .tb-btns [data-wm=shade] { order: 3; --light: var(--light-zoom); }
+[data-look=mac] .tb-btns [data-full] { order: 3; --light: var(--light-zoom); }
 [data-look=mac] .win:not(.active) .tb-btns button { --light: var(--light-off); }
 [data-look=mac] .tb-btns:hover button::before { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(0, 0, 0, .55); font: bold 10px/1 system-ui, sans-serif; }
 [data-look=mac] .tb-btns:hover [data-wm=close]::before { content: '×'; }
 [data-look=mac] .tb-btns:hover [data-wm=min]::before { content: '−'; }
-[data-look=mac] .tb-btns:hover [data-wm=shade]::before { content: '+'; }
+[data-look=mac] .tb-btns:hover :is([data-wm=shade], [data-full])::before { content: '+'; }
 [data-look=mac] .win .menubar { display: none; }
 [data-look=mac] .tb-mini { font: var(--small-font); }
 

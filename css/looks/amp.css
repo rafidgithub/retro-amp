@@ -91,6 +91,7 @@
 [data-look=amp] .win:not(.dialog) [data-wm=min] { --glyph: linear-gradient(#111 0 0) 50% 6px / 6px 2px no-repeat; }
 [data-look=amp] .win:not(.dialog) [data-wm=shade] { --glyph: linear-gradient(#111 0 0) 50% 1px / 6px 2px no-repeat; }
 [data-look=amp] .win:not(.dialog) [data-wm=close] { --glyph: var(--x-glyph) center no-repeat; }
+[data-look=amp] .win:not(.dialog) [data-full] { --glyph: linear-gradient(#111 0 0) 2px 1px / 6px 2px no-repeat, linear-gradient(#111 0 0) 2px 6px / 6px 1px no-repeat, linear-gradient(#111 0 0) 2px 1px / 1px 6px no-repeat, linear-gradient(#111 0 0) 7px 1px / 1px 6px no-repeat; }
 [data-look=amp] .tb-mini { color: var(--lcd-on); background: var(--lcd-bg); padding: 1px 4px; box-shadow: var(--m-sunken); }
 
 /* ---------- player ---------- */

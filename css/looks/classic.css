@@ -66,6 +66,9 @@
 :is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns [data-wm=min]:active { background-position: 5px 10px; }
 :is([data-look=chicago] .win, [data-look=amp] .dialog) .tb-btns [data-wm=close] { --glyph: var(--x-glyph); margin-left: 2px; }
 [data-look=chicago] .tb-btns [data-wm=shade] { display: none; }
+[data-look=chicago] .tb-btns [data-full] {
+  --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath fill-rule='evenodd' d='M0 0h9v9H0zM1 2v6h7V2z'/%3E%3C/svg%3E");
+}
 
 /* buttons, inputs, list views, progress */
 :is([data-look=chicago], [data-look=amp] .dialog) .btn {

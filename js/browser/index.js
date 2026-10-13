@@ -1,19 +1,26 @@
-// Internet: a period web browser that only ever shows Google. It's nostalgia,
-// not a browser: google.com runs in a sandboxed iframe (Google allows framing
-// with igu=1), and everything around it (toolbar, throbber, status messages,
-// error pages, even how slowly a page seems to arrive) follows the skin's year,
-// from NCSA-style 1993 to 2026.
+// Internet: a period web browser. Pages run in a sandboxed iframe, Home and
+// searches go to Google (which allows framing with igu=1), and everything
+// around the page (toolbar, throbber, status messages, error pages, even how
+// slowly a page seems to arrive) follows the skin's year, from NCSA-style 1993
+// to 2026.
 //
 // What a page can and can't do with a cross-origin frame shapes the UX:
-// - The frame's URL and title are private. The address bar shows the last
-//   address we asked for; links clicked inside Google keep it.
+// - The frame's URL and title are private. The address bar shows the address
+//   we asked for. After a link clicked inside the page it goes blank instead
+//   of keeping an address that may no longer be true (a phishing page could
+//   hide behind google.com), and Reload / Open in New Window are off.
 // - Back/Forward walk the tab's own history, which includes frame navigations.
 //   A sentinel entry pushed on first open makes overshooting harmless: it lands
 //   on our own document (popstate), never on the page before RetroAmp.
-// - Links that leave google.com hit our CSP frame-src. The violation event
-//   names the host, and an era-styled error page covers the browser's own.
-// - The sandbox has no allow-downloads, allow-popups or allow-top-navigation:
-//   nothing downloads, nothing opens a window, Google can't navigate us away.
+// - Sites that send X-Frame-Options or frame-ancestors refuse every frame, and
+//   the browser shows its own refusal page. We can't detect that, so the
+//   menus' Open in New Window opens the address in a real tab.
+// - Our CSP frame-src is https: only. A link to an http: page is blocked; the
+//   violation event names the host, and an era-styled error page covers the
+//   browser's own.
+// - The sandbox has allow-popups but no allow-popups-to-escape-sandbox,
+//   allow-downloads or allow-top-navigation: new windows stay sandboxed,
+//   nothing downloads, and no page can navigate RetroAmp away.
 // - credentialless (Chromium) gives the frame an empty cookie jar that dies
 //   with the page; Firefox and Safari partition or block third-party cookies.
 //   Either way you browse signed out, and RetroAmp stores nothing.
@@ -24,7 +31,7 @@ import { SKINS } from '../core/skins.js';
 
 const GOOGLE = 'https://www.google.com';
 const HOME = `${GOOGLE}/webhp?igu=1`;
-const HOST = 'www.google.com';
+const UNKNOWN = 'Web page'; // title of a page reached by a link inside the frame
 const MIN_W = 340;
 const MIN_H = 260;
 const calm = matchMedia('(prefers-reduced-motion: reduce)');
@@ -38,6 +45,7 @@ export function eraFor(id) {
   const s = SKINS[id];
   if (!s) return 'ie5';
   if (id === 'dos' || id === 'phosphor') return 'lynx';
+  if (id === 'mce') return 'tabs'; // Windows 7 Media Center
   if (s.linux) return 'nav'; // the browser on every 1999 Linux desktop
   const year = s.year || s.mac || { chicago: 1995, amp: 1998, luna: 2001, mac: 2007, modern: 2015 }[s.look];
   if (s.look === 'chicago' && year > 1997) return 'nav';
@@ -45,7 +53,7 @@ export function eraFor(id) {
   if (year < 1994) return 'mosaic';
   if (year < 1998) return 'nav';
   if (year < 2001) return 'ie5';
-  if (s.mac && year < 2010) return 'safari';
+  if (s.mac && year < 2011) return 'safari'; // Slate (2010): the tablet's Safari
   if (year < 2007) return 'ie6';
   if (year < 2010) return 'tabs';
   if (year < 2020) return 'chrome';
@@ -56,7 +64,7 @@ const IE_MSG = {
   find: h => `Finding site: ${h}`,
   connect: h => `Connecting to site ${h}`,
   wait: () => 'Web site found. Waiting for reply...',
-  xfer: (h, url) => `Opening page ${url}...`,
+  xfer: (h, url) => (url ? `Opening page ${url}...` : 'Opening page...'),
   done: () => 'Done',
   stop: () => 'Done',
 };
@@ -85,7 +93,7 @@ const ERAS = {
       done: () => 'Document Done.',
       stop: () => 'Transfer interrupted.',
     },
-    err: h => ({ title: 'Failed to load document', text: [`Requested document (${h}) could not be accessed.`, 'This browser only visits www.google.com.'] }),
+    err: h => ({ title: 'Failed to load document', text: [`Requested document (${h}) could not be accessed.`, 'This browser only opens secure (https) documents.'] }),
   },
   lynx: {
     year: 1994, ver: '2.3 (text mode)', go: 'Go', reload: 'Reload', addr: 'URL to open:',
@@ -99,7 +107,7 @@ const ERAS = {
       done: () => 'Data transfer complete',
       stop: () => 'Transfer interrupted!',
     },
-    err: h => ({ title: 'Alert!: Unable to access document.', text: [`${h} is outside google.com, the only site this browser visits.`] }),
+    err: h => ({ title: 'Alert!: Unable to access document.', text: [`${h} is not a secure (https) address.`] }),
   },
   nav: {
     year: 1996, ver: '3.0', go: 'Go', reload: 'Reload', addr: 'Location:', editing: 'Go to:',
@@ -109,11 +117,11 @@ const ERAS = {
       find: h => `Connect: Looking up host: ${h}...`,
       connect: h => `Connect: Contacting host: ${h}...`,
       wait: h => `Connect: Host ${h} contacted. Waiting for reply...`,
-      xfer: h => `Transferring data from ${h}...`,
+      xfer: h => (h ? `Transferring data from ${h}...` : 'Transferring data...'),
       done: () => 'Document: Done',
       stop: () => 'Transfer interrupted!',
     },
-    err: h => ({ title: 'Unable to open this page', text: [`RetroAmp Web only visits www.google.com, so ${h} can't be opened here.`, 'Try another link, or search for it on Google.'] }),
+    err: h => ({ title: 'Unable to open this page', text: [`${h} isn't a secure (https) site, and RetroAmp Web only opens secure ones.`, 'Try another link, or search for it on Google.'] }),
   },
   ie5: {
     year: 1999, ver: '5.0', go: 'Go', reload: 'Refresh', addr: 'Address',
@@ -122,9 +130,9 @@ const ERAS = {
     msg: IE_MSG,
     err: h => ({
       title: 'The page cannot be displayed',
-      text: [`The page you are looking for is on ${h}, outside google.com. RetroAmp Web only displays Google pages.`],
+      text: [`The page you are looking for is on ${h}, which does not use a secure (https) connection. RetroAmp Web only displays secure pages.`],
       tips: ['Click the Back button to try another link.', `Search Google for ${h} instead.`],
-      foot: 'Page outside Google',
+      foot: 'Insecure page blocked',
     }),
   },
   ie6: {
@@ -142,11 +150,11 @@ const ERAS = {
       find: h => `Looking up ${h}...`,
       connect: h => `Connecting to ${h}...`,
       wait: h => `Waiting for ${h}...`,
-      xfer: h => `Transferring data from ${h}...`,
+      xfer: h => (h ? `Transferring data from ${h}...` : 'Transferring data...'),
       done: () => 'Done',
       stop: () => 'Stopped',
     },
-    err: h => ({ title: 'This page can’t be shown here', text: [`${h} is outside google.com. RetroAmp Web only shows Google pages.`], tips: ['Go back to the previous page.', `Search Google for ${h}.`] }),
+    err: h => ({ title: 'This page can’t be shown here', text: [`${h} doesn’t use a secure (https) connection.`], tips: ['Go back to the previous page.', `Search Google for ${h}.`] }),
   },
   safari: {
     year: 2007, ver: '3.0', go: 'Go', reload: 'Reload', addr: '', find: 'Google',
@@ -160,14 +168,14 @@ const ERAS = {
       done: () => '',
       stop: () => '',
     },
-    err: h => ({ title: 'RetroAmp Web can’t open the page.', text: [`“${h}” is outside google.com, the only site this browser visits.`] }),
+    err: h => ({ title: 'RetroAmp Web can’t open the page.', text: [`“${h}” doesn’t use a secure (https) connection.`] }),
   },
   chrome: {
     year: 2011, ver: '10.0', go: 'Go', reload: 'Reload', addr: '', placeholder: 'Search Google or type a URL',
     steps: [80, 200], min: 0, xfer: 120,
     title: t => `${t} - RetroAmp Web`,
     msg: CHROME_MSG,
-    err: h => ({ title: 'This page is outside Google', text: [`RetroAmp Web only opens www.google.com, so ${h} is blocked here.`], code: 'ERR_BLOCKED_BY_CSP' }),
+    err: h => ({ title: 'This page isn’t secure', text: [`${h} doesn’t use a secure (https) connection, so RetroAmp Web blocked it.`], code: 'ERR_BLOCKED_BY_CSP' }),
   },
   modern: {
     year: 2026, ver: '26.0', go: 'Go', reload: 'Reload', addr: '', placeholder: 'Search Google or type a URL',
@@ -395,9 +403,9 @@ wm.register(win, { title: 'Internet', icon: 'w-globe', dialog: true });
 let frame = null;
 let era = 'ie5';
 let cfg = ERAS[era];
-let entries = []; // one per frame history entry: { url, title, blocked?, inPage? }
+let entries = []; // one per frame history entry: { url (null if unknown), title, blocked? }
 let idx = -1;
-let pending = null; // what the next frame load is: { kind: nav|back|forward|reload, entry?, note? }
+let pending = null; // what the next frame load is: { kind: nav|back|forward|reload, entry? }
 let pendingTimer = 0;
 let loading = false;
 let quick = false;
@@ -419,57 +427,63 @@ const clearTimers = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Addresses: everything resolves to https://www.google.com/…
+// Addresses: any https:// page. Google pages get the framing flag.
 
-function entryFor(href, extra = {}) {
+// null for anything the frame mustn't open: not https, credentials in the URL
+// (google.com@evil.example), or RetroAmp itself (same-origin, it could lift
+// the sandbox).
+function entryFor(href) {
   let u;
   try {
     u = new URL(href);
   } catch {
     return null;
   }
-  if (u.origin !== GOOGLE) return null;
+  if (u.protocol !== 'https:' || u.username || u.password || u.origin === location.origin) return null;
+  if (u.origin !== GOOGLE) return { url: u.href, title: u.hostname };
   u.searchParams.set('igu', '1');
   const q = u.searchParams.get('q');
-  const title = u.pathname === '/search' && q ? `${q} - Google Search` : 'Google';
-  return { url: u.href, title, ...extra };
+  return { url: u.href, title: u.pathname === '/search' && q ? `${q} - Google Search` : 'Google' };
 }
 
-// What the address bar shows: the real address minus the framing flag.
+// What the address bar shows: the real address minus Google's framing flag.
 function shown(href) {
   const u = new URL(href);
+  if (u.origin !== GOOGLE) return u.href;
   u.searchParams.delete('igu');
   if (u.pathname === '/webhp' && !u.search) u.pathname = '/';
   return u.href;
 }
 
-// Typed text → a Google address. Other sites can't load here, so they become
-// a Google search for that site.
-function fromInput(text) {
-  const s = text.trim();
-  if (!s) return null;
-  if (/^about:/i.test(s)) return { about: true };
-  const hasScheme = /^https?:\/\//i.test(s);
-  let offsite = null;
-  if (!/\s/.test(s) && (hasScheme || /^[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?([/?#]|$)/i.test(s))) {
-    try {
-      const u = new URL(hasScheme ? s : `https://${s}`);
-      if (/^(www\.)?google\.com$/i.test(u.hostname)) return { url: GOOGLE + u.pathname + u.search + u.hash };
-      offsite = u.hostname;
-    } catch {
-      // not a URL after all: search for it
-    }
-  }
-  const q = new URL('/search', GOOGLE);
-  q.searchParams.set('q', s);
-  return { url: q.href, note: offsite && `${offsite} is outside Google, so RetroAmp Web searched for it.` };
-}
+// Status-bar wording for a page: host, address, title (host and address are
+// null when a link inside the page brought us there).
+const describe = e => (e?.url ? [new URL(e.url).hostname, shown(e.url), e.title] : [null, null, e?.title || UNKNOWN]);
 
 const searchUrl = text => {
   const q = new URL('/search', GOOGLE);
   q.searchParams.set('q', text);
   return q.href;
 };
+
+// Typed text → an address. Anything shaped like a web address opens directly,
+// upgraded to https (the frame loads nothing else); the rest is a Google search.
+function fromInput(text) {
+  const s = text.trim();
+  if (!s) return null;
+  if (/^about:/i.test(s)) return { about: true };
+  const hasScheme = /^https?:\/\//i.test(s);
+  if (!/\s/.test(s) && (hasScheme || /^([a-z0-9-]+\.)+[a-z][a-z0-9-]+(:\d+)?([/?#]|$)/i.test(s))) {
+    try {
+      const u = new URL(hasScheme ? s : `https://${s}`);
+      u.protocol = 'https:';
+      if (/^google\.com$/i.test(u.hostname)) u.hostname = 'www.google.com';
+      if (entryFor(u.href)) return { url: u.href };
+    } catch {
+      // not a URL after all: search for it
+    }
+  }
+  return { url: searchUrl(s) };
+}
 
 // ---------------------------------------------------------------------------
 // The frame
@@ -484,7 +498,7 @@ function createFrame(entry) {
   frame.className = 'wb-frame';
   frame.title = 'Web page';
   frame.setAttribute('credentialless', '');
-  frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+  frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
   frame.referrerPolicy = 'no-referrer';
   frame.addEventListener('load', onLoad);
   entries = [];
@@ -523,7 +537,7 @@ function expect(p, ms) {
   }, ms);
 }
 
-function go(href, note = null) {
+function go(href) {
   const entry = entryFor(href);
   if (!entry) return;
   showingAbout = false;
@@ -533,7 +547,7 @@ function go(href, note = null) {
     render();
     return;
   }
-  expect({ kind: 'nav', entry, note }, 30000);
+  expect({ kind: 'nav', entry }, 30000);
   startLoading(entry);
   frame.src = entry.url;
   render();
@@ -555,15 +569,14 @@ function onLoad() {
   else if (p?.kind === 'reload' && entries[idx]) entries[idx] = { ...p.entry };
   else {
     // our own navigation, or a link clicked inside the page (address unknown)
-    const prev = entries[idx];
     entries = entries.slice(0, idx + 1);
-    entries.push(p?.entry ? { ...p.entry } : { url: prev?.url || HOME, title: 'Google', inPage: true });
+    entries.push(p?.entry ? { ...p.entry } : { url: null, title: UNKNOWN });
     idx = entries.length - 1;
   }
   if (blockedHost && now - blockedAt < 5000) entries[idx].blocked = blockedHost;
   blockedHost = null;
   if (!p || !loading) startLoading(entries[idx], true);
-  finish(p?.note);
+  finish();
   render();
 }
 
@@ -606,6 +619,9 @@ function canBack() {
 function canForward() {
   return !showingAbout && idx < entries.length - 1;
 }
+function canReload() {
+  return showingAbout || !entries[idx] || !!entries[idx].url;
+}
 
 function back() {
   if (showingAbout) {
@@ -629,7 +645,8 @@ function reload() {
   showingAbout = false;
   const e = entries[idx];
   if (!frame || !e) return go(HOME);
-  const entry = entryFor(e.url, { title: e.inPage ? 'Google' : e.title });
+  if (!e.url) return render(); // address unknown: nothing to reload
+  const entry = entryFor(e.url);
   expect({ kind: 'reload', entry }, 30000);
   startLoading(entry);
   // replace(): a refresh doesn't add a history entry
@@ -642,6 +659,12 @@ function stop() {
 }
 
 const home = () => go(HOME);
+
+// For sites that refuse to be framed: the same address in a real browser tab.
+function openOutside() {
+  const u = entries[idx]?.url;
+  if (u) window.open(shown(u), '_blank', 'noopener,noreferrer');
+}
 
 function focusUrl() {
   url.focus();
@@ -697,7 +720,7 @@ addr.addEventListener('submit', e => {
   editing = false;
   url.blur();
   if (r.about) showAbout();
-  else go(r.url, r.note);
+  else go(r.url);
 });
 url.addEventListener('focus', () => setTimeout(() => document.activeElement === url && url.select()));
 url.addEventListener('input', () => {
@@ -733,6 +756,7 @@ const goItems = () => [
 const MENUS = {
   file: () => [
     { label: 'Open Location…', key: 'Ctrl+L', act: focusUrl },
+    { label: 'Open in New Window', disabled: !entries[idx]?.url, act: openOutside },
     { sep: true },
     { label: 'Close', act: closeBrowser },
   ],
@@ -740,7 +764,7 @@ const MENUS = {
     { label: 'Status Bar', checked: !win.classList.contains('wb-nostatus'), act: () => win.classList.toggle('wb-nostatus') },
     { sep: true },
     { label: 'Stop', key: 'Esc', disabled: !loading, act: stop },
-    { label: cfg.reload, key: 'F5', act: reload },
+    { label: cfg.reload, key: 'F5', disabled: !canReload(), act: reload },
     { sep: true },
     { label: 'Full Screen', checked: win.classList.contains('wb-max'), act: toggleMax },
   ],
@@ -750,6 +774,7 @@ const MENUS = {
 const moreMenu = () => [
   ...goItems(),
   { sep: true },
+  { label: 'Open in New Window', disabled: !entries[idx]?.url, act: openOutside },
   { label: 'Full Screen', checked: win.classList.contains('wb-max'), act: toggleMax },
   { label: 'About RetroAmp Web', act: showAbout },
   { sep: true },
@@ -786,27 +811,28 @@ function setProgress(p, mode = '') {
   win.style.setProperty('--wb-p', p);
 }
 
-function startLoading(entry, isQuick = false) {
+function startLoading(entry, isQuick = !entry?.url) {
   clearTimers();
   loading = true;
   quick = isQuick;
   loadStart = Date.now();
   win.classList.add('wb-loading');
   setProgress(0, 'snap');
-  if (entry && !editing && !isQuick) url.value = shown(entry.url);
+  const [host] = describe(entry);
+  if (host && !editing && !isQuick) url.value = shown(entry.url);
   if (isQuick) {
     win.dataset.phase = 'load';
-    setStatus(cfg.msg.xfer(HOST, entry ? shown(entry.url) : GOOGLE, entry?.title || 'Google'));
+    setStatus(cfg.msg.xfer(...describe(entry)));
     later(20, () => setProgress(0.7));
   } else {
     win.dataset.phase = 'wait';
-    setStatus(cfg.msg.find(HOST));
+    setStatus(cfg.msg.find(host));
     later(cfg.steps[0], () => {
-      setStatus(cfg.msg.connect(HOST));
+      setStatus(cfg.msg.connect(host));
       setProgress(0.08);
     });
     later(cfg.steps[1], () => {
-      setStatus(cfg.msg.wait(HOST));
+      setStatus(cfg.msg.wait(host));
       setProgress(0.9, 'creep');
     });
     if (cfg.wipe && !calm.matches) wipe.className = 'wb-wipe on';
@@ -816,14 +842,14 @@ function startLoading(entry, isQuick = false) {
 
 // The frame loaded: play out "transferring", then "done". Older eras never
 // look faster than their modems were (min), so their status lines get read.
-function finish(note) {
+function finish() {
   const e = entries[idx];
   const wait = quick ? 0 : Math.max(0, cfg.min - (Date.now() - loadStart));
   later(wait, () => {
     win.dataset.phase = 'load';
-    if (!quick) setStatus(cfg.msg.xfer(HOST, e ? shown(e.url) : GOOGLE, e?.title || 'Google'));
+    if (!quick) setStatus(cfg.msg.xfer(...describe(e)));
     setProgress(1);
-    later(cfg.xfer, () => stopLoading(note || cfg.msg.done(), true));
+    later(cfg.xfer, () => stopLoading(cfg.msg.done(), true));
   });
 }
 
@@ -1058,8 +1084,9 @@ function render() {
   const e = entries[idx];
   for (const b of $$('[data-web=back]', body)) b.disabled = !canBack();
   for (const b of $$('[data-web=forward]', body)) b.disabled = !canForward();
+  for (const b of $$('[data-web=reload]', body)) b.disabled = !canReload();
   for (const b of $$('.wb-btn.wb-stop, .wb-ab.wb-stop', body)) b.disabled = !loading;
-  if (!editing) url.value = showingAbout ? 'about:' : e ? shown(e.url) : '';
+  if (!editing) url.value = showingAbout ? 'about:' : e?.url ? shown(e.url) : '';
   syncLabels();
 
   const err = e?.blocked && !showingAbout ? cfg.err(e.blocked) : null;
@@ -1125,10 +1152,12 @@ function aboutPage() {
   head.append(icon('w-globe', 'wb-pg-logo'), text);
   const ul = h('ul');
   for (const t of [
-    'Every page comes from www.google.com. Links to other sites stay closed.',
-    'No history, no bookmarks, no downloads, no new windows.',
-    'You browse signed out: Google’s cookies here are separate from your own browser’s and are not kept by RetroAmp.',
-    'Searches go straight from your browser to Google, not through RetroAmp’s server. Google sees your IP address, as on any visit.',
+    'Type any https address, or words to search Google.',
+    'Some sites refuse to open inside another page and show a refusal instead. Open in New Window, in the menu, opens them in your own browser.',
+    'After you click a link, the address bar goes blank: RetroAmp Web can’t see where a page took you. Don’t type passwords into a page whose address you can’t see.',
+    'No history, no bookmarks, no downloads. Links that open a new window get a sandboxed one.',
+    'You browse signed out: cookies here are separate from your own browser’s and are not kept by RetroAmp.',
+    'Pages load straight from your browser, not through RetroAmp’s server. Every site you visit sees your IP address, as on any visit.',
     'Closing this window forgets everything.',
   ]) {
     ul.append(h('li', '', t));

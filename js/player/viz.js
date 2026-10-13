@@ -38,9 +38,10 @@ export class Visualizer {
     h >>>= 0;
     this.seed = (h % 997) / 7;
     this.bpm = 84 + (h % 53);
+    this.still = false;
   }
 
-  // cfg: { pixel, w, h, scale, bar, gap, dots, reflect }
+  // cfg: { pixel, w, h, scale, bar, gap, dots, reflect, wave }
   configure(cfg) {
     this.cfg = cfg;
     this.colors = {
@@ -50,6 +51,7 @@ export class Visualizer {
       peak: cssVar('--viz-peak'),
       scope: cssVar('--viz-scope'),
       dots: cssVar('--viz-dots'),
+      rest: cssVar('--viz-rest'),
     };
     this.resize();
   }
@@ -93,7 +95,9 @@ export class Visualizer {
   }
 
   // source: { spectrum(n), waveform(n) } for real audio, or null to synthesize
-  frame(t, playing, dt, source = null) {
+  // progress: 0–1 through the loaded track, or null when nothing is loaded
+  frame(t, playing, dt, source = null, progress = null) {
+    if (this.cfg.wave && this.mode === 'spectrum') return this.track(progress, dt);
     const quiet = !playing && this.level < 0.01 && !this.peaks?.some(p => p > 0);
     if (quiet && this.still) return; // nothing moving: skip redraws
     this.still = quiet;
@@ -156,6 +160,36 @@ export class Visualizer {
     }
   }
 
+  // cfg.wave: the whole track as one mirrored waveform, the played part in the
+  // spectrum colors and the rest in --viz-rest. YouTube audio can't be read, so
+  // the outline comes from the track seed: each song keeps its own shape.
+  track(progress, dt) {
+    const target = progress === null ? 0 : 1;
+    this.level += (target - this.level) * Math.min(1, dt * 6);
+    if (Math.abs(target - this.level) < 0.01) this.level = target;
+    const quiet = this.level === target && progress === this.at;
+    if (quiet && this.still) return;
+    this.still = quiet;
+    this.at = progress;
+    const { ctx, c, H, bw, gap, x0 } = this;
+    const n = this.bars.length;
+    const split = Math.round((progress ?? 0) * n);
+    ctx.clearRect(0, 0, c.width, c.height);
+    if (!this.level) return;
+    const draw = (from, to) => {
+      for (let i = from; i < to; i++) {
+        const f = n > 1 ? i / (n - 1) : 0;
+        const shape = 0.12 + 0.48 * noise(f * 7 + this.seed) + 0.3 * noise(f * 60 + this.seed * 2) + 0.2 * noise(f * 300 + this.seed * 5);
+        const h = Math.round(Math.min(1, shape, f * 30, (1 - f) * 20) * H * 0.9 * this.level);
+        if (h) ctx.fillRect(x0 + i * (bw + gap), Math.round((H - h) / 2), bw, h);
+      }
+    };
+    ctx.fillStyle = this.grad;
+    draw(0, split);
+    ctx.fillStyle = this.colors.rest;
+    draw(split, n);
+  }
+
   scope(t, source) {
     const { ctx, c, u } = this;
     const W = c.width;
@@ -210,7 +244,7 @@ export class Lcd {
     this.ctx = canvas.getContext('2d');
   }
 
-  // cfg: { seg: true, w, h, t, gap, scale }  or  { seg: false, font, cssW, cssH }
+  // cfg: { seg: true, w, h, t, gap, scale }  or  { seg: false, font, cssW, cssH, glow }
   configure(cfg) {
     this.cfg = cfg;
     this.on = cssVar('--lcd-on');
@@ -286,7 +320,7 @@ export class Lcd {
     if (dim) return;
     ctx.font = cfg.font.replace(/(\d+)px/, (_, n) => `${n * u}px`);
     ctx.fillStyle = ctx.shadowColor = this.on;
-    ctx.shadowBlur = 6 * u;
+    ctx.shadowBlur = cfg.glow === false ? 0 : 6 * u; // a reflective LCD doesn't glow
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     ctx.fillText(str, c.width - 2 * u, c.height / 2);
